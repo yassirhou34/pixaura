@@ -1245,7 +1245,12 @@ export default function OffrePage() {
               <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-48 h-1 bg-gradient-to-r from-cyan-400 via-purple-500 to-cyan-400 rounded-full opacity-60" style={{ animation: 'pack-glow-pulse 3s ease-in-out infinite' }} />
             </div>
             
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto scrollbar-hide" style={{ 
+              scrollbarWidth: 'none', 
+              msOverflowStyle: 'none',
+              WebkitOverflowScrolling: 'touch',
+              scrollBehavior: 'smooth',
+            }}>
               <div className="relative group/table">
                 {/* Multi-Layer Glow Effects */}
                 <div className="absolute -inset-4 bg-gradient-to-r from-cyan-400/20 via-purple-500/20 to-cyan-400/20 rounded-3xl blur-3xl opacity-40 group-hover/table:opacity-70 transition-opacity duration-1000" style={{ animation: 'pack-glow-pulse 4s ease-in-out infinite' }} />
@@ -1447,7 +1452,7 @@ export default function OffrePage() {
                       
                       {/* Main Image */}
                       <Image
-                        src="/Banque d_images/Copie de M7_03385.jpg"
+                        src="/Banque d_images/Copie de M7_09214.jpg"
                         alt="Conférence Pixaura - Événement exclusif"
                         fill
                         className="object-cover group-hover/image:scale-110 transition-transform duration-700"

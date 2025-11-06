@@ -136,7 +136,7 @@ export function ServicesSection() {
 
       <div className="relative z-10 max-w-7xl mx-auto">
         {/* Enhanced Creative Header Section - Refined */}
-        <div className="text-center mb-8">
+        <div id="nos-expertises" className="text-center mb-8 scroll-mt-40">
           <div className="relative inline-block mb-4">
             {/* Animated background glow - Refined */}
             <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 via-cyan-400/20 to-primary/20 rounded-full blur-3xl opacity-40 animate-pulse-slow" />

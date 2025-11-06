@@ -37,12 +37,11 @@ export function Footer() {
               <div className="absolute -inset-2 bg-gradient-to-r from-cyan-400/8 via-purple-500/8 to-cyan-400/8 rounded-lg blur-xl opacity-0 group-hover/logo:opacity-40 transition-opacity duration-500" />
               
               <Image
-                src="/Pixaura_it%20.png"
+                src="/Pixaura_it .png"
                 alt="Pixaura International"
                 width={160}
                 height={48}
-                className="relative z-10 brightness-0 invert mb-2 transition-all duration-500 group-hover/logo:scale-105 group-hover/logo:drop-shadow-[0_0_20px_rgba(34,211,238,0.4)]"
-                style={{ filter: 'brightness(0) invert(1)' }}
+                className="relative z-10 mb-2 transition-all duration-500 group-hover/logo:scale-105 group-hover/logo:drop-shadow-[0_0_20px_rgba(34,211,238,0.4)]"
               />
               
               {/* Animated Sparkles */}

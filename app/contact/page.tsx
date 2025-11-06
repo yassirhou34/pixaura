@@ -91,7 +91,7 @@ export default function ContactPage() {
     <main className="bg-black min-h-screen">
       <Navbar />
       
-      <section className="relative py-20 md:py-28 px-6 bg-black overflow-hidden">
+      <section className="relative pt-40 pb-20 md:pb-28 px-6 bg-black overflow-hidden">
         {/* Background Effects - Premium */}
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-500/5 to-transparent opacity-40" />
         <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/3 via-transparent to-purple-500/3 opacity-30" />

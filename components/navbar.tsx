@@ -28,7 +28,7 @@ export function Navbar() {
   }, [])
 
   const navItems = [
-    { label: "Services", href: "#services" },
+    { label: "Services", href: "/#nos-expertises" },
     { label: "Réalisations", href: "/realisations" },
     { label: "Offre", href: "/offre" },
     { label: "Agence", href: "/agence" },
@@ -112,7 +112,7 @@ export function Navbar() {
             className="group relative z-10 transition-all duration-300 hover:opacity-90"
           >
             <Image
-              src="/Pixaura_it%20.png"
+              src="/Pixaura_it .png"
               alt="Pixaura International Logo"
               width={500}
               height={150}
@@ -169,7 +169,7 @@ export function Navbar() {
           {/* CTA Button - Modern Clean Design - Stays Rounded */}
           <div className="hidden xl:block relative z-10">
             <Link
-              href="#contact"
+              href="/contact#rendez-vous"
               className="group relative px-10 py-4 font-bold text-sm tracking-wide rounded-full overflow-hidden transition-all duration-500"
               style={{
                 background: "linear-gradient(135deg, #0073ff 0%, #1aa3ff 50%, #0073ff 100%)",
@@ -272,7 +272,7 @@ export function Navbar() {
             ))}
             
             <Link
-              href="#contact"
+              href="/contact#rendez-vous"
               className="block mt-8 px-10 py-5 text-white font-bold rounded-full text-center transition-all duration-500 shadow-xl relative overflow-hidden group"
               onClick={() => setIsOpen(false)}
               style={{

@@ -802,3 +802,26 @@ select:focus option:checked {
   background-color: #22d3ee !important;
   color: #000000 !important;
 }
+
+/* Hide scrollbar for table */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Smooth auto-scroll animation */
+@keyframes smooth-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-10px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}

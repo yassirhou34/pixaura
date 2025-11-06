@@ -150,11 +150,11 @@ export default function AgencePage() {
 
         <div className="relative z-10">
           {/* Hero Section */}
-          <section className="relative py-24 px-6">
+          <section className="relative py-16 px-6 pt-24">
             <div className="max-w-7xl mx-auto text-center">
-              <div className="relative mb-8">
+              <div className="relative mb-6">
                 <div className="absolute -inset-6 bg-gradient-to-r from-cyan-400/20 via-purple-500/20 to-cyan-400/20 rounded-2xl blur-3xl opacity-50" />
-                <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-white relative z-10 mb-6" style={{ 
+                <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-white relative z-10 mb-4" style={{ 
                   fontFamily: 'Montserrat, sans-serif', 
                   letterSpacing: '-0.03em',
                   lineHeight: '1.1',
@@ -171,7 +171,7 @@ export default function AgencePage() {
           </section>
 
           {/* Section Separator */}
-          <div className="relative py-12 px-6">
+          <div className="relative py-6 px-6">
             <div className="max-w-7xl mx-auto">
               <div className="h-[2px] bg-gradient-to-r from-transparent via-white/40 to-transparent rounded-full">
                 <div className="absolute left-1/2 -translate-x-1/2 w-32 h-[2px] bg-gradient-to-r from-cyan-400/60 to-purple-500/60 blur-sm opacity-60" />
@@ -180,11 +180,11 @@ export default function AgencePage() {
           </div>
 
           {/* Section Manifeste & Valeurs */}
-          <section className="relative py-24 px-6">
+          <section className="relative py-12 px-6">
             <div className="max-w-7xl mx-auto">
-              <div className="text-center mb-16 relative">
+              <div className="text-center mb-8 relative">
                 <div className="absolute -inset-6 bg-gradient-to-r from-cyan-400/20 via-purple-500/20 to-cyan-400/20 rounded-2xl blur-3xl opacity-50" />
-                <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 relative z-10" style={{ 
+                <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-4 relative z-10" style={{ 
                   fontFamily: 'Montserrat, sans-serif', 
                   letterSpacing: '-0.03em',
                   textShadow: '0 0 40px rgba(255, 255, 255, 0.2), 0 0 80px rgba(255, 255, 255, 0.1)',
@@ -194,11 +194,11 @@ export default function AgencePage() {
                 <div className="absolute left-1/2 -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-cyan-400 via-purple-500 to-cyan-400 rounded-full opacity-60" style={{ animation: 'pack-glow-pulse 3s ease-in-out infinite' }} />
               </div>
 
-              <div className="max-w-4xl mx-auto mb-16">
-                <p className="text-gray-300 text-lg md:text-xl leading-relaxed text-center mb-4" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+              <div className="max-w-4xl mx-auto mb-8">
+                <p className="text-gray-300 text-lg md:text-xl leading-relaxed text-center mb-3" style={{ fontFamily: 'Montserrat, sans-serif' }}>
                   Fondée par des passionnés de communication et d'image, Pixaura est née d'une conviction :
                 </p>
-                <p className="text-white text-xl md:text-2xl font-bold text-center mb-6" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+                <p className="text-white text-xl md:text-2xl font-bold text-center mb-4" style={{ fontFamily: 'Montserrat, sans-serif' }}>
                   l'image doit à la fois inspirer et performer.
                 </p>
                 <p className="text-gray-300 text-lg md:text-xl leading-relaxed text-center" style={{ fontFamily: 'Montserrat, sans-serif' }}>
@@ -206,7 +206,7 @@ export default function AgencePage() {
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
                 {values.map((value, index) => {
                   const IconComponent = value.icon
                   return (
