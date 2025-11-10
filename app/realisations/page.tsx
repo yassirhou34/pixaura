@@ -6,7 +6,9 @@ import Link from "next/link"
 import { ProjectModal } from "@/components/project-modal"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
-import { Palette, Car, Building2, Dumbbell, UtensilsCrossed, Briefcase, Users } from "lucide-react"
+import { Palette, Car, Building2, Dumbbell, UtensilsCrossed, Briefcase, Users, ArrowRight } from "lucide-react"
+import { SectionDivider } from "@/components/section-divider"
+import { Reveal } from "@/components/reveal"
 
 // Types de projets
 const formatFilters = ["Branding"]
@@ -279,319 +281,314 @@ export default function RealisationsPage() {
   }, [])
 
   return (
-    <main className="bg-black min-h-screen">
+    <main className="relative min-h-screen overflow-hidden bg-transparent">
       <Navbar />
-      <section ref={sectionRef} className="relative pt-40 pb-20 px-6 bg-black overflow-hidden">
-        {/* Section Separator - Top */}
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
-        
-        {/* Enhanced Background - Deep dark with animated gradients */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-slate-950/50 to-black" />
-        
-        {/* Animated gradient overlay - Follows mouse */}
+
+      <div className="pointer-events-none fixed inset-0 -z-10">
+        <video
+          className="h-full w-full object-cover"
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+        >
+          <source src="/Banque d_images/backv1.mp4" type="video/mp4" />
+        </video>
+      </div>
+
+      <section ref={sectionRef} className="relative pt-40 pb-20 px-6 bg-transparent overflow-hidden">
         <div
           className="absolute inset-0 opacity-30 pointer-events-none transition-opacity duration-1000"
           style={{
             background: `radial-gradient(circle 600px at ${mousePosition.x}px ${mousePosition.y}px, rgba(0, 200, 255, 0.15) 0%, rgba(124, 58, 237, 0.1) 30%, transparent 60%)`,
           }}
         />
-        
-        {/* Enhanced digital patterns - Animated */}
-        <div className="absolute inset-0 opacity-[0.04]">
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: `
-                repeating-linear-gradient(90deg, transparent, transparent 99px, rgba(0, 200, 255, 0.08) 100px),
-                repeating-linear-gradient(0deg, transparent, transparent 99px, rgba(124, 58, 237, 0.08) 100px)
-              `,
-              backgroundSize: '200px 200px',
-              animation: 'patternMove 20s linear infinite',
-            }}
-          />
-        </div>
+        <div className="relative z-10 mx-auto max-w-6xl space-y-12">
+          <Reveal className="relative overflow-hidden px-6 py-12 text-center text-white md:px-10 md:py-16">
+            <div className="absolute inset-0 bg-gradient-to-br from-white/8 via-transparent to-transparent opacity-70" />
+            <div className="pointer-events-none absolute -top-40 -right-32 h-72 w-72 rounded-full bg-primary/30 blur-[140px]" />
+            <div className="pointer-events-none absolute -bottom-32 -left-28 h-72 w-72 rounded-full bg-cyan-400/25 blur-[140px]" />
+            <div className="pointer-events-none absolute top-1/2 left-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 transform rounded-full bg-white/8 blur-[220px]" />
+            <div className="relative mx-auto flex max-w-4xl flex-col items-center gap-6">
+              <span className="inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/10 px-6 py-2 text-[11px] font-semibold uppercase tracking-[0.32em] text-white/70 backdrop-blur-lg">
+                Nos réalisations
+              </span>
+              <h1 className="text-4xl font-black leading-tight md:text-5xl" style={{ fontFamily: "Montserrat, sans-serif" }}>
+                Films, shootings et campagnes qui <span className="bg-gradient-to-r from-white via-primary/80 to-white bg-clip-text text-transparent">amplifient l’aura</span> des marques.
+              </h1>
+              <p className="text-sm text-white/70 md:text-base">
+                Inspirez-vous de notre portfolio : un mix de formats premium conçus pour créer de l’impact, de l’émotion et des résultats mesurables.
+              </p>
+              <div className="mt-4 flex flex-wrap justify-center gap-4 text-xs uppercase tracking-[0.28em] text-white/50">
+                <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 backdrop-blur-lg">
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary/70" />
+                  Film & Vidéo
+                </div>
+                <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 backdrop-blur-lg">
+                  <span className="h-1.5 w-1.5 rounded-full bg-cyan-400/70" />
+                  Photo
+                </div>
+                <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 backdrop-blur-lg">
+                  <span className="h-1.5 w-1.5 rounded-full bg-white/60" />
+                  Activation
+                </div>
+              </div>
+            </div>
+          </Reveal>
 
-        {/* Enhanced scattered light points - More dynamic */}
-        {mounted && (
-          <div className="absolute inset-0 pointer-events-none overflow-hidden">
-            {[...Array(25)].map((_, i) => {
-              // Use deterministic values based on index to avoid hydration mismatch
-              const seed = i * 0.1375 // Deterministic seed based on index
-              const left = ((seed * 100) % 100)
-              const top = ((seed * 137.5) % 100)
-              const duration = 4 + ((seed * 4) % 4)
-              const delay = (seed * 3) % 3
-              
-              return (
-                <div
-                  key={i}
-                  className="absolute w-1 h-1 bg-white rounded-full opacity-15"
-                  style={{
-                    left: `${left}%`,
-                    top: `${top}%`,
-                    animation: `floatAdvanced ${duration}s ease-in-out infinite`,
-                    animationDelay: `${delay}s`,
-                  }}
-                />
-              )
-            })}
-          </div>
-        )}
-
-        {/* Subtle light streaks - Enhanced */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/4 left-0 w-full h-px bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent" />
-          <div className="absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/15 to-transparent" />
-          <div className="absolute top-3/4 left-0 w-full h-px bg-gradient-to-r from-transparent via-purple-500/20 to-transparent" />
-        </div>
-        
-        <div className="relative z-10 max-w-7xl mx-auto">
           {/* Sticky Filters Section - Premium Design */}
           <div
             ref={filtersRef}
             className={`mb-12 space-y-6 transition-all duration-300 ${
               isSticky
-                ? "sticky top-0 z-30 bg-black/85 backdrop-blur-sm py-3 -mx-6 px-6 border-b border-white/10 shadow-md"
+                ? "sticky top-0 z-30 bg-white/10 backdrop-blur-xl py-3 -mx-6 px-6 border-b border-white/10 shadow-md"
                 : ""
             }`}
           >
             {/* All Filters Combined in One Line - Compact Premium Design with Exclusive Selection */}
-            <div className="flex flex-nowrap gap-2 justify-center overflow-x-auto pb-2 px-2 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}>
-              {/* Tous Button */}
-              <button
-                onClick={() => setActiveFilter("Tous")}
-                className={`group relative px-4 py-2 rounded-full font-medium text-xs transition-all duration-300 ease-out flex items-center gap-1.5 backdrop-blur-md flex-shrink-0 overflow-visible cursor-pointer ${
-                  activeFilter === "Tous"
-                    ? "bg-[#0073FF] text-white shadow-lg shadow-[#0073FF]/50 border border-white/30"
-                    : "bg-white/10 text-white/70 border border-white/15"
-                } group-hover:bg-white/20 group-hover:text-white group-hover:border-white/30 group-hover:shadow-lg group-hover:shadow-white/20`}
-                aria-label="Afficher tous les projets"
-                style={{
-                  fontFamily: 'Montserrat, sans-serif',
-                  letterSpacing: '0.01em',
-                }}
-              >
-                {/* Premium Smooth Hover Effects - Only when not active */}
-                {activeFilter !== "Tous" && (
-                  <>
-                    {/* Premium Glow Pulse - Subtle Outer Glow */}
-                    <div className="absolute -inset-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" style={{
-                      background: 'radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 50%, transparent 70%)',
-                      animation: 'premium-glow 2.5s ease-in-out infinite',
-                      filter: 'blur(12px)',
-                    }} />
-                    
-                    {/* Premium Shine Effect - Smooth Sweep */}
-                    <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none overflow-hidden">
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent" style={{
-                        transform: 'translateX(-100%) translateY(-100%) rotate(45deg)',
-                        width: '200%',
-                        height: '200%',
-                        animation: 'premium-shine 2s ease-in-out infinite',
+            <div className="relative overflow-hidden rounded-full border border-white/10 bg-white/6 px-4 py-3 shadow-[0_25px_80px_rgba(0,0,0,0.35)] backdrop-blur-2xl">
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-white/5 via-transparent to-white/5" />
+              <div className="pointer-events-none absolute -left-10 top-1/2 h-24 w-24 -translate-y-1/2 rounded-full bg-primary/25 blur-3xl" />
+              <div className="pointer-events-none absolute -right-8 top-0 h-28 w-32 rounded-full bg-cyan-400/20 blur-3xl" />
+              <div className="relative flex flex-nowrap gap-2 justify-center overflow-x-auto pb-2 px-2 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}>
+                {/* Tous Button */}
+                <button
+                  onClick={() => setActiveFilter("Tous")}
+                  className={`group relative px-4 py-2 rounded-full font-medium text-xs transition-all duration-300 ease-out flex items-center gap-1.5 backdrop-blur-md flex-shrink-0 overflow-visible cursor-pointer ${
+                    activeFilter === "Tous"
+                      ? "bg-[#0073FF] text-white shadow-lg shadow-[#0073FF]/50 border border-white/30"
+                      : "bg-white/10 text-white/70 border border-white/15"
+                  } group-hover:bg-white/20 group-hover:text-white group-hover:border-white/30 group-hover:shadow-lg group-hover:shadow-white/20`}
+                  aria-label="Afficher tous les projets"
+                  style={{
+                    fontFamily: 'Montserrat, sans-serif',
+                    letterSpacing: '0.01em',
+                  }}
+                >
+                  {/* Premium Smooth Hover Effects - Only when not active */}
+                  {activeFilter !== "Tous" && (
+                    <>
+                      {/* Premium Glow Pulse - Subtle Outer Glow */}
+                      <div className="absolute -inset-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" style={{
+                        background: 'radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 50%, transparent 70%)',
+                        animation: 'premium-glow 2.5s ease-in-out infinite',
+                        filter: 'blur(12px)',
                       }} />
-                    </div>
-                    
-                    {/* Subtle Inner Glow */}
-                    <div className="absolute inset-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" style={{
-                      background: 'radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, transparent 70%)',
-                      animation: 'premium-glow 3s ease-in-out infinite',
-                    }} />
-                    
-                    {/* Minimal Floating Particles - Very Subtle */}
-                    <div className="absolute inset-0 overflow-hidden rounded-full pointer-events-none">
-                      {[...Array(4)].map((_, i) => (
-                        <div
-                          key={i}
-                          className="absolute rounded-full bg-white/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                          style={{
-                            width: '1px',
-                            height: '1px',
-                            top: `${25 + (i * 20)}%`,
-                            left: `${20 + (i * 25)}%`,
-                            animation: `premium-particles 2.5s ease-out infinite ${i * 0.4}s`,
-                            filter: 'blur(0.5px)',
-                          }}
-                        />
-                      ))}
-                    </div>
-                  </>
-                )}
+                      
+                      {/* Premium Shine Effect - Smooth Sweep */}
+                      <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent" style={{
+                          transform: 'translateX(-100%) translateY(-100%) rotate(45deg)',
+                          width: '200%',
+                          height: '200%',
+                          animation: 'premium-shine 2s ease-in-out infinite',
+                        }} />
+                      </div>
+                      
+                      {/* Subtle Inner Glow */}
+                      <div className="absolute inset-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" style={{
+                        background: 'radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, transparent 70%)',
+                        animation: 'premium-glow 3s ease-in-out infinite',
+                      }} />
+                      
+                      {/* Minimal Floating Particles - Very Subtle */}
+                      <div className="absolute inset-0 overflow-hidden rounded-full pointer-events-none">
+                        {[...Array(4)].map((_, i) => (
+                          <div
+                            key={i}
+                            className="absolute rounded-full bg-white/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                            style={{
+                              width: '1px',
+                              height: '1px',
+                              top: `${25 + (i * 20)}%`,
+                              left: `${20 + (i * 25)}%`,
+                              animation: `premium-particles 2.5s ease-out infinite ${i * 0.4}s`,
+                              filter: 'blur(0.5px)',
+                            }}
+                          />
+                        ))}
+                      </div>
+                    </>
+                  )}
+                  
+                  <span className={`relative z-10 transition-all duration-300 ${activeFilter === "Tous" ? "text-white scale-105" : "text-white/70 group-hover:text-white group-hover:scale-110"}`} style={{ width: '14px', height: '14px' }}>
+                    <Briefcase className="w-3.5 h-3.5" />
+                  </span>
+                  <span className={`relative z-10 whitespace-nowrap text-xs transition-all duration-300 ${activeFilter !== "Tous" ? "group-hover:tracking-wider" : ""}`}>Tous</span>
+                  <span className={`relative z-10 px-1.5 py-0.5 rounded-full text-[10px] font-bold transition-all duration-300 min-w-[18px] flex items-center justify-center ${
+                    activeFilter === "Tous"
+                      ? "bg-white/25 text-white shadow-sm"
+                      : "bg-white/10 text-white/60 group-hover:bg-white/20 group-hover:text-white/90 group-hover:scale-110"
+                  }`}>
+                    {filterCounts["Tous"]}
+                  </span>
+                </button>
                 
-                <span className={`relative z-10 transition-all duration-300 ${activeFilter === "Tous" ? "text-white scale-105" : "text-white/70 group-hover:text-white group-hover:scale-110"}`} style={{ width: '14px', height: '14px' }}>
-                  <Briefcase className="w-3.5 h-3.5" />
-                </span>
-                <span className={`relative z-10 whitespace-nowrap text-xs transition-all duration-300 ${activeFilter !== "Tous" ? "group-hover:tracking-wider" : ""}`}>Tous</span>
-                <span className={`relative z-10 px-1.5 py-0.5 rounded-full text-[10px] font-bold transition-all duration-300 min-w-[18px] flex items-center justify-center ${
-                  activeFilter === "Tous"
-                    ? "bg-white/25 text-white shadow-sm"
-                    : "bg-white/10 text-white/60 group-hover:bg-white/20 group-hover:text-white/90 group-hover:scale-110"
-                }`}>
-                  {filterCounts["Tous"]}
-                </span>
-              </button>
-              
-              {/* Format Filters */}
-              {formatFilters.map((format) => {
-                const isActive = activeFilter === format
-                const count = filterCounts[format]
-                return (
-                  <button
-                    key={`format-${format}`}
-                    onClick={() => setActiveFilter(format)}
-                    className={`group relative px-4 py-2 rounded-full font-medium text-xs transition-all duration-300 ease-out flex items-center gap-1.5 backdrop-blur-md flex-shrink-0 overflow-visible cursor-pointer ${
-                      isActive
-                        ? "bg-[#0073FF] text-white shadow-lg shadow-[#0073FF]/50 border border-white/30"
-                        : "bg-white/10 text-white/70 border border-white/15"
-                    } group-hover:bg-white/20 group-hover:text-white group-hover:border-white/30 group-hover:shadow-lg group-hover:shadow-white/20`}
-                    aria-label={`Filtrer par ${format}`}
-                    style={{
-                      fontFamily: 'Montserrat, sans-serif',
-                      letterSpacing: '0.01em',
-                    }}
-                  >
-                    {/* Premium Smooth Hover Effects - Only when not active */}
-                    {!isActive && (
-                      <>
-                        {/* Premium Glow Pulse - Subtle Outer Glow */}
-                        <div className="absolute -inset-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" style={{
-                          background: 'radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 50%, transparent 70%)',
-                          animation: 'premium-glow 2.5s ease-in-out infinite',
-                          filter: 'blur(12px)',
-                        }} />
-                        
-                        {/* Premium Shine Effect - Smooth Sweep */}
-                        <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none overflow-hidden">
-                          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent" style={{
-                            transform: 'translateX(-100%) translateY(-100%) rotate(45deg)',
-                            width: '200%',
-                            height: '200%',
-                            animation: 'premium-shine 2s ease-in-out infinite',
+                {/* Format Filters */}
+                {formatFilters.map((format) => {
+                  const isActive = activeFilter === format
+                  const count = filterCounts[format]
+                  return (
+                    <button
+                      key={`format-${format}`}
+                      onClick={() => setActiveFilter(format)}
+                      className={`group relative px-4 py-2 rounded-full font-medium text-xs transition-all duration-300 ease-out flex items-center gap-1.5 backdrop-blur-md flex-shrink-0 overflow-visible cursor-pointer ${
+                        isActive
+                          ? "bg-[#0073FF] text-white shadow-lg shadow-[#0073FF]/50 border border-white/30"
+                          : "bg-white/10 text-white/70 border border-white/15"
+                      } group-hover:bg-white/20 group-hover:text-white group-hover:border-white/30 group-hover:shadow-lg group-hover:shadow-white/20`}
+                      aria-label={`Filtrer par ${format}`}
+                      style={{
+                        fontFamily: 'Montserrat, sans-serif',
+                        letterSpacing: '0.01em',
+                      }}
+                    >
+                      {/* Premium Smooth Hover Effects - Only when not active */}
+                      {!isActive && (
+                        <>
+                          {/* Premium Glow Pulse - Subtle Outer Glow */}
+                          <div className="absolute -inset-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" style={{
+                            background: 'radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 50%, transparent 70%)',
+                            animation: 'premium-glow 2.5s ease-in-out infinite',
+                            filter: 'blur(12px)',
                           }} />
-                        </div>
-                        
-                        {/* Subtle Inner Glow */}
-                        <div className="absolute inset-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" style={{
-                          background: 'radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, transparent 70%)',
-                          animation: 'premium-glow 3s ease-in-out infinite',
-                        }} />
-                        
-                        {/* Minimal Floating Particles - Very Subtle */}
-                        <div className="absolute inset-0 overflow-hidden rounded-full pointer-events-none">
-                          {[...Array(4)].map((_, i) => (
-                            <div
-                              key={i}
-                              className="absolute rounded-full bg-white/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                              style={{
-                                width: '1px',
-                                height: '1px',
-                                top: `${25 + (i * 20)}%`,
-                                left: `${20 + (i * 25)}%`,
-                                animation: `premium-particles 2.5s ease-out infinite ${i * 0.4}s`,
-                                filter: 'blur(0.5px)',
-                              }}
-                            />
-                          ))}
-                        </div>
-                      </>
-                    )}
-                    
-                    <span className={`relative z-10 transition-all duration-300 ${isActive ? "text-white scale-105" : "text-white/70 group-hover:text-white group-hover:scale-110"}`} style={{ width: '14px', height: '14px' }}>
-                      {formatIcons[format]}
-                    </span>
-                    <span className={`relative z-10 whitespace-nowrap text-xs transition-all duration-300 ${!isActive ? "group-hover:tracking-wider" : ""}`}>{format}</span>
-                    <span className={`relative z-10 px-1.5 py-0.5 rounded-full text-[10px] font-bold transition-all duration-300 min-w-[18px] flex items-center justify-center ${
-                      isActive
-                        ? "bg-white/25 text-white shadow-sm"
-                        : "bg-white/10 text-white/60 group-hover:bg-white/20 group-hover:text-white/90 group-hover:scale-110"
-                    }`}>
-                      {count}
-                    </span>
-                  </button>
-                )
-              })}
-              
-              {/* Sector Filters - excluding "Tous" to avoid duplication */}
-              {sectorFilters.filter(sector => sector !== "Tous").map((sector) => {
-                const isActive = activeFilter === sector
-                const count = filterCounts[sector]
-                return (
-                  <button
-                    key={`sector-${sector}`}
-                    onClick={() => setActiveFilter(sector)}
-                    className={`group relative px-4 py-2 rounded-full font-medium text-xs transition-all duration-300 ease-out flex items-center gap-1.5 backdrop-blur-md flex-shrink-0 overflow-visible cursor-pointer ${
-                      isActive
-                        ? "bg-[#0073FF] text-white shadow-lg shadow-[#0073FF]/50 border border-white/30"
-                        : "bg-white/10 text-white/70 border border-white/15"
-                    } group-hover:bg-white/20 group-hover:text-white group-hover:border-white/30 group-hover:shadow-lg group-hover:shadow-white/20`}
-                    aria-label={`Filtrer par ${sector}`}
-                    style={{
-                      fontFamily: 'Montserrat, sans-serif',
-                      letterSpacing: '0.01em',
-                    }}
-                  >
-                    {/* Premium Smooth Hover Effects - Only when not active */}
-                    {!isActive && (
-                      <>
-                        {/* Premium Glow Pulse - Subtle Outer Glow */}
-                        <div className="absolute -inset-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" style={{
-                          background: 'radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 50%, transparent 70%)',
-                          animation: 'premium-glow 2.5s ease-in-out infinite',
-                          filter: 'blur(12px)',
-                        }} />
-                        
-                        {/* Premium Shine Effect - Smooth Sweep */}
-                        <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none overflow-hidden">
-                          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent" style={{
-                            transform: 'translateX(-100%) translateY(-100%) rotate(45deg)',
-                            width: '200%',
-                            height: '200%',
-                            animation: 'premium-shine 2s ease-in-out infinite',
+                          
+                          {/* Premium Shine Effect - Smooth Sweep */}
+                          <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent" style={{
+                              transform: 'translateX(-100%) translateY(-100%) rotate(45deg)',
+                              width: '200%',
+                              height: '200%',
+                              animation: 'premium-shine 2s ease-in-out infinite',
+                            }} />
+                          </div>
+                          
+                          {/* Subtle Inner Glow */}
+                          <div className="absolute inset-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" style={{
+                            background: 'radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, transparent 70%)',
+                            animation: 'premium-glow 3s ease-in-out infinite',
                           }} />
-                        </div>
-                        
-                        {/* Subtle Inner Glow */}
-                        <div className="absolute inset-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" style={{
-                          background: 'radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, transparent 70%)',
-                          animation: 'premium-glow 3s ease-in-out infinite',
-                        }} />
-                        
-                        {/* Minimal Floating Particles - Very Subtle */}
-                        <div className="absolute inset-0 overflow-hidden rounded-full pointer-events-none">
-                          {[...Array(4)].map((_, i) => (
-                            <div
-                              key={i}
-                              className="absolute rounded-full bg-white/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                              style={{
-                                width: '1px',
-                                height: '1px',
-                                top: `${25 + (i * 20)}%`,
-                                left: `${20 + (i * 25)}%`,
-                                animation: `premium-particles 2.5s ease-out infinite ${i * 0.4}s`,
-                                filter: 'blur(0.5px)',
-                              }}
-                            />
-                          ))}
-                        </div>
-                      </>
-                    )}
-                    
-                    <span className={`relative z-10 transition-all duration-300 ${isActive ? "text-white scale-105" : "text-white/70 group-hover:text-white group-hover:scale-110"}`} style={{ width: '14px', height: '14px' }}>
-                      {sectorIcons[sector]}
-                    </span>
-                    <span className={`relative z-10 whitespace-nowrap text-xs transition-all duration-300 ${!isActive ? "group-hover:tracking-wider" : ""}`}>{sector}</span>
-                    <span className={`relative z-10 px-1.5 py-0.5 rounded-full text-[10px] font-bold transition-all duration-300 min-w-[18px] flex items-center justify-center ${
-                      isActive
-                        ? "bg-white/25 text-white shadow-sm"
-                        : "bg-white/10 text-white/60 group-hover:bg-white/20 group-hover:text-white/90 group-hover:scale-110"
-                    }`}>
-                      {count}
-                    </span>
-                  </button>
-                )
-              })}
+                          
+                          {/* Minimal Floating Particles - Very Subtle */}
+                          <div className="absolute inset-0 overflow-hidden rounded-full pointer-events-none">
+                            {[...Array(4)].map((_, i) => (
+                              <div
+                                key={i}
+                                className="absolute rounded-full bg-white/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                                style={{
+                                  width: '1px',
+                                  height: '1px',
+                                  top: `${25 + (i * 20)}%`,
+                                  left: `${20 + (i * 25)}%`,
+                                  animation: `premium-particles 2.5s ease-out infinite ${i * 0.4}s`,
+                                  filter: 'blur(0.5px)',
+                                }}
+                              />
+                            ))}
+                          </div>
+                        </>
+                      )}
+                      
+                      <span className={`relative z-10 transition-all duration-300 ${isActive ? "text-white scale-105" : "text-white/70 group-hover:text-white group-hover:scale-110"}`} style={{ width: '14px', height: '14px' }}>
+                        {formatIcons[format]}
+                      </span>
+                      <span className={`relative z-10 whitespace-nowrap text-xs transition-all duration-300 ${!isActive ? "group-hover:tracking-wider" : ""}`}>{format}</span>
+                      <span className={`relative z-10 px-1.5 py-0.5 rounded-full text-[10px] font-bold transition-all duration-300 min-w-[18px] flex items-center justify-center ${
+                        isActive
+                          ? "bg-white/25 text-white shadow-sm"
+                          : "bg-white/10 text-white/60 group-hover:bg-white/20 group-hover:text-white/90 group-hover:scale-110"
+                      }`}>
+                        {count}
+                      </span>
+                    </button>
+                  )
+                })}
+                
+                {/* Sector Filters - excluding "Tous" to avoid duplication */}
+                {sectorFilters.filter(sector => sector !== "Tous").map((sector) => {
+                  const isActive = activeFilter === sector
+                  const count = filterCounts[sector]
+                  return (
+                    <button
+                      key={`sector-${sector}`}
+                      onClick={() => setActiveFilter(sector)}
+                      className={`group relative px-4 py-2 rounded-full font-medium text-xs transition-all duration-300 ease-out flex items-center gap-1.5 backdrop-blur-md flex-shrink-0 overflow-visible cursor-pointer ${
+                        isActive
+                          ? "bg-[#0073FF] text-white shadow-lg shadow-[#0073FF]/50 border border-white/30"
+                          : "bg-white/10 text-white/70 border border-white/15"
+                      } group-hover:bg-white/20 group-hover:text-white group-hover:border-white/30 group-hover:shadow-lg group-hover:shadow-white/20`}
+                      aria-label={`Filtrer par ${sector}`}
+                      style={{
+                        fontFamily: 'Montserrat, sans-serif',
+                        letterSpacing: '0.01em',
+                      }}
+                    >
+                      {/* Premium Smooth Hover Effects - Only when not active */}
+                      {!isActive && (
+                        <>
+                          {/* Premium Glow Pulse - Subtle Outer Glow */}
+                          <div className="absolute -inset-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" style={{
+                            background: 'radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 50%, transparent 70%)',
+                            animation: 'premium-glow 2.5s ease-in-out infinite',
+                            filter: 'blur(12px)',
+                          }} />
+                          
+                          {/* Premium Shine Effect - Smooth Sweep */}
+                          <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent" style={{
+                              transform: 'translateX(-100%) translateY(-100%) rotate(45deg)',
+                              width: '200%',
+                              height: '200%',
+                              animation: 'premium-shine 2s ease-in-out infinite',
+                            }} />
+                          </div>
+                          
+                          {/* Subtle Inner Glow */}
+                          <div className="absolute inset-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" style={{
+                            background: 'radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, transparent 70%)',
+                            animation: 'premium-glow 3s ease-in-out infinite',
+                          }} />
+                          
+                          {/* Minimal Floating Particles - Very Subtle */}
+                          <div className="absolute inset-0 overflow-hidden rounded-full pointer-events-none">
+                            {[...Array(4)].map((_, i) => (
+                              <div
+                                key={i}
+                                className="absolute rounded-full bg-white/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                                style={{
+                                  width: '1px',
+                                  height: '1px',
+                                  top: `${25 + (i * 20)}%`,
+                                  left: `${20 + (i * 25)}%`,
+                                  animation: `premium-particles 2.5s ease-out infinite ${i * 0.4}s`,
+                                  filter: 'blur(0.5px)',
+                                }}
+                              />
+                            ))}
+                          </div>
+                        </>
+                      )}
+                      
+                      <span className={`relative z-10 transition-all duration-300 ${isActive ? "text-white scale-105" : "text-white/70 group-hover:text-white group-hover:scale-110"}`} style={{ width: '14px', height: '14px' }}>
+                        {sectorIcons[sector]}
+                      </span>
+                      <span className={`relative z-10 whitespace-nowrap text-xs transition-all duration-300 ${!isActive ? "group-hover:tracking-wider" : ""}`}>{sector}</span>
+                      <span className={`relative z-10 px-1.5 py-0.5 rounded-full text-[10px] font-bold transition-all duration-300 min-w-[18px] flex items-center justify-center ${
+                        isActive
+                          ? "bg-white/25 text-white shadow-sm"
+                          : "bg-white/10 text-white/60 group-hover:bg-white/20 group-hover:text-white/90 group-hover:scale-110"
+                      }`}>
+                        {count}
+                      </span>
+                    </button>
+                  )
+                })}
+              </div>
             </div>
           </div>
 
+          <SectionDivider label="Sélection premium" />
           {/* Portfolio Grid - Premium Cards */}
           {filteredProjects.length === 0 ? (
             <div className="text-center py-20">
@@ -604,250 +601,103 @@ export default function RealisationsPage() {
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {filteredProjects.map((project, index) => (
-              <div
-                key={project.id}
-                className="group relative overflow-hidden rounded-[28px] bg-black border border-white/15 hover:border-primary/70 transition-all duration-700 cursor-pointer transform hover:scale-[1.08] hover:-translate-y-[12px] hover:rotate-[0.5deg] shadow-2xl hover:shadow-[#0073FF]/40 hover:shadow-2xl"
-                onClick={() => handleProjectClick(project)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault()
-                    handleProjectClick(project)
-                  }
-                }}
-                role="button"
-                tabIndex={0}
-                aria-label={`Voir les détails du projet ${project.title}`}
-                style={{
-                  animation: `slideInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${index * 100}ms forwards`,
-                  opacity: 0,
-                }}
-              >
-                {/* Ultra Premium Glow Effects - Multi-layer */}
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/0 via-primary/0 to-muted/0 group-hover:from-primary/35 group-hover:via-primary/25 group-hover:to-muted/35 transition-all duration-700 rounded-[28px] opacity-0 group-hover:opacity-100 blur-2xl group-hover:animate-pulse-glow" />
-                <div className="absolute -inset-2 bg-gradient-to-br from-primary/0 via-cyan-400/0 to-muted/0 group-hover:from-primary/25 group-hover:via-cyan-400/18 group-hover:to-muted/25 transition-all duration-900 rounded-[28px] opacity-0 group-hover:opacity-100 blur-3xl" style={{ animation: 'pulseGlow 3s ease-in-out infinite 0.3s' }} />
-                <div className="absolute -inset-4 bg-gradient-to-br from-primary/0 via-cyan-400/0 to-muted/0 group-hover:from-primary/18 group-hover:via-cyan-400/12 group-hover:to-muted/18 transition-all duration-1000 rounded-[28px] opacity-0 group-hover:opacity-100 blur-[60px]" style={{ animation: 'pulseGlow 3s ease-in-out infinite 0.6s' }} />
-                
-                {/* Rotating Glow Ring */}
-                <div className="absolute -inset-6 opacity-0 group-hover:opacity-100 transition-opacity duration-1000">
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/30 via-cyan-400/30 to-muted/30 animate-rotate-glow blur-2xl" />
-                </div>
-                
-                {/* Animated Border Gradient */}
-                <div className="absolute inset-0 rounded-[28px] opacity-0 group-hover:opacity-100 transition-opacity duration-700">
-                  <div className="absolute inset-0 rounded-[28px] bg-gradient-to-r from-primary/50 via-cyan-400/50 to-muted/50 p-[2px] animate-gradient-shift">
-                    <div className="w-full h-full rounded-[28px] bg-black" />
+                <Reveal
+                  key={project.id}
+                  delay={index * 120}
+                  className="group relative overflow-hidden rounded-3xl border border-white/15 bg-white/5 text-white backdrop-blur-xl transition duration-700 ease-out hover:-translate-y-3 hover:scale-[1.01] hover:border-white/25 hover:bg-white/10 hover:shadow-[0_45px_140px_rgba(0,0,0,0.55)]"
+                >
+                  <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-700 ease-out group-hover:opacity-100">
+                    <div className="absolute -inset-6 rounded-[40px] bg-gradient-to-r from-primary/20 via-white/10 to-cyan-400/20 blur-3xl animate-pulse" />
+                    <div className="absolute inset-0 rounded-[30px] border border-white/20 opacity-60" />
                   </div>
-                  <div className="absolute inset-0 rounded-[28px] animate-shimmer" />
-                </div>
-                
-                {/* Video or Image - Enhanced with Saturation */}
-                <div className="relative h-80 overflow-hidden rounded-t-[28px]">
-                  {project.video && project.id !== 8 ? (
-                    <video
-                      src={project.video}
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      className="w-full h-full object-cover group-hover:scale-125 transition-transform duration-1000 ease-out brightness-110 saturate-120"
-                    />
-                  ) : (
-                    <Image
-                      src={project.image || "/placeholder.jpg"}
-                      alt={project.title}
-                      fill
-                      className={`object-cover group-hover:scale-125 transition-transform duration-1000 ease-out brightness-110 saturate-120 ${
-                        project.id === 8 ? 'rotate-[-90deg]' : ''
-                      }`}
-                      style={project.id === 8 ? { transform: 'rotate(-90deg) scale(1.5)' } : undefined}
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      loading="lazy"
-                    />
-                  )}
-                  
-                  {/* Enhanced Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/70 via-black/50 to-black/30 group-hover:from-black/80 group-hover:via-black/60 group-hover:to-black/30 transition-all duration-700" />
-                  
-                  {/* Animated Light Rays */}
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
-                    <div className="absolute top-0 left-1/4 w-1/2 h-full bg-gradient-to-b from-primary/30 via-transparent to-transparent blur-2xl transform -skew-x-12 animate-pulse" />
-                    <div className="absolute top-0 right-1/4 w-1/3 h-full bg-gradient-to-b from-cyan-400/25 via-transparent to-transparent blur-2xl transform skew-x-12 animate-pulse" style={{ animationDelay: '0.5s' }} />
-                  </div>
-                  
-                  {/* Animated Shimmer Overlay */}
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer" />
-                  </div>
-                  
-                  {/* Premium Badge with Glow - Intelligent Format Detection */}
-                  <div className="absolute top-5 left-5 z-10">
-                    {(() => {
-                      // Détection intelligente du format principal basé sur le contenu réel
-                      const hasVideo = project.gallery?.some(item => item.endsWith('.mp4')) || project.video
-                      const hasImage = project.gallery?.some(item => item.endsWith('.jpg') || item.endsWith('.png') || item.endsWith('.jpeg')) || project.image
-                      const videoCount = project.gallery?.filter(item => item.endsWith('.mp4')).length || 0
-                      const imageCount = project.gallery?.filter(item => !item.endsWith('.mp4')).length || 0
-                      
-                      let badgeText = project.category
-                      
-                      // Logique intelligente pour déterminer le badge le plus significatif
-                      if (videoCount > imageCount && videoCount > 0) {
-                        badgeText = "Production Vidéo"
-                      } else if (imageCount > videoCount && imageCount > 0) {
-                        badgeText = "Shooting Photo"
-                      } else if (videoCount > 0 && imageCount > 0 && videoCount === imageCount) {
-                        badgeText = "Production Multi-Média"
-                      } else if (hasVideo && !hasImage) {
-                        badgeText = "Production Vidéo"
-                      } else if (hasImage && !hasVideo) {
-                        badgeText = "Shooting Photo"
-                      } else if (project.sector === "Artistes & Créateurs") {
-                        badgeText = "Création Artistique"
-                      } else if (project.sector === "Immobilier") {
-                        badgeText = "Production Immobilière"
-                      } else if (project.sector === "Automobile") {
-                        badgeText = "Production Automobile"
-                      } else if (project.title.toLowerCase().includes("interview")) {
-                        badgeText = "Interview Vidéo"
-                      } else if (project.title.toLowerCase().includes("rally")) {
-                        badgeText = "Coverage Événementiel"
-                      } else if (project.title.toLowerCase().includes("halloween") || project.title.toLowerCase().includes("shooting")) {
-                        badgeText = "Shooting Créatif"
-                      }
-                      
-                      return (
-                        <span className="px-4 py-1.5 bg-gradient-to-r from-primary via-[#1AA3FF] to-primary text-white text-xs font-black rounded-full backdrop-blur-md shadow-lg shadow-primary/50 border border-white/30 uppercase tracking-wider">
-                          {badgeText}
-                        </span>
-                      )
-                    })()}
-                  </div>
-
-                  {/* Ultra Premium "Voir le projet" Button */}
-                  <div className="absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-out z-20 transform translate-y-6 group-hover:translate-y-0">
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation()
+                  <button
+                    type="button"
+                    onClick={() => handleProjectClick(project)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
                         e.preventDefault()
                         handleProjectClick(project)
-                      }}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          e.preventDefault()
-                          e.stopPropagation()
-                          handleProjectClick(project)
-                        }
-                      }}
-                      className="relative w-full px-6 py-3.5 bg-gradient-to-r from-primary/90 via-[#1AA3FF]/90 to-cyan-400/90 text-white font-bold rounded-full group/btn overflow-hidden border border-white/30 hover:border-white/50 backdrop-blur-md transition-all duration-300 ease-out"
-                      style={{ 
-                        fontFamily: 'Montserrat, sans-serif',
-                        letterSpacing: '0.05em',
-                        textTransform: 'uppercase',
-                        fontWeight: 700,
-                        boxShadow: '0 4px 20px rgba(0,115,255,0.3), inset 0 1px 0 rgba(255,255,255,0.2)',
-                        transform: 'rotate(0deg)',
-                      }}
-                    >
-                      {/* Subtle Background Glow */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-primary via-[#1AA3FF] to-cyan-400 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300 rounded-full" />
-                      
-                      {/* Smooth Shimmer Effect */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000 ease-in-out rounded-full" />
-                      
-                      {/* Content */}
-                      <span className="relative z-10 flex items-center justify-center gap-3">
-                        <span className="text-xs font-bold tracking-wider transition-all duration-300 group-hover/btn:tracking-widest" style={{ 
-                          textShadow: '0 2px 8px rgba(0,0,0,0.3)',
-                        }}>
-                          VOIR LE PROJET
-                        </span>
-                        <span className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center border border-white/30 transition-all duration-300 group-hover/btn:bg-white/30 group-hover/btn:border-white/50 group-hover/btn:translate-x-1">
-                          <span className="text-sm font-bold transition-transform duration-300 group-hover/btn:translate-x-0.5">→</span>
-                        </span>
+                      }
+                    }}
+                    className="w-full text-left"
+                  >
+                    <div className="relative h-64 w-full overflow-hidden">
+                      {project.video && project.id !== 8 ? (
+                        <video
+                          src={project.video}
+                          autoPlay
+                          loop
+                          muted
+                          playsInline
+                          className="h-full w-full object-cover transition duration-700 ease-out group-hover:scale-105"
+                        />
+                      ) : (
+                        <Image
+                          src={project.image || "/placeholder.jpg"}
+                          alt={project.title}
+                          fill
+                          className={`object-cover transition duration-700 ease-out group-hover:scale-105 ${
+                            project.id === 8 ? "rotate-[-90deg]" : ""
+                          }`}
+                          style={project.id === 8 ? { transform: "rotate(-90deg) scale(1.3)" } : undefined}
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 30vw"
+                          loading="lazy"
+                        />
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                      <span className="absolute bottom-5 left-5 rounded-full border border-white/20 bg-white/15 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.32em] text-white/75 backdrop-blur-sm">
+                        {project.category}
                       </span>
-                      
-                      {/* Subtle Inner Glow */}
-                      <div className="absolute inset-[1px] bg-gradient-to-t from-white/5 to-transparent rounded-full opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300" />
-                    </button>
-                  </div>
-                </div>
-
-                {/* Enhanced Content */}
-                <div className="p-8 bg-gradient-to-b from-transparent via-black/20 to-black/60 relative overflow-hidden">
-                  {/* Background Pattern */}
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,115,255,0.1),transparent_50%)]" />
-                  </div>
-                  
-                  <h3 className="relative text-2xl font-black text-white mb-4 leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-primary group-hover:via-cyan-400 group-hover:to-muted transition-all duration-700 group-hover:scale-105 transform" style={{ 
-                    fontFamily: 'Montserrat, sans-serif',
-                    letterSpacing: '-0.02em',
-                  }}>
-                    <span className="relative z-10">{project.title}</span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-cyan-400/20 to-muted/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                  </h3>
-                  
-                  {/* Decorative Separator */}
-                  <div className="relative mb-4">
-                    <div className="w-12 h-0.5 bg-gradient-to-r from-primary to-cyan-400 group-hover:w-24 transition-all duration-500 group-hover:shadow-lg group-hover:shadow-primary/50" />
-                    <div className="absolute inset-0 w-12 h-0.5 bg-gradient-to-r from-primary/50 to-cyan-400/50 blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  </div>
-                  
-                  <p className="relative text-sm text-white/80 leading-relaxed font-medium group-hover:text-white/95 transition-all duration-700 group-hover:translate-x-1" style={{ 
-                    letterSpacing: '0.01em',
-                    lineHeight: '1.7',
-                  }}>
-                    {project.shortDescription}
-                  </p>
-                  
-                  {/* Decorative Element */}
-                  <div className="mt-5 pt-5 border-t border-white/10 group-hover:border-primary/50 transition-all duration-700 relative">
-                    <div className="flex items-center gap-2 text-xs text-white/60 group-hover:text-primary/80 transition-all duration-700 group-hover:scale-105">
-                      <span className="w-2 h-2 rounded-full bg-primary/60 group-hover:bg-primary group-hover:shadow-lg group-hover:shadow-primary/50 animate-pulse" />
-                      <span className="font-semibold group-hover:font-bold transition-all duration-300">{project.sector}</span>
                     </div>
-                  </div>
-                </div>
-                
-                {/* Enhanced Corner Accents */}
-                <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-primary/30 via-cyan-400/20 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-all duration-1000 group-hover:scale-150 group-hover:rotate-12 blur-lg" />
-                <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-muted/30 via-primary/20 to-transparent rounded-tr-full opacity-0 group-hover:opacity-100 transition-all duration-1000 group-hover:scale-150 group-hover:-rotate-12 blur-lg" />
-                
-                {/* Top Right Corner Light */}
-                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-primary/20 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-1000 animate-pulse" />
-                
-                {/* Bottom Left Corner Light */}
-                <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-muted/20 to-transparent rounded-tr-full opacity-0 group-hover:opacity-100 transition-opacity duration-1000 animate-pulse" style={{ animationDelay: '0.5s' }} />
-                
-                {/* Animated Border Glow */}
-                <div className="absolute inset-0 rounded-[28px] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
-                  <div className="absolute inset-0 rounded-[28px] border-2 border-primary/30 animate-pulse-glow" />
-                </div>
-              </div>
-            ))}
+
+                    <div className="flex flex-col gap-4 px-8 py-8 text-white">
+                      <h3 className="text-xl font-semibold leading-tight md:text-2xl">
+                        {project.title}
+                      </h3>
+                      <div className="flex items-center gap-4 text-xs uppercase tracking-[0.28em] text-white/50">
+                        <span className="flex items-center gap-2">
+                          <span className="h-1 w-1 rounded-full bg-white/50" />
+                          {project.category}
+                        </span>
+                        <span className="h-px flex-1 bg-white/20" />
+                        <span className="inline-flex items-center gap-2 text-white transition duration-300 group-hover:text-white/70">
+                          Voir le projet
+                          <ArrowRight className="h-3 w-3" />
+                        </span>
+                      </div>
+                    </div>
+                  </button>
+                </Reveal>
+              ))}
             </div>
           )}
 
           {/* CTA Section */}
-          <div className="text-center mt-16">
-            <p className="text-xl md:text-2xl text-white mb-6 font-medium">
-              Vous souhaitez un rendu aussi impactant ? Parlons de votre projet.
-            </p>
-            <Link
-              href="/#contact"
-              className="inline-block px-8 py-4 bg-[#0073FF] text-white font-bold rounded-full hover:bg-[#1AA3FF] transition-all duration-300 hover:scale-105 shadow-lg shadow-[#0073FF]/50 hover:shadow-[#0073FF]/70"
-            >
-              Prendre rendez-vous
-            </Link>
-          </div>
+          <Reveal className="relative mt-20 overflow-hidden px-8 py-16 text-center text-white">
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/6 via-transparent to-transparent" />
+            <div className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-[#0073FF]/25 blur-3xl" />
+            <div className="pointer-events-none absolute -left-16 bottom-0 h-56 w-56 rounded-full bg-cyan-400/25 blur-[140px]" />
+            <div className="pointer-events-none absolute top-1/2 left-1/2 h-[480px] w-[480px] -translate-x-1/2 -translate-y-1/2 transform rounded-full bg-white/6 blur-[210px]" />
+            <div className="relative mx-auto flex max-w-3xl flex-col items-center gap-6">
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-2 text-[11px] font-semibold uppercase tracking-[0.32em] text-white/70 backdrop-blur-lg">
+                parlons de votre prochain succès
+              </span>
+              <p className="text-xl font-semibold md:text-2xl">
+                Vous souhaitez un rendu <span className="bg-gradient-to-r from-white via-primary/70 to-white bg-clip-text text-transparent">aussi impactant</span> ? Transformons votre idée en performance.
+              </p>
+              <Link
+                href="/#contact"
+                className="inline-flex items-center gap-3 rounded-full bg-[#0073FF] px-10 py-4 text-sm font-bold uppercase tracking-[0.28em] text-white transition-all duration-300 hover:scale-105 hover:bg-[#1AA3FF] shadow-lg shadow-[#0073FF]/50"
+              >
+                Prendre rendez-vous
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </Reveal>
+
         </div>
-        
-        {/* Section Separator - Bottom */}
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-400/30 to-transparent blur-sm" />
 
         {/* Project Modal */}
         <ProjectModal

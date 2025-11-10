@@ -5,7 +5,7 @@
 
 :root {
   /* Updated color tokens for dark premium theme with blue/violet luminous effects */
-  --background: #000000;
+  --background: rgba(0, 0, 0, 0);
   --foreground: #ffffff;
   --card: #0a0a0a;
   --card-foreground: #ffffff;
@@ -824,4 +824,18 @@ select:focus option:checked {
   100% {
     transform: translateX(0);
   }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+  --reveal-delay: 0ms;
+  transition-delay: var(--reveal-delay);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0px);
 }
