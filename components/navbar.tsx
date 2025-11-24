@@ -3,11 +3,13 @@
 import Link from "next/link"
 import Image from "next/image"
 import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
 import { useTranslation } from "@/contexts/translation-context"
 import { Globe, Sparkles } from "lucide-react"
 
 export function Navbar() {
   const { t, language, setLanguage } = useTranslation()
+  const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
   const [hoveredItem, setHoveredItem] = useState<string | null>(null)
   const [scrolled, setScrolled] = useState(false)
@@ -20,6 +22,14 @@ export function Navbar() {
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
+
+  // Prefetch home page immediately when navbar mounts (especially on humind/realisations pages)
+  useEffect(() => {
+    const currentPath = window.location.pathname
+    if (currentPath === '/humind' || currentPath === '/realisations') {
+      router.prefetch('/?skipIntro=true')
+    }
+  }, [router])
 
   const navItems = [
     { label: t("nav.services"), href: "/#services" },
@@ -56,13 +66,69 @@ export function Navbar() {
           className="transition-opacity duration-300 hover:opacity-80 cursor-pointer"
           onClick={(e) => {
             e.preventDefault()
+            const currentPath = window.location.pathname
+            const isOnRealisationsOrHumind = currentPath === '/realisations' || currentPath === '/humind'
+            
             // Always redirect to home page and skip intro, go directly to Hero Section
-            if (window.location.pathname === "/") {
+            if (currentPath === "/") {
               // If already on home page, just scroll to top (Hero Section)
               window.scrollTo({ top: 0, behavior: 'smooth' })
             } else {
-              // Navigate to home page with skipIntro parameter to skip intro
-              window.location.href = "/?skipIntro=true"
+              // Prevent white flash during navigation from realisations/humind
+              if (isOnRealisationsOrHumind) {
+                // Mark that we're navigating from special page
+                sessionStorage.setItem('navFromSpecialPage', 'true')
+                
+                // Add instant black overlay to prevent white flash (below navbar z-50, above content)
+                const overlay = document.createElement('div')
+                overlay.id = 'nav-transition-overlay'
+                overlay.style.cssText = 'position: fixed; inset: 0; background: #000; z-index: 40; pointer-events: none; opacity: 1;'
+                document.body.appendChild(overlay)
+                
+                // Ensure navbar stays visible above overlay
+                const navbar = document.querySelector('nav') as HTMLElement
+                if (navbar) {
+                  navbar.style.setProperty('z-index', '9999')
+                  navbar.style.setProperty('position', 'fixed')
+                }
+                
+                // Set black background for smooth transition
+                document.documentElement.style.backgroundColor = '#000000'
+                document.body.style.backgroundColor = '#000000'
+                
+                // Disable smooth scroll during navigation
+                document.documentElement.style.scrollBehavior = 'auto'
+                document.body.style.scrollBehavior = 'auto'
+                
+                // Navigate immediately using router.push for faster navigation (prefetch already done on mount)
+                router.push('/?skipIntro=true')
+                
+                // Remove overlay after navigation completes (reduced delay for faster transition)
+                setTimeout(() => {
+                  const overlayEl = document.getElementById('nav-transition-overlay')
+                  if (overlayEl) {
+                    overlayEl.style.opacity = '0'
+                    overlayEl.style.transition = 'opacity 150ms'
+                    setTimeout(() => {
+                      overlayEl.remove()
+                      // Remove black background after overlay is removed
+                      setTimeout(() => {
+                        document.documentElement.style.backgroundColor = ''
+                        document.body.style.backgroundColor = ''
+                      }, 50)
+                    }, 150)
+                  } else {
+                    // If overlay was already removed, just remove background
+                    document.documentElement.style.backgroundColor = ''
+                    document.body.style.backgroundColor = ''
+                  }
+                  document.documentElement.style.scrollBehavior = ''
+                  document.body.style.scrollBehavior = ''
+                }, 150)
+              } else {
+                // For other pages, use router.push for faster navigation
+                router.push('/?skipIntro=true')
+              }
             }
           }}
         >
@@ -84,9 +150,11 @@ export function Navbar() {
             const sectionId = isHomeSection ? item.href.substring(2) : null
             
             const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+              const currentPath = window.location.pathname
+              const isOnRealisationsOrHumind = currentPath === '/realisations' || currentPath === '/humind'
+              
               if (isHomeSection && sectionId) {
                 e.preventDefault()
-                const currentPath = window.location.pathname
                 
                 if (currentPath === "/") {
                   // Already on home page, just scroll to section
@@ -95,11 +163,128 @@ export function Navbar() {
                     element.scrollIntoView({ behavior: 'smooth', block: 'start' })
                   }
                 } else {
-                  // Navigate to home page with skipIntro and scroll to section
-                  window.location.href = `/?skipIntro=true#${sectionId}`
+                  // Prevent white flash during navigation from realisations/humind
+                  if (isOnRealisationsOrHumind) {
+                    // Mark that we're navigating from special page
+                    sessionStorage.setItem('navFromSpecialPage', 'true')
+                    
+                    // Add instant black overlay to prevent white flash (below navbar z-50, above content)
+                    const overlay = document.createElement('div')
+                    overlay.id = 'nav-transition-overlay'
+                    overlay.style.cssText = 'position: fixed; inset: 0; background: #000; z-index: 40; pointer-events: none; opacity: 1;'
+                    document.body.appendChild(overlay)
+                    
+                    // Ensure navbar stays visible above overlay
+                    const navbar = document.querySelector('nav') as HTMLElement
+                    if (navbar) {
+                      navbar.style.setProperty('z-index', '9999')
+                      navbar.style.setProperty('position', 'fixed')
+                    }
+                    
+                    // Set black background for smooth transition
+                    document.documentElement.style.backgroundColor = '#000000'
+                    document.body.style.backgroundColor = '#000000'
+                    
+                    // Prefetch the home page for instant navigation
+                    router.prefetch(`/?skipIntro=true#${sectionId}`)
+                    
+                    // Disable smooth scroll during navigation
+                    document.documentElement.style.scrollBehavior = 'auto'
+                    document.body.style.scrollBehavior = 'auto'
+                    
+                    // Navigate immediately
+                    router.push(`/?skipIntro=true#${sectionId}`)
+                    
+                    // Remove overlay and restore after navigation completes
+                    setTimeout(() => {
+                      const overlayEl = document.getElementById('nav-transition-overlay')
+                      if (overlayEl) {
+                        overlayEl.style.opacity = '0'
+                        overlayEl.style.transition = 'opacity 200ms'
+                        setTimeout(() => {
+                          overlayEl.remove()
+                          // Remove black background after overlay is removed
+                          setTimeout(() => {
+                            document.documentElement.style.backgroundColor = ''
+                            document.body.style.backgroundColor = ''
+                          }, 100)
+                        }, 200)
+                      } else {
+                        // If overlay was already removed, just remove background
+                        document.documentElement.style.backgroundColor = ''
+                        document.body.style.backgroundColor = ''
+                      }
+                      document.documentElement.style.scrollBehavior = ''
+                      document.body.style.scrollBehavior = ''
+                    }, 300)
+                  } else {
+                    router.push(`/?skipIntro=true#${sectionId}`)
+                  }
+                }
+              } else {
+                e.preventDefault()
+                
+                // Add overlay when navigating FROM realisations/humind to any other page
+                // This includes navigating between realisations and humind
+                // When navigating TO humind/realisations from home, no overlay needed
+                const isNavigatingToHumindOrRealisations = item.href === '/humind' || item.href === '/realisations'
+                const isNavigatingFromHome = currentPath === '/'
+                
+                if (isOnRealisationsOrHumind && !isNavigatingFromHome) {
+                  // Add instant black overlay to prevent white flash (below navbar z-50, above content)
+                  const overlay = document.createElement('div')
+                  overlay.id = 'nav-transition-overlay'
+                  overlay.style.cssText = 'position: fixed; inset: 0; background: #000; z-index: 40; pointer-events: none; opacity: 1;'
+                  document.body.appendChild(overlay)
+                  
+                  // Ensure navbar stays visible above overlay
+                  const navbar = document.querySelector('nav') as HTMLElement
+                  if (navbar) {
+                    navbar.style.setProperty('z-index', '9999')
+                    navbar.style.setProperty('position', 'fixed')
+                  }
+                  
+                  // Set black background for smooth transition
+                  document.documentElement.style.backgroundColor = '#000000'
+                  document.body.style.backgroundColor = '#000000'
+                  
+                  // Prefetch for instant navigation
+                  router.prefetch(item.href)
+                  
+                  // Disable smooth scroll during navigation
+                  document.documentElement.style.scrollBehavior = 'auto'
+                  document.body.style.scrollBehavior = 'auto'
+                  
+                  // Navigate immediately
+                  router.push(item.href)
+                  
+                  // Remove overlay after navigation completes
+                  setTimeout(() => {
+                    const overlayEl = document.getElementById('nav-transition-overlay')
+                    if (overlayEl) {
+                      overlayEl.style.opacity = '0'
+                      overlayEl.style.transition = 'opacity 200ms'
+                      setTimeout(() => {
+                        overlayEl.remove()
+                        // Remove black background after overlay is removed
+                        setTimeout(() => {
+                          document.documentElement.style.backgroundColor = ''
+                          document.body.style.backgroundColor = ''
+                        }, 100)
+                      }, 200)
+                    } else {
+                      // If overlay was already removed, just remove background
+                      document.documentElement.style.backgroundColor = ''
+                      document.body.style.backgroundColor = ''
+                    }
+                    document.documentElement.style.scrollBehavior = ''
+                    document.body.style.scrollBehavior = ''
+                  }, 300)
+                } else {
+                  // Navigate normally without overlay (especially when going TO humind/realisations from home)
+                  router.push(item.href)
                 }
               }
-              // For other links (like /realisations, /humind), let Link handle it normally
             }
             
             return (
@@ -241,9 +426,68 @@ export function Navbar() {
             href="/#rendez-vous"
             onClick={(e) => {
               const currentPath = window.location.pathname
+              const isOnRealisationsOrHumind = currentPath === '/realisations' || currentPath === '/humind'
+              
               if (currentPath !== "/") {
                 e.preventDefault()
-                window.location.href = `/?skipIntro=true#rendez-vous`
+                
+                // Use the same smooth navigation logic as "Agence" button
+                if (isOnRealisationsOrHumind) {
+                  // Mark that we're navigating from special page
+                  sessionStorage.setItem('navFromSpecialPage', 'true')
+                  
+                  // Add instant black overlay to prevent white flash (below navbar z-50, above content)
+                  const overlay = document.createElement('div')
+                  overlay.id = 'nav-transition-overlay'
+                  overlay.style.cssText = 'position: fixed; inset: 0; background: #000; z-index: 40; pointer-events: none; opacity: 1;'
+                  document.body.appendChild(overlay)
+                  
+                  // Ensure navbar stays visible above overlay
+                  const navbar = document.querySelector('nav') as HTMLElement
+                  if (navbar) {
+                    navbar.style.setProperty('z-index', '9999')
+                    navbar.style.setProperty('position', 'fixed')
+                  }
+                  
+                  // Set black background for smooth transition
+                  document.documentElement.style.backgroundColor = '#000000'
+                  document.body.style.backgroundColor = '#000000'
+                  
+                  // Prefetch the home page for instant navigation
+                  router.prefetch(`/?skipIntro=true#rendez-vous`)
+                  
+                  // Disable smooth scroll during navigation
+                  document.documentElement.style.scrollBehavior = 'auto'
+                  document.body.style.scrollBehavior = 'auto'
+                  
+                  // Navigate immediately
+                  router.push(`/?skipIntro=true#rendez-vous`)
+                  
+                  // Remove overlay and restore after navigation completes
+                  setTimeout(() => {
+                    const overlayEl = document.getElementById('nav-transition-overlay')
+                    if (overlayEl) {
+                      overlayEl.style.opacity = '0'
+                      overlayEl.style.transition = 'opacity 200ms'
+                      setTimeout(() => {
+                        overlayEl.remove()
+                        // Remove black background after overlay is removed
+                        setTimeout(() => {
+                          document.documentElement.style.backgroundColor = ''
+                          document.body.style.backgroundColor = ''
+                        }, 100)
+                      }, 200)
+                    } else {
+                      // If overlay was already removed, just remove background
+                      document.documentElement.style.backgroundColor = ''
+                      document.body.style.backgroundColor = ''
+                    }
+                    document.documentElement.style.scrollBehavior = ''
+                    document.body.style.scrollBehavior = ''
+                  }, 300)
+                } else {
+                  router.push(`/?skipIntro=true#rendez-vous`)
+                }
               }
             }}
             className="group relative inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-full overflow-hidden transition-all duration-500 hover:scale-[1.02] active:scale-[0.98]"
@@ -313,9 +557,11 @@ export function Navbar() {
             
             const handleMobileClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
               setIsOpen(false)
+              const currentPath = window.location.pathname
+              const isOnRealisationsOrHumind = currentPath === '/realisations' || currentPath === '/humind'
+              
               if (isHomeSection && sectionId) {
                 e.preventDefault()
-                const currentPath = window.location.pathname
                 
                 if (currentPath === "/") {
                   // Already on home page, just scroll to section
@@ -326,11 +572,128 @@ export function Navbar() {
                     }
                   }, 100)
                 } else {
-                  // Navigate to home page with skipIntro and scroll to section
-                  window.location.href = `/?skipIntro=true#${sectionId}`
+                  // Prevent white flash during navigation from realisations/humind
+                  if (isOnRealisationsOrHumind) {
+                    // Mark that we're navigating from special page
+                    sessionStorage.setItem('navFromSpecialPage', 'true')
+                    
+                    // Add instant black overlay to prevent white flash (below navbar z-50, above content)
+                    const overlay = document.createElement('div')
+                    overlay.id = 'nav-transition-overlay'
+                    overlay.style.cssText = 'position: fixed; inset: 0; background: #000; z-index: 40; pointer-events: none; opacity: 1;'
+                    document.body.appendChild(overlay)
+                    
+                    // Ensure navbar stays visible above overlay
+                    const navbar = document.querySelector('nav') as HTMLElement
+                    if (navbar) {
+                      navbar.style.setProperty('z-index', '9999')
+                      navbar.style.setProperty('position', 'fixed')
+                    }
+                    
+                    // Set black background for smooth transition
+                    document.documentElement.style.backgroundColor = '#000000'
+                    document.body.style.backgroundColor = '#000000'
+                    
+                    // Prefetch the home page for instant navigation
+                    router.prefetch(`/?skipIntro=true#${sectionId}`)
+                    
+                    // Disable smooth scroll during navigation
+                    document.documentElement.style.scrollBehavior = 'auto'
+                    document.body.style.scrollBehavior = 'auto'
+                    
+                    // Navigate immediately
+                    router.push(`/?skipIntro=true#${sectionId}`)
+                    
+                    // Remove overlay and restore after navigation completes
+                    setTimeout(() => {
+                      const overlayEl = document.getElementById('nav-transition-overlay')
+                      if (overlayEl) {
+                        overlayEl.style.opacity = '0'
+                        overlayEl.style.transition = 'opacity 200ms'
+                        setTimeout(() => {
+                          overlayEl.remove()
+                          // Remove black background after overlay is removed
+                          setTimeout(() => {
+                            document.documentElement.style.backgroundColor = ''
+                            document.body.style.backgroundColor = ''
+                          }, 100)
+                        }, 200)
+                      } else {
+                        // If overlay was already removed, just remove background
+                        document.documentElement.style.backgroundColor = ''
+                        document.body.style.backgroundColor = ''
+                      }
+                      document.documentElement.style.scrollBehavior = ''
+                      document.body.style.scrollBehavior = ''
+                    }, 300)
+                  } else {
+                    router.push(`/?skipIntro=true#${sectionId}`)
+                  }
+                }
+              } else {
+                e.preventDefault()
+                
+                // Add overlay when navigating FROM realisations/humind to any other page
+                // This includes navigating between realisations and humind
+                // When navigating TO humind/realisations from home, no overlay needed
+                const isNavigatingToHumindOrRealisations = item.href === '/humind' || item.href === '/realisations'
+                const isNavigatingFromHome = currentPath === '/'
+                
+                if (isOnRealisationsOrHumind && !isNavigatingFromHome) {
+                  // Add instant black overlay to prevent white flash (below navbar z-50, above content)
+                  const overlay = document.createElement('div')
+                  overlay.id = 'nav-transition-overlay'
+                  overlay.style.cssText = 'position: fixed; inset: 0; background: #000; z-index: 40; pointer-events: none; opacity: 1;'
+                  document.body.appendChild(overlay)
+                  
+                  // Ensure navbar stays visible above overlay
+                  const navbar = document.querySelector('nav') as HTMLElement
+                  if (navbar) {
+                    navbar.style.setProperty('z-index', '9999')
+                    navbar.style.setProperty('position', 'fixed')
+                  }
+                  
+                  // Set black background for smooth transition
+                  document.documentElement.style.backgroundColor = '#000000'
+                  document.body.style.backgroundColor = '#000000'
+                  
+                  // Prefetch for instant navigation
+                  router.prefetch(item.href)
+                  
+                  // Disable smooth scroll during navigation
+                  document.documentElement.style.scrollBehavior = 'auto'
+                  document.body.style.scrollBehavior = 'auto'
+                  
+                  // Navigate immediately
+                  router.push(item.href)
+                  
+                  // Remove overlay after navigation completes
+                  setTimeout(() => {
+                    const overlayEl = document.getElementById('nav-transition-overlay')
+                    if (overlayEl) {
+                      overlayEl.style.opacity = '0'
+                      overlayEl.style.transition = 'opacity 200ms'
+                      setTimeout(() => {
+                        overlayEl.remove()
+                        // Remove black background after overlay is removed
+                        setTimeout(() => {
+                          document.documentElement.style.backgroundColor = ''
+                          document.body.style.backgroundColor = ''
+                        }, 100)
+                      }, 200)
+                    } else {
+                      // If overlay was already removed, just remove background
+                      document.documentElement.style.backgroundColor = ''
+                      document.body.style.backgroundColor = ''
+                    }
+                    document.documentElement.style.scrollBehavior = ''
+                    document.body.style.scrollBehavior = ''
+                  }, 300)
+                } else {
+                  // Navigate normally without overlay (especially when going TO humind/realisations from home)
+                  router.push(item.href)
                 }
               }
-              // For other links (like /realisations, /humind), let Link handle it normally
             }
             
             return (
@@ -405,9 +768,68 @@ export function Navbar() {
             onClick={(e) => {
               setIsOpen(false)
               const currentPath = window.location.pathname
+              const isOnRealisationsOrHumind = currentPath === '/realisations' || currentPath === '/humind'
+              
               if (currentPath !== "/") {
                 e.preventDefault()
-                window.location.href = `/?skipIntro=true#rendez-vous`
+                
+                // Use the same smooth navigation logic as "Agence" button
+                if (isOnRealisationsOrHumind) {
+                  // Mark that we're navigating from special page
+                  sessionStorage.setItem('navFromSpecialPage', 'true')
+                  
+                  // Add instant black overlay to prevent white flash (below navbar z-50, above content)
+                  const overlay = document.createElement('div')
+                  overlay.id = 'nav-transition-overlay'
+                  overlay.style.cssText = 'position: fixed; inset: 0; background: #000; z-index: 40; pointer-events: none; opacity: 1;'
+                  document.body.appendChild(overlay)
+                  
+                  // Ensure navbar stays visible above overlay
+                  const navbar = document.querySelector('nav') as HTMLElement
+                  if (navbar) {
+                    navbar.style.setProperty('z-index', '9999')
+                    navbar.style.setProperty('position', 'fixed')
+                  }
+                  
+                  // Set black background for smooth transition
+                  document.documentElement.style.backgroundColor = '#000000'
+                  document.body.style.backgroundColor = '#000000'
+                  
+                  // Prefetch the home page for instant navigation
+                  router.prefetch(`/?skipIntro=true#rendez-vous`)
+                  
+                  // Disable smooth scroll during navigation
+                  document.documentElement.style.scrollBehavior = 'auto'
+                  document.body.style.scrollBehavior = 'auto'
+                  
+                  // Navigate immediately
+                  router.push(`/?skipIntro=true#rendez-vous`)
+                  
+                  // Remove overlay and restore after navigation completes
+                  setTimeout(() => {
+                    const overlayEl = document.getElementById('nav-transition-overlay')
+                    if (overlayEl) {
+                      overlayEl.style.opacity = '0'
+                      overlayEl.style.transition = 'opacity 200ms'
+                      setTimeout(() => {
+                        overlayEl.remove()
+                        // Remove black background after overlay is removed
+                        setTimeout(() => {
+                          document.documentElement.style.backgroundColor = ''
+                          document.body.style.backgroundColor = ''
+                        }, 100)
+                      }, 200)
+                    } else {
+                      // If overlay was already removed, just remove background
+                      document.documentElement.style.backgroundColor = ''
+                      document.body.style.backgroundColor = ''
+                    }
+                    document.documentElement.style.scrollBehavior = ''
+                    document.body.style.scrollBehavior = ''
+                  }, 300)
+                } else {
+                  router.push(`/?skipIntro=true#rendez-vous`)
+                }
               }
             }}
             style={{

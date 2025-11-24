@@ -3,12 +3,12 @@
 import { useState, useEffect, useRef, useMemo } from "react"
 import Image from "next/image"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { ProjectModal } from "@/components/project-modal"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { Palette, Car, Building2, Dumbbell, UtensilsCrossed, Briefcase, Users, ArrowRight } from "lucide-react"
 import { SectionDivider } from "@/components/section-divider"
-import { Reveal } from "@/components/reveal"
 import { useTranslation } from "@/contexts/translation-context"
 
 // Types de projets - will be translated in component
@@ -189,6 +189,15 @@ const sectorIcons: Record<string, JSX.Element> = {
 
 export default function RealisationsPage() {
   const { t } = useTranslation()
+  const router = useRouter()
+  const [mounted, setMounted] = useState(false)
+  
+  
+  useEffect(() => {
+    setMounted(true)
+    // Scroll to top immediately without animation
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+  }, [])
   
           // Get translated projects
           const translatedProjects = useMemo(() => {
@@ -316,12 +325,7 @@ export default function RealisationsPage() {
 
   // Mouse position tracking for background gradient
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-  const [mounted, setMounted] = useState(false)
   const sectionRef = useRef<HTMLElement>(null)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -341,22 +345,48 @@ export default function RealisationsPage() {
     <main className="relative min-h-screen overflow-hidden bg-transparent">
       <Navbar />
 
+      {/* Video background - hidden on mobile, visible on desktop */}
       <div className="pointer-events-none fixed inset-0 -z-10">
         <video
-          className="h-full w-full object-cover"
+          key="realisations-bg"
+          className="hidden md:block h-full w-full object-cover"
           autoPlay
           loop
           muted
           playsInline
           preload="auto"
+          style={{ 
+            opacity: 1,
+            visibility: 'visible',
+            objectFit: 'cover',
+            width: '100%',
+            height: '100%'
+          }}
+          onError={() => {
+            // Silent error handling - don't break the page
+            // Video will show poster or remain hidden if it fails
+          }}
         >
           <source src="/Banque d_images/i3.mp4" type="video/mp4" />
         </video>
+        {/* Background image - visible only on mobile */}
+        <img
+          src="/Banque d_images/backnoiree.png"
+          alt="Background"
+          className="block md:hidden h-full w-full object-cover"
+          style={{
+            opacity: 1,
+            visibility: 'visible',
+            objectFit: 'cover',
+            width: '100%',
+            height: '100%'
+          }}
+        />
       </div>
 
       <section ref={sectionRef} className="relative pt-40 pb-20 px-6 bg-transparent overflow-visible">
         <div className="relative z-10 mx-auto max-w-6xl space-y-12">
-          <Reveal className="relative overflow-hidden px-6 py-12 text-center text-white md:px-10 md:py-16">
+          <div className="relative overflow-hidden px-6 py-12 text-center text-white md:px-10 md:py-16">
             <div className="relative mx-auto flex max-w-4xl flex-col items-center gap-6">
               <span className="relative inline-flex items-center gap-3 rounded-full border border-white/30 bg-gradient-to-br from-white/15 via-white/10 to-white/5 px-6 py-2.5 text-[11px] font-semibold uppercase tracking-[0.32em] text-white/90 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,115,255,0.15)]">
                 <span className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/20 via-transparent to-cyan-400/20 opacity-50 blur-xl" />
@@ -392,7 +422,7 @@ export default function RealisationsPage() {
                 </div>
               </div>
             </div>
-          </Reveal>
+          </div>
 
           {/* Sticky Filters Section - Premium Design */}
           <div
@@ -531,9 +561,8 @@ export default function RealisationsPage() {
           ) : (
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {filteredProjects.map((project, index) => (
-                <Reveal
+                <div
                   key={project.id}
-                  delay={index * 120}
                   className="group relative overflow-hidden rounded-3xl border border-white/20 bg-gradient-to-br from-white/8 via-white/5 to-white/3 text-white backdrop-blur-2xl transition-all duration-500 ease-out hover:-translate-y-2 hover:scale-[1.02] hover:border-white/35 hover:bg-gradient-to-br hover:from-white/12 hover:via-white/8 hover:to-white/5 hover:shadow-[0_25px_80px_rgba(0,115,255,0.25),0_0_0_1px_rgba(255,255,255,0.1)]"
                 >
                   <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 ease-out group-hover:opacity-100">
@@ -598,13 +627,13 @@ export default function RealisationsPage() {
                       </div>
                     </div>
                   </button>
-                </Reveal>
+                </div>
               ))}
             </div>
           )}
 
           {/* CTA Section - Ultra Premium */}
-          <Reveal className="relative mt-24 overflow-hidden px-8 py-20 text-center text-white">
+          <div className="relative mt-24 overflow-hidden px-8 py-20 text-center text-white">
             <div className="relative mx-auto flex max-w-3xl flex-col items-center gap-8">
               {/* Premium Badge */}
               <span className="relative inline-flex items-center gap-2 rounded-full border border-white/30 bg-gradient-to-br from-white/15 via-white/10 to-white/5 px-6 py-2.5 text-[11px] font-semibold uppercase tracking-[0.32em] text-white/90 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,115,255,0.15)]">
@@ -631,7 +660,45 @@ export default function RealisationsPage() {
                   const currentPath = window.location.pathname
                   if (currentPath !== "/") {
                     e.preventDefault()
-                    window.location.href = `/?skipIntro=true#rendez-vous`
+                    
+                    // Use the same smooth navigation logic as "Agence" button
+                    // Mark that we're navigating from special page
+                    sessionStorage.setItem('navFromSpecialPage', 'true')
+                    
+                    // Add instant black overlay to prevent white flash (below navbar z-50, above content)
+                    const overlay = document.createElement('div')
+                    overlay.id = 'nav-transition-overlay'
+                    overlay.style.cssText = 'position: fixed; inset: 0; background: #000; z-index: 40; pointer-events: none; opacity: 1;'
+                    document.body.appendChild(overlay)
+                    
+                    // Ensure navbar stays visible above overlay
+                    const navbar = document.querySelector('nav') as HTMLElement
+                    if (navbar) {
+                      navbar.style.setProperty('z-index', '9999')
+                      navbar.style.setProperty('position', 'fixed')
+                    }
+                    
+                    // Prefetch the home page for instant navigation
+                    router.prefetch(`/?skipIntro=true#rendez-vous`)
+                    
+                    // Disable smooth scroll during navigation
+                    document.documentElement.style.scrollBehavior = 'auto'
+                    document.body.style.scrollBehavior = 'auto'
+                    
+                    // Navigate immediately
+                    router.push(`/?skipIntro=true#rendez-vous`)
+                    
+                    // Remove overlay and restore after navigation completes
+                    setTimeout(() => {
+                      const overlayEl = document.getElementById('nav-transition-overlay')
+                      if (overlayEl) {
+                        overlayEl.style.opacity = '0'
+                        overlayEl.style.transition = 'opacity 200ms'
+                        setTimeout(() => overlayEl.remove(), 200)
+                      }
+                      document.documentElement.style.scrollBehavior = ''
+                      document.body.style.scrollBehavior = ''
+                    }, 300)
                   }
                 }}
                 className="group relative inline-flex items-center gap-3 rounded-full bg-gradient-to-br from-[#0073FF] via-[#0066E6] to-[#0052CC] px-12 py-5 text-sm font-bold uppercase tracking-[0.28em] text-white transition-all duration-300 hover:scale-105 hover:shadow-[0_12px_40px_rgba(0,115,255,0.5)] shadow-[0_8px_24px_rgba(0,115,255,0.4)] border border-white/20"
@@ -641,7 +708,7 @@ export default function RealisationsPage() {
                 <ArrowRight className="h-4 w-4 relative z-10 transition-transform duration-300 group-hover:translate-x-1" />
               </Link>
             </div>
-          </Reveal>
+          </div>
 
         </div>
 

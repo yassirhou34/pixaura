@@ -58,49 +58,107 @@ export default function Home() {
     if (introComplete) {
       const hash = window.location.hash.substring(1)
       if (hash) {
-        // Wait a bit for content to render, then scroll to section
-        const timer = setTimeout(() => {
-          const element = document.getElementById(hash)
-          if (element) {
-            // Calculate offset for navbar
-            const navbarHeight = 80
-            const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
-            const offsetPosition = elementPosition - navbarHeight
-            
-            window.scrollTo({
-              top: offsetPosition,
-              behavior: 'smooth'
-            })
-          }
-        }, 200)
+        // Check if we came from realisations or humind (via sessionStorage)
+        const cameFromSpecialPage = sessionStorage.getItem('navFromSpecialPage') === 'true'
+        sessionStorage.removeItem('navFromSpecialPage')
         
-        return () => clearTimeout(timer)
+        // Scroll immediately if coming from special page, otherwise wait a bit
+        const scrollToSection = () => {
+          try {
+            const element = document.getElementById(hash)
+            if (element) {
+              // Calculate offset for navbar
+              const navbarHeight = 80
+              const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
+              const offsetPosition = elementPosition - navbarHeight
+              
+              // Use instant scroll if coming from realisations/humind to avoid white flash
+              window.scrollTo({
+                top: offsetPosition,
+                behavior: cameFromSpecialPage ? 'instant' : 'smooth'
+              })
+            }
+          } catch (error) {
+            // Silent error handling - don't break navigation
+          }
+        }
+        
+        if (cameFromSpecialPage) {
+          // Try immediately, then retry if element not ready
+          scrollToSection()
+          const timer = setTimeout(() => {
+            scrollToSection()
+          }, 10)
+          return () => clearTimeout(timer)
+        } else {
+          const timer = setTimeout(scrollToSection, 200)
+          return () => clearTimeout(timer)
+        }
       }
     }
   }, [introComplete])
 
+  // Check if coming from special page for instant render
+  const [cameFromSpecialPage] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return sessionStorage.getItem('navFromSpecialPage') === 'true'
+    }
+    return false
+  })
+  
   const contentTransition = useMemo(
     () =>
       [
-        "relative z-10 transition-all duration-[1400ms] ease-[cubic-bezier(0.16,0.84,0.34,1)]",
-        introComplete ? "opacity-100 translate-y-0 scale-100 blur-0" : "pointer-events-none opacity-0 translate-y-6 scale-[0.97] blur-sm",
+        "relative z-10",
+        // Instant render if coming from special page, otherwise use transition
+        cameFromSpecialPage 
+          ? "opacity-100 translate-y-0 scale-100 blur-0" 
+          : introComplete 
+            ? "transition-all duration-[1400ms] ease-[cubic-bezier(0.16,0.84,0.34,1)] opacity-100 translate-y-0 scale-100 blur-0" 
+            : "pointer-events-none opacity-0 translate-y-6 scale-[0.97] blur-sm",
       ].join(" "),
-    [introComplete]
+    [introComplete, cameFromSpecialPage]
   )
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-transparent">
       <div className="pointer-events-none fixed inset-0 -z-10">
+        {/* Background video - hidden on mobile, visible on desktop */}
         <video
-          className="h-full w-full object-cover"
+          key="home-bg-video"
+          className="hidden md:block h-full w-full object-cover"
           autoPlay
           loop
           muted
           playsInline
           preload="auto"
+          style={{
+            opacity: 1,
+            visibility: 'visible',
+            objectFit: 'cover',
+            width: '100%',
+            height: '100%'
+          }}
+          onError={() => {
+            // Silent error handling - don't break the page
+            // Video will show poster or remain hidden if it fails
+          }}
         >
           <source src="/Banque d_images/backv1.mp4" type="video/mp4" />
         </video>
+        {/* Background image - visible only on mobile */}
+        <img
+          src="/Banque d_images/backnoiree.png"
+          alt="Background"
+          className="block md:hidden h-full w-full object-cover"
+          style={{
+            opacity: 1,
+            visibility: 'visible',
+            objectFit: 'cover',
+            width: '100%',
+            height: '100%'
+          }}
+        />
       </div>
 
       {!introComplete && (

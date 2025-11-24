@@ -370,9 +370,10 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
         isFadingOut ? "pointer-events-none opacity-0" : "opacity-100"
       }`}
     >
+      {/* Background video - hidden on mobile, visible on desktop */}
       <video
         key={backgroundVideo}
-        className="absolute inset-0 h-full w-full object-cover"
+        className="hidden md:block absolute inset-0 h-full w-full object-cover"
         autoPlay
         loop
         muted
@@ -381,6 +382,12 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
       >
         <source src={backgroundVideo} type="video/mp4" />
       </video>
+      {/* Background image - visible only on mobile */}
+      <img
+        src="/Banque d_images/backnoiree.png"
+        alt="Background"
+        className="block md:hidden absolute inset-0 h-full w-full object-cover"
+      />
 
       <div className={`absolute inset-0 ${overlayTone}`} />
       <div className="absolute inset-0 bg-[url('/Banque d_images/noise.png')] opacity-[0.08] mix-blend-overlay" />

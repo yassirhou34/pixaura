@@ -1,11 +1,10 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Geist, Geist_Mono, Space_Grotesk } from "next/font/google"
+import { Geist, Space_Grotesk } from "next/font/google"
 import "./globals.css"
 import { TranslationProvider } from "@/contexts/translation-context"
 
 const geist = Geist({ subsets: ["latin"] })
-const geistMono = Geist_Mono({ subsets: ["latin"] })
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-heading" })
 
 export const metadata: Metadata = {
@@ -21,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="bg-background" suppressHydrationWarning>
+    <html lang="en" className="bg-transparent" suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{
@@ -50,7 +49,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geist.className} ${spaceGrotesk.variable} antialiased bg-background text-foreground`}
+        className={`${geist.className} ${spaceGrotesk.variable} antialiased bg-transparent text-foreground`}
       >
         <TranslationProvider>
           {children}

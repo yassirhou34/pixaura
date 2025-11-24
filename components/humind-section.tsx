@@ -2,10 +2,9 @@
 
 import { useEffect, useState } from "react"
 import Image from "next/image"
-import { useRouter } from "next/navigation"
+import Link from "next/link"
 import { Reveal } from "@/components/reveal"
 import { Sparkles, Mic2, Video } from "lucide-react"
-import { PremiumPageTransition } from "@/components/premium-page-transition"
 import { useTranslation } from "@/contexts/translation-context"
 
 const featuredEpisode = {
@@ -40,8 +39,6 @@ const episodeSnippets = [
 export function HumindSection() {
   const { t } = useTranslation()
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-  const [isTransitioning, setIsTransitioning] = useState(false)
-  const router = useRouter()
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -51,22 +48,8 @@ export function HumindSection() {
     return () => window.removeEventListener("mousemove", handleMouseMove)
   }, [])
 
-  const handleViewEpisode = (e: React.MouseEvent) => {
-    e.preventDefault()
-    setIsTransitioning(true)
-  }
-
-  const handleTransitionComplete = () => {
-    setIsTransitioning(false)
-  }
-
   return (
     <>
-      <PremiumPageTransition 
-        isActive={isTransitioning}
-        targetPath="/humind"
-        onComplete={handleTransitionComplete}
-      />
       <section id="humind" className="humind-section relative overflow-hidden py-24 px-6 md:py-32">
       {/* Premium background effects */}
       <div className="humind-bg absolute inset-0 opacity-30" />
@@ -137,15 +120,16 @@ export function HumindSection() {
           </Reveal>
 
           <Reveal delay={180} className="flex flex-wrap items-center gap-5">
-            <button
-              onClick={handleViewEpisode}
+            <Link
+              href="/humind"
+              prefetch={true}
               className="humind-cta group relative inline-flex items-center gap-3 rounded-full border border-white/25 bg-gradient-to-r from-white/10 via-white/7 to-white/5 px-10 py-4 text-[0.7rem] font-black uppercase tracking-[0.4em] text-white backdrop-blur-2xl transition-all duration-400 hover:border-white/45 hover:from-white/18 hover:via-white/12 hover:to-white/10 hover:scale-110 hover:shadow-[0_12px_40px_rgba(80,120,255,0.4)] overflow-hidden"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-blue-500/25 via-purple-500/25 to-cyan-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
               <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/30 via-purple-500/30 to-transparent opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-400 -z-10" />
               <span className="relative z-10">{t("humindHome.exploreEpisodes")}</span>
               <span className="text-base transition-transform duration-400 group-hover:translate-x-2 relative z-10">→</span>
-            </button>
+            </Link>
             <span className="text-[0.7rem] uppercase tracking-[0.35em] text-white/45 font-medium">
               {t("humindHome.newEpisode")}
             </span>

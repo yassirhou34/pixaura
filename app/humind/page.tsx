@@ -3,8 +3,6 @@
 import { useState, useMemo, useEffect } from "react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
-import { GlobalAtmosphere } from "@/components/global-atmosphere"
-import { Reveal } from "@/components/reveal"
 import { Play, ArrowRight, Sparkles, Heart, Zap, Users, Globe, Film, Mic, BarChart3, Lightbulb, Target, Rocket, Video } from "lucide-react"
 import { useTranslation } from "@/contexts/translation-context"
 
@@ -80,47 +78,12 @@ export default function HumindPage() {
   
   const episodes = getEpisodes(t)
   const [activeFilter, setActiveFilter] = useState<string>(t("humindPage.categoryAll"))
-  const [videoLoaded, setVideoLoaded] = useState(false)
   const [clickedFilter, setClickedFilter] = useState<string | null>(null)
-  const [isMounted, setIsMounted] = useState(false)
 
-  // Wait for client-side hydration before modifying DOM
   useEffect(() => {
-    setIsMounted(true)
+    // Scroll to top immediately without animation - instant navigation
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
   }, [])
-
-  // Overlay noir temporaire pour éviter le flash blanc, disparaît quand la vidéo est chargée
-  useEffect(() => {
-    // Only run on client after hydration
-    if (!isMounted) return
-
-    // Forcer le scroll vers le haut immédiatement sans animation
-    // Désactiver temporairement le smooth scroll
-    const originalScrollBehavior = document.documentElement.style.scrollBehavior
-    document.documentElement.style.scrollBehavior = 'auto'
-    document.body.style.scrollBehavior = 'auto'
-    
-    // Scroll vers le haut
-    window.scrollTo(0, 0)
-    document.documentElement.scrollTop = 0
-    document.body.scrollTop = 0
-    
-    // Restaurer le smooth scroll après un court délai
-    setTimeout(() => {
-      document.documentElement.style.scrollBehavior = originalScrollBehavior
-      document.body.style.scrollBehavior = originalScrollBehavior
-    }, 100)
-    
-    // Appliquer le fond noir temporairement
-    document.documentElement.style.backgroundColor = "#000000"
-    document.body.style.backgroundColor = "#000000"
-    
-    // Nettoyer au démontage
-    return () => {
-      document.documentElement.style.backgroundColor = ""
-      document.body.style.backgroundColor = ""
-    }
-  }, [isMounted])
 
   // Filtrer les épisodes
   const filteredEpisodes = useMemo(() => {
@@ -159,40 +122,46 @@ export default function HumindPage() {
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-transparent">
-      {/* Overlay noir temporaire pour éviter le flash blanc - derrière la vidéo */}
-      <div 
-        className={`fixed inset-0 z-0 transition-opacity duration-300 pointer-events-none ${
-          videoLoaded ? 'opacity-0' : 'opacity-100'
-        }`}
-        style={{ backgroundColor: '#000000' }}
-      />
-      
-      {/* Vidéo en background - au-dessus de l'overlay */}
-      <div className="pointer-events-none fixed inset-0 z-[1]">
+      <Navbar />
+
+      {/* Video background - hidden on mobile, visible on desktop */}
+      <div className="pointer-events-none fixed inset-0 -z-10">
         <video
-          className="h-full w-full object-cover"
+          key="humind-bg"
+          className="hidden md:block h-full w-full object-cover"
           autoPlay
           loop
           muted
           playsInline
           preload="auto"
-          onLoadedData={() => {
-            setVideoLoaded(true)
-            // Retirer le fond noir du body une fois la vidéo chargée
-            if (isMounted) {
-              setTimeout(() => {
-                document.documentElement.style.backgroundColor = "transparent"
-                document.body.style.backgroundColor = "transparent"
-              }, 100)
-            }
+          style={{ 
+            opacity: 1,
+            visibility: 'visible',
+            objectFit: 'cover',
+            width: '100%',
+            height: '100%'
+          }}
+          onError={() => {
+            // Silent error handling - don't break the page
+            // Video will show poster or remain hidden if it fails
           }}
         >
           <source src="/Banque d_images/noir.mp4" type="video/mp4" />
         </video>
+        {/* Background image - visible only on mobile */}
+        <img
+          src="/Banque d_images/backnoiree.png"
+          alt="Background"
+          className="block md:hidden h-full w-full object-cover"
+          style={{
+            opacity: 1,
+            visibility: 'visible',
+            objectFit: 'cover',
+            width: '100%',
+            height: '100%'
+          }}
+        />
       </div>
-
-      <Navbar />
-      <GlobalAtmosphere />
 
       <div className="relative z-10">
         {/* Hero Section - Section 01 */}
@@ -371,10 +340,8 @@ export default function HumindPage() {
                         target.src = `https://img.youtube.com/vi/${episode.youtubeId}/hqdefault.jpg`
                       }}
                     />
-                    {/* Overlay gradient - Subtle */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-black/25 via-transparent to-purple-500/15" />
                     {/* Play button overlay - Premium */}
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/25 group-hover:bg-black/15 transition-all duration-700">
+                    <div className="absolute inset-0 flex items-center justify-center transition-all duration-700">
                       <div className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-white/40 bg-black/50 text-white backdrop-blur-xl transition-all duration-700 group-hover:border-white/80 group-hover:bg-white/25 group-hover:scale-110 shadow-[0_0_30px_rgba(0,0,0,0.5)] group-hover:shadow-[0_0_40px_rgba(255,255,255,0.3)]">
                         <Play className="h-7 w-7 fill-current ml-1" />
                       </div>
@@ -420,8 +387,7 @@ export default function HumindPage() {
         </div>
 
         {/* Section 1 - Le concept Humind - Ultra Premium */}
-        <Reveal delay={0}>
-          <section className="relative mx-auto w-full max-w-7xl px-6 pb-32 pt-12 md:px-12">
+        <section className="relative mx-auto w-full max-w-7xl px-6 pb-32 pt-12 md:px-12">
             <div className="grid lg:grid-cols-12 gap-16 items-start text-white">
               {/* Left Column - Ultra Premium Header */}
               <div className="lg:col-span-4 flex flex-col gap-8">
@@ -551,7 +517,6 @@ export default function HumindPage() {
               </div>
             </div>
           </section>
-        </Reveal>
 
         {/* Ultra Premium Separator */}
         <div className="relative py-20 px-6">
@@ -565,8 +530,7 @@ export default function HumindPage() {
         </div>
 
         {/* Section 2 - Nos valeurs fondamentales - Ultra Premium */}
-        <Reveal delay={100}>
-          <section className="relative z-20 mx-auto w-full max-w-7xl px-6 pb-32 pt-12 md:px-12">
+        <section className="relative z-20 mx-auto w-full max-w-7xl px-6 pb-32 pt-12 md:px-12">
             <div className="grid lg:grid-cols-12 gap-16 items-start text-white relative z-20">
               {/* Left Column - Ultra Premium Header */}
               <div className="lg:col-span-5 flex flex-col gap-8 relative z-20">
@@ -647,7 +611,6 @@ export default function HumindPage() {
               </div>
             </div>
           </section>
-        </Reveal>
 
         {/* Ultra Premium Separator */}
         <div className="relative py-20 px-6">
@@ -661,8 +624,7 @@ export default function HumindPage() {
         </div>
 
         {/* Section 3 - Notre approche éditoriale - Ultra Premium */}
-        <Reveal delay={200}>
-          <section className="relative mx-auto w-full max-w-7xl px-6 pb-32 pt-12 md:px-12">
+        <section className="relative mx-auto w-full max-w-7xl px-6 pb-32 pt-12 md:px-12">
             <div className="grid lg:grid-cols-12 gap-16 items-start text-white">
               {/* Left Column - Ultra Premium Header */}
               <div className="lg:col-span-4 flex flex-col gap-8">
@@ -777,7 +739,6 @@ export default function HumindPage() {
               </div>
             </div>
           </section>
-        </Reveal>
 
         {/* Ultra Premium Separator */}
         <div className="relative py-20 px-6">
@@ -791,8 +752,7 @@ export default function HumindPage() {
         </div>
 
         {/* Section 4 - Un projet signé Pixaura - Ultra Premium */}
-        <Reveal delay={300}>
-          <section className="relative mx-auto w-full max-w-7xl px-6 pb-32 pt-12 md:px-12">
+        <section className="relative mx-auto w-full max-w-7xl px-6 pb-32 pt-12 md:px-12">
             <div className="grid lg:grid-cols-12 gap-16 items-start text-white">
               {/* Left Column - Ultra Premium Header */}
               <div className="lg:col-span-4 flex flex-col gap-8">
@@ -868,7 +828,6 @@ export default function HumindPage() {
               </div>
             </div>
           </section>
-        </Reveal>
 
         {/* Ultra Premium Separator */}
         <div className="relative py-20 px-6">
@@ -882,8 +841,7 @@ export default function HumindPage() {
         </div>
 
         {/* Section 5 - Humind dans l'écosystème Pixaura - Ultra Premium */}
-        <Reveal delay={400}>
-          <section className="relative mx-auto w-full max-w-7xl px-6 pb-32 pt-12 md:px-12">
+        <section className="relative mx-auto w-full max-w-7xl px-6 pb-32 pt-12 md:px-12">
             <div className="grid lg:grid-cols-12 gap-16 items-start text-white">
               {/* Left Column - Ultra Premium Header */}
               <div className="lg:col-span-4 flex flex-col gap-8">
@@ -955,7 +913,6 @@ export default function HumindPage() {
               </div>
             </div>
           </section>
-        </Reveal>
 
         {/* Ultra Premium Separator */}
         <div className="relative py-20 px-6">
@@ -969,8 +926,7 @@ export default function HumindPage() {
         </div>
 
         {/* Section 6 - Ils nous ont inspirés - Ultra Premium */}
-        <Reveal delay={500}>
-          <section className="relative mx-auto w-full max-w-7xl px-6 pb-32 pt-12 md:px-12">
+        <section className="relative mx-auto w-full max-w-7xl px-6 pb-32 pt-12 md:px-12">
             <div className="grid lg:grid-cols-12 gap-16 items-start text-white">
               {/* Left Column - Ultra Premium Header */}
               <div className="lg:col-span-4 flex flex-col gap-8">
@@ -1056,7 +1012,6 @@ export default function HumindPage() {
               </div>
             </div>
           </section>
-        </Reveal>
       </div>
       
       {/* Footer */}
