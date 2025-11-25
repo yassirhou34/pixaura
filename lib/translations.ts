@@ -81,6 +81,8 @@ export const translations = {
       ctaTitle: "Prêts à accélérer ?",
       ctaDesc: "Discutons d'un dispositif sur mesure — branding, production, activation.",
       ctaButton: "Planifier un appel",
+      seeMore: "Voir plus",
+      seeLess: "Réduire",
     },
     // Portfolio section
     portfolio: {
@@ -651,6 +653,8 @@ export const translations = {
       ctaTitle: "Ready to accelerate?",
       ctaDesc: "Let's discuss a custom solution — branding, production, activation.",
       ctaButton: "Schedule a call",
+      seeMore: "See more",
+      seeLess: "Show less",
     },
     // Portfolio section
     portfolio: {
