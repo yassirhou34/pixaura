@@ -69,6 +69,10 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
     stage === "hold" || stage === "transition" || stage === "finishing"
       ? "/Banque d_images/Backv2.mp4"
       : "/Banque d_images/back3.mp4"
+  
+  const [videoLoaded, setVideoLoaded] = useState(false)
+  const [videoError, setVideoError] = useState(false)
+  const videoRef = useRef<HTMLVideoElement | null>(null)
 
   const overlayTone =
     stage === "hold" || stage === "finishing"
@@ -315,6 +319,24 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
     }
   }, [stage])
 
+  // Preload video when component mounts
+  useEffect(() => {
+    const video = videoRef.current
+    if (video && backgroundVideo) {
+      // Force video to load
+      video.load()
+      
+      // Set timeout to ensure video starts loading
+      const loadTimeout = setTimeout(() => {
+        if (video.readyState < 2) {
+          video.load()
+        }
+      }, 100)
+      
+      return () => clearTimeout(loadTimeout)
+    }
+  }, [backgroundVideo])
+
   useEffect(() => {
     if (stage === "hold") return
     if (holdTrailRef.current) cancelAnimationFrame(holdTrailRef.current)
@@ -372,6 +394,7 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
     >
       {/* Background video - hidden on mobile, visible on desktop */}
       <video
+        ref={videoRef}
         key={backgroundVideo}
         className="hidden md:block absolute inset-0 h-full w-full object-cover"
         autoPlay
@@ -379,9 +402,33 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
         muted
         playsInline
         preload="auto"
+        onLoadedData={() => {
+          setVideoLoaded(true)
+          setVideoError(false)
+        }}
+        onCanPlay={() => {
+          setVideoLoaded(true)
+          setVideoError(false)
+        }}
+        onError={(e) => {
+          console.warn('Video loading error:', backgroundVideo)
+          setVideoError(true)
+          setVideoLoaded(false)
+        }}
+        onLoadStart={() => {
+          setVideoLoaded(false)
+        }}
+        style={{
+          opacity: videoLoaded ? 1 : 0,
+          transition: 'opacity 0.5s ease-in-out',
+        }}
       >
         <source src={backgroundVideo} type="video/mp4" />
       </video>
+      {/* Fallback black background while video loads */}
+      {!videoLoaded && !videoError && (
+        <div className="hidden md:block absolute inset-0 bg-black" />
+      )}
       {/* Background image - visible only on mobile */}
       <img
         src="/Banque d_images/backnoiree.png"

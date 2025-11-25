@@ -141,13 +141,25 @@ export default function HumindPage() {
             width: '100%',
             height: '100%'
           }}
-          onError={() => {
+          onLoadedData={() => {
+            // Video loaded successfully
+          }}
+          onCanPlay={() => {
+            // Video can play
+          }}
+          onError={(e) => {
+            console.warn('Humind background video loading error')
             // Silent error handling - don't break the page
             // Video will show poster or remain hidden if it fails
+          }}
+          onLoadStart={() => {
+            // Video loading started
           }}
         >
           <source src="/Banque d_images/noir.mp4" type="video/mp4" />
         </video>
+        {/* Fallback black background while video loads */}
+        <div className="hidden md:block absolute inset-0 bg-black" style={{ zIndex: -1 }} />
         {/* Background image - visible only on mobile */}
         <img
           src="/Banque d_images/backnoiree.png"

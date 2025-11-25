@@ -53,36 +53,147 @@ export function HeroSection() {
   const [previousIndex, setPreviousIndex] = useState<number | null>(null)
   const [isAnimating, setIsAnimating] = useState(false)
 
-  const headlineVariants = useMemo(() => [
+  // Preload the first card image immediately on mount for faster loading
+  useEffect(() => {
+    if (heroProjects[0]?.image) {
+      const link = document.createElement('link')
+      link.rel = 'preload'
+      link.as = 'image'
+      link.href = heroProjects[0].image
+      link.fetchPriority = 'high'
+      document.head.appendChild(link)
+      
+      // Also preload using Image constructor for better browser support
+      const img = new window.Image()
+      img.src = heroProjects[0].image
+      
+      return () => {
+        // Cleanup
+        if (document.head.contains(link)) {
+          document.head.removeChild(link)
+        }
+      }
+    }
+  }, [])
+
+  const headlineVariants = useMemo(() => {
+    // Split headline1 for better spacing
+    const headline1Parts = t("hero.headline1").split(" ")
+    const headline1EndParts = t("hero.headline1End").split(" ")
+    const isEnglish = t("hero.headline1").includes("aura of")
+    
+    return [
     (
       <>
-        {t("hero.headline1")} <span className="hero-highlight">{t("hero.headline1Highlight")}</span> {t("hero.headline1End")}
+        {isEnglish ? (
+          // English: "the aura of" / "ambitious" / "brands on every" / "continent."
+          <>
+            <span className="block leading-tight">{headline1Parts.join(" ")}</span>
+            <span className="block leading-tight -mt-2 sm:-mt-2 md:-mt-3">
+              <span className="hero-highlight">{t("hero.headline1Highlight")}</span>
+            </span>
+            <span className="block leading-tight -mt-2 sm:-mt-2 md:-mt-3">{headline1EndParts[0]} {headline1EndParts[1]}</span>
+            <span className="block leading-tight -mt-2 sm:-mt-2 md:-mt-3">{headline1EndParts.slice(2).join(" ")}</span>
+          </>
+        ) : (
+          // French: "l'aura des" / "marques" / "ambitieuses sur" / "chaque continent."
+          <>
+            <span className="block leading-tight">{headline1Parts.slice(0, 2).join(" ")}</span>
+            <span className="block leading-tight -mt-1 sm:mt-0">{headline1Parts.slice(2).join(" ")}</span>
+            <span className="block leading-tight -mt-1 sm:mt-0">
+              <span className="hero-highlight">{t("hero.headline1Highlight")}</span> {headline1EndParts[0]}
+            </span>
+            <span className="block leading-tight -mt-1 sm:mt-0">{headline1EndParts.slice(1).join(" ")}</span>
+          </>
+        )}
       </>
     ),
     (
       <>
-        <span className="block leading-tight">{t("hero.headline2Line1")}</span>
-        <span className="block leading-tight -mt-1 sm:mt-0">
-          {t("hero.headline2Line2").split(" ").map((word, index, array) => 
-            word === "rayonner" ? (
-              <span key={index}>
-                <span className="hero-highlight">{word}</span>
-                {index < array.length - 1 ? " " : ""}
-              </span>
-            ) : (
-              <span key={index}>{word}{index < array.length - 1 ? " " : ""}</span>
+        {(() => {
+          const isEnglish = t("hero.headline2Line1").includes("bold ideas")
+          
+          if (isEnglish) {
+            // English: "bold ideas that make" / "radiate" / "every brand."
+            const line2Words = t("hero.headline2Line2").split(" ")
+            return (
+              <>
+                <span className="block leading-tight">{t("hero.headline2Line1")} {line2Words.slice(0, -1).join(" ")}</span>
+                <span className="block leading-tight -mt-2 sm:-mt-2 md:-mt-3">
+                  <span className="hero-highlight">{line2Words[line2Words.length - 1]}</span>
+                </span>
+                <span className="block leading-tight -mt-2 sm:-mt-2 md:-mt-3">{t("hero.headline2Line3")}</span>
+              </>
             )
-          )}
-        </span>
-        <span className="block leading-tight -mt-1 sm:mt-0">{t("hero.headline2Line3")}</span>
+          } else {
+            // French: "des idées audacieuses qui" / "font rayonner chaque" / "marque."
+            return (
+              <>
+                <span className="block leading-tight">{t("hero.headline2Line1")}</span>
+                <span className="block leading-tight -mt-1 sm:mt-0">
+                  {t("hero.headline2Line2").split(" ").map((word, index, array) => 
+                    word === "rayonner" ? (
+                      <span key={index}>
+                        <span className="hero-highlight">{word}</span>
+                        {index < array.length - 1 ? " " : ""}
+                      </span>
+                    ) : (
+                      <span key={index}>{word}{index < array.length - 1 ? " " : ""}</span>
+                    )
+                  )}
+                </span>
+                <span className="block leading-tight -mt-1 sm:mt-0">{t("hero.headline2Line3")}</span>
+              </>
+            )
+          }
+        })()}
       </>
     ),
     (
       <>
-        {t("hero.headline3")} <span className="hero-highlight">{t("hero.headline3Highlight")}</span> {t("hero.headline3End")}
+        {(() => {
+          const headline3Parts = t("hero.headline3").split(" ")
+          const highlightParts = t("hero.headline3Highlight").split(" ")
+          const endParts = t("hero.headline3End").split(" ")
+          
+          // French: "des activations créatives" / "haute performance" / "pour amplifier l'impact."
+          // English: "high-performance" / "creative activations" / "to amplify impact."
+          if (t("hero.headline3").includes("activations")) {
+            // French version
+            return (
+              <>
+                <span className="block leading-tight">{headline3Parts.slice(0, 2).join(" ")}</span>
+                <span className="block leading-tight -mt-1 sm:mt-0">{headline3Parts[2]} {highlightParts[0]}</span>
+                <span className="block leading-tight -mt-1 sm:mt-0">
+                  <span className="hero-highlight">{highlightParts[1]}</span>
+                </span>
+                <span className="block leading-tight -mt-1 sm:mt-0">{endParts.slice(0, 2).join(" ")}</span>
+                <span className="block leading-tight -mt-1 sm:mt-0">{endParts.slice(2).join(" ")}</span>
+              </>
+            )
+          } else {
+            // English version: "creative" / "activations" / "high-" / "performance to" / "amplify impact."
+            const creativeParts = highlightParts[1].split(" ")
+            const highPerfParts = highlightParts[0].split("-")
+            return (
+              <>
+                <span className="block leading-tight">{creativeParts[0]}</span>
+                <span className="block leading-tight -mt-2 sm:-mt-2 md:-mt-3">
+                  <span className="hero-highlight">{creativeParts[1]}</span>
+                </span>
+                <span className="block leading-tight -mt-2 sm:-mt-2 md:-mt-3">{highPerfParts[0]}-</span>
+                <span className="block leading-tight -mt-2 sm:-mt-2 md:-mt-3">
+                  {highPerfParts[1]} {endParts[0]}
+                </span>
+                <span className="block leading-tight -mt-2 sm:-mt-2 md:-mt-3">{endParts.slice(1).join(" ")}</span>
+              </>
+            )
+          }
+        })()}
       </>
     ),
-  ], [t])
+    ]
+  }, [t])
 
   const longestHeadlineIndex = useMemo(() => {
     let longest = 0
@@ -151,7 +262,7 @@ export function HeroSection() {
                       {t("hero.reveal")}
                     </span>
                     <div
-                      className={`hero-headline-container text-[28px] font-black leading-[1.1] tracking-tight text-white sm:text-[36px] sm:leading-[1.08] md:text-[56px] md:leading-[1.05] lg:text-[72px] lg:leading-[1.04] ${activeIndex === 1 ? 'pb-2 sm:pb-0' : 'pb-2 sm:pb-0'}`}
+                      className="hero-headline-container text-[28px] font-black leading-[1.1] tracking-tight text-white sm:text-[36px] sm:leading-[1.08] md:text-[56px] md:leading-[1.05] lg:text-[72px] lg:leading-[1.04] pb-0 sm:pb-0 md:pb-6 lg:pb-8"
                       aria-live="polite"
                       style={placeholderHeight ? { minHeight: placeholderHeight } : undefined}
                     >
@@ -173,7 +284,7 @@ export function HeroSection() {
               </Reveal>
 
               <Reveal delay={240}>
-                <p className={`max-w-2xl text-sm text-white/80 sm:text-base md:text-lg lg:text-xl relative z-10 leading-relaxed text-justify text-justify-smooth ${activeIndex === 1 ? 'mt-10 sm:mt-4 md:mt-5 lg:mt-6' : 'mt-4 sm:mt-4 md:mt-5 lg:mt-6'}`}>{t("hero.subheadline")}</p>
+                <p className="max-w-2xl text-sm text-white/80 sm:text-base md:text-lg lg:text-xl relative z-10 leading-relaxed text-justify text-justify-smooth mt-6 sm:mt-6 md:mt-8 lg:mt-10">{t("hero.subheadline")}</p>
               </Reveal>
             </div>
 
@@ -203,7 +314,13 @@ export function HeroSection() {
                             alt={project.title}
                             fill
                             className="object-cover transition duration-700 ease-out group-hover:scale-[1.05]"
-                            sizes="100vw"
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                            priority={index === 0}
+                            loading={index === 0 ? "eager" : "lazy"}
+                            quality={index === 0 ? 95 : 85}
+                            placeholder="blur"
+                            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWEREiMxUf/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
+                            fetchPriority={index === 0 ? "high" : "auto"}
                           />
                           <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/0 via-black/20 to-black/80" />
                           <div className="absolute inset-x-0 bottom-0 flex flex-col gap-2 px-5 pb-4">
@@ -250,6 +367,10 @@ export function HeroSection() {
                       className="object-cover transition duration-700 ease-out group-hover:scale-[1.05]"
                       sizes="(max-width: 1280px) 220px, 260px"
                       priority={index === 0}
+                      loading={index === 0 ? "eager" : "lazy"}
+                      quality={90}
+                      placeholder="blur"
+                      blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWEREiMxUf/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
                     />
                     <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/0 via-black/20 to-black/80" />
                     <div className="absolute inset-x-0 bottom-0 flex flex-col gap-2 px-6 pb-5">
