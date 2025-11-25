@@ -50,6 +50,20 @@ export default function RootLayout({
                 visibility: hidden !important;
                 opacity: 0 !important;
               }
+              /* Ensure navigation overlay is always on top - prevents white flash on Vercel */
+              #nav-transition-overlay {
+                position: fixed !important;
+                inset: 0 !important;
+                background: #000 !important;
+                z-index: 999999 !important;
+                pointer-events: none !important;
+                opacity: 1 !important;
+                transition: none !important;
+              }
+              /* Keep black background during navigation to prevent white flash */
+              html.navigating, body.navigating {
+                background-color: #000000 !important;
+              }
             `,
           }}
         />

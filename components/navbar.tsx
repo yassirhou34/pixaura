@@ -31,122 +31,117 @@ export function Navbar() {
     }
   }, [router])
 
-  // Helper function to handle smooth navigation transitions
+  // Helper function to handle simple navigation transitions - NO ANIMATIONS, just black overlay
   const handleNavigationTransition = (targetUrl: string, shouldSetNavFromSpecialPage: boolean = false) => {
+    // Mark navigation if needed
+    if (shouldSetNavFromSpecialPage) {
+      sessionStorage.setItem('navFromSpecialPage', 'true')
+    }
+    
+    // CRITICAL: Create overlay SYNCHRONOUSLY before any navigation
     // Remove any existing overlay first
     const existingOverlay = document.getElementById('nav-transition-overlay')
     if (existingOverlay) {
       existingOverlay.remove()
     }
     
-    // Mark navigation if needed
-    if (shouldSetNavFromSpecialPage) {
-      sessionStorage.setItem('navFromSpecialPage', 'true')
-    }
-    
-    // Add instant black overlay to prevent white flash
+    // Create overlay IMMEDIATELY - no delays
     const overlay = document.createElement('div')
     overlay.id = 'nav-transition-overlay'
-    overlay.style.cssText = 'position: fixed; inset: 0; background: #000; z-index: 40; pointer-events: none; opacity: 1; transition: opacity 0ms;'
-    document.body.appendChild(overlay)
-    
-    // Ensure navbar stays visible above overlay
-    const navbar = document.querySelector('nav') as HTMLElement
-    if (navbar) {
-      navbar.style.setProperty('z-index', '9999')
-      navbar.style.setProperty('position', 'fixed')
+    overlay.style.cssText = 'position: fixed; inset: 0; background: #000; z-index: 99999; pointer-events: none; opacity: 1;'
+    // Insert at the very top of body to ensure it's above everything
+    if (document.body.firstChild) {
+      document.body.insertBefore(overlay, document.body.firstChild)
+    } else {
+      document.body.appendChild(overlay)
     }
     
-    // Set black background for smooth transition
+    // Set black background IMMEDIATELY
     document.documentElement.style.backgroundColor = '#000000'
     document.body.style.backgroundColor = '#000000'
     
-    // Prefetch for instant navigation BEFORE navigating
+    // Ensure navbar stays visible
+    const navbar = document.querySelector('nav') as HTMLElement
+    if (navbar) {
+      navbar.style.setProperty('z-index', '999999', 'important')
+      navbar.style.setProperty('position', 'fixed')
+    }
+    
+    // Prefetch BEFORE navigation
     router.prefetch(targetUrl)
     
-    // Disable smooth scroll during navigation
+    // Disable smooth scroll to prevent animations
     document.documentElement.style.scrollBehavior = 'auto'
     document.body.style.scrollBehavior = 'auto'
     
-    // Navigate immediately
-    router.push(targetUrl)
+    // Add navigating class to html/body to keep black background
+    document.documentElement.classList.add('navigating')
+    document.body.classList.add('navigating')
     
-    // Wait for navigation to complete before removing overlay
-    const removeOverlay = () => {
-      const overlayEl = document.getElementById('nav-transition-overlay')
-      if (overlayEl) {
-        // Check if page has loaded - use multiple checks for Vercel
-        const checkAndRemove = () => {
-          // Check readyState and also wait a bit more for Vercel
-          if (document.readyState === 'complete') {
-            // Additional check: wait for Next.js hydration
-            setTimeout(() => {
-              const el = document.getElementById('nav-transition-overlay')
-              if (el) {
-                el.style.opacity = '0'
-                el.style.transition = 'opacity 300ms ease-out'
-                setTimeout(() => {
-                  el.remove()
-                  // Remove black background after overlay is removed
-                  setTimeout(() => {
-                    document.documentElement.style.backgroundColor = ''
-                    document.body.style.backgroundColor = ''
-                  }, 50)
-                }, 300)
-              }
-              document.documentElement.style.scrollBehavior = ''
-              document.body.style.scrollBehavior = ''
-            }, 200) // Extra delay for Vercel
-          } else {
-            // Wait for page to load
-            window.addEventListener('load', () => {
-              setTimeout(() => {
-                const el = document.getElementById('nav-transition-overlay')
-                if (el) {
-                  el.style.opacity = '0'
-                  el.style.transition = 'opacity 300ms ease-out'
-                  setTimeout(() => {
-                    el.remove()
-                    document.documentElement.style.backgroundColor = ''
-                    document.body.style.backgroundColor = ''
-                  }, 300)
-                }
-                document.documentElement.style.scrollBehavior = ''
-                document.body.style.scrollBehavior = ''
-              }, 200) // Extra delay for Vercel
-            }, { once: true })
-          }
-        }
-        
-        // Initial check
-        checkAndRemove()
-        
-        // Fallback: if still not loaded after 1.5s, remove anyway (for Vercel)
+    // Navigate immediately - use replace to avoid history stack
+    // No delay - navigate synchronously after overlay is created
+    router.replace(targetUrl)
+      
+    // Keep overlay until page is fully loaded
+    const checkAndRemove = () => {
+      // Wait for both DOM and Next.js to be ready
+      if (document.readyState === 'complete') {
+        // Additional wait for Next.js hydration on Vercel
         setTimeout(() => {
           const el = document.getElementById('nav-transition-overlay')
           if (el) {
-            el.style.opacity = '0'
-            el.style.transition = 'opacity 300ms ease-out'
-            setTimeout(() => {
-              el.remove()
-              document.documentElement.style.backgroundColor = ''
-              document.body.style.backgroundColor = ''
-            }, 300)
+            el.remove()
           }
+          document.documentElement.style.backgroundColor = ''
+          document.body.style.backgroundColor = ''
           document.documentElement.style.scrollBehavior = ''
           document.body.style.scrollBehavior = ''
-        }, 1500)
+          document.documentElement.classList.remove('navigating')
+          document.body.classList.remove('navigating')
+          if (navbar) {
+            navbar.style.removeProperty('z-index')
+          }
+        }, 800) // Longer wait for Vercel
       } else {
-        // If overlay was already removed, just remove background
-        document.documentElement.style.backgroundColor = ''
-        document.body.style.backgroundColor = ''
-        document.documentElement.style.scrollBehavior = ''
-        document.body.style.scrollBehavior = ''
+        window.addEventListener('load', () => {
+          setTimeout(() => {
+            const el = document.getElementById('nav-transition-overlay')
+            if (el) {
+              el.remove()
+            }
+            document.documentElement.style.backgroundColor = ''
+            document.body.style.backgroundColor = ''
+            document.documentElement.style.scrollBehavior = ''
+            document.body.style.scrollBehavior = ''
+            document.documentElement.classList.remove('navigating')
+            document.body.classList.remove('navigating')
+            if (navbar) {
+              navbar.style.removeProperty('z-index')
+            }
+          }, 800)
+        }, { once: true })
       }
     }
     
-    // Start checking after a short delay
-    setTimeout(removeOverlay, 100)
+    // Start checking immediately
+    checkAndRemove()
+    
+    // Fallback: remove after 3 seconds max (for Vercel slow loading)
+    setTimeout(() => {
+      const el = document.getElementById('nav-transition-overlay')
+      if (el) {
+        el.remove()
+      }
+      document.documentElement.style.backgroundColor = ''
+      document.body.style.backgroundColor = ''
+      document.documentElement.style.scrollBehavior = ''
+      document.body.style.scrollBehavior = ''
+      document.documentElement.classList.remove('navigating')
+      document.body.classList.remove('navigating')
+      if (navbar) {
+        navbar.style.removeProperty('z-index')
+      }
+    }, 3000)
   }
 
   const navItems = [
