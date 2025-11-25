@@ -61,13 +61,20 @@ export function HeroSection() {
     ),
     (
       <>
-        <span className="block">{t("hero.headline2Line1")}</span>
-        <span className="block">{t("hero.headline2Line2")}</span>
-        <span className="block">{t("hero.headline2Line3")}</span>
-        <span className="block">
-          <span className="hero-highlight">{t("hero.headline2Line4")}</span> {t("hero.headline2Line5")}
+        <span className="block leading-tight">{t("hero.headline2Line1")}</span>
+        <span className="block leading-tight -mt-1 sm:mt-0">
+          {t("hero.headline2Line2").split(" ").map((word, index, array) => 
+            word === "rayonner" ? (
+              <span key={index}>
+                <span className="hero-highlight">{word}</span>
+                {index < array.length - 1 ? " " : ""}
+              </span>
+            ) : (
+              <span key={index}>{word}{index < array.length - 1 ? " " : ""}</span>
+            )
+          )}
         </span>
-        <span className="block">{t("hero.headline2Line6")}</span>
+        <span className="block leading-tight -mt-1 sm:mt-0">{t("hero.headline2Line3")}</span>
       </>
     ),
     (
@@ -144,7 +151,7 @@ export function HeroSection() {
                       {t("hero.reveal")}
                     </span>
                     <div
-                      className={`hero-headline-container text-[28px] font-black leading-[1.1] tracking-tight text-white sm:text-[36px] sm:leading-[1.08] md:text-[56px] md:leading-[1.05] lg:text-[72px] lg:leading-[1.04] ${activeIndex === 1 ? 'pb-10 sm:pb-0' : 'pb-2 sm:pb-0'}`}
+                      className={`hero-headline-container text-[28px] font-black leading-[1.1] tracking-tight text-white sm:text-[36px] sm:leading-[1.08] md:text-[56px] md:leading-[1.05] lg:text-[72px] lg:leading-[1.04] ${activeIndex === 1 ? 'pb-2 sm:pb-0' : 'pb-2 sm:pb-0'}`}
                       aria-live="polite"
                       style={placeholderHeight ? { minHeight: placeholderHeight } : undefined}
                     >
@@ -166,7 +173,7 @@ export function HeroSection() {
               </Reveal>
 
               <Reveal delay={240}>
-                <p className={`max-w-2xl text-sm text-white/80 sm:text-base md:text-lg lg:text-xl relative z-10 leading-relaxed ${activeIndex === 1 ? 'mt-10 sm:mt-4 md:mt-5 lg:mt-6' : 'mt-4 sm:mt-4 md:mt-5 lg:mt-6'}`}>{t("hero.subheadline")}</p>
+                <p className={`max-w-2xl text-sm text-white/80 sm:text-base md:text-lg lg:text-xl relative z-10 leading-relaxed text-justify text-justify-smooth ${activeIndex === 1 ? 'mt-10 sm:mt-4 md:mt-5 lg:mt-6' : 'mt-4 sm:mt-4 md:mt-5 lg:mt-6'}`}>{t("hero.subheadline")}</p>
               </Reveal>
             </div>
 
@@ -233,9 +240,7 @@ export function HeroSection() {
                 <Reveal
                   key={project.id}
                   delay={index * 180}
-                  className={`hero-highlight-card group relative isolate flex h-[360px] w-[220px] flex-col overflow-hidden rounded-[28px] border border-white/15 bg-white/5 pb-5 text-white backdrop-blur-xl transition duration-700 hover:-translate-y-2 hover:border-white/30 hover:bg-white/10 xl:h-[400px] xl:w-[240px] ${
-                    index === 1 ? "lg:-mt-8 xl:-mt-14" : ""
-                  } ${index === 2 ? "lg:-mt-16 xl:-mt-30" : ""}`}
+                  className="hero-highlight-card group relative isolate flex h-[360px] w-[220px] flex-col overflow-hidden rounded-[28px] border border-white/15 bg-white/5 pb-5 text-white backdrop-blur-xl transition duration-700 hover:-translate-y-2 hover:border-white/30 hover:bg-white/10 xl:h-[400px] xl:w-[240px]"
                 >
                   <div className="relative h-[58%] w-full overflow-hidden">
                     <Image

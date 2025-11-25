@@ -3,25 +3,25 @@
 import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { Sparkles, Target, GraduationCap, Shield, BarChart3, Globe, ArrowRight } from "lucide-react"
+import { Sparkles, ArrowRight } from "lucide-react"
 import { Reveal } from "@/components/reveal"
 import { useTranslation } from "@/contexts/translation-context"
 
 const values = [
   {
-    icon: Sparkles,
+    badge: "Créativité",
     title: "Créativité contemporaine",
     description: "Direction artistique, storytelling visuel, esthétique inspirée des codes cinématiques.",
     gradient: "from-purple-500 via-pink-500 to-purple-600",
   },
   {
-    icon: Target,
+    badge: "Intelligence",
     title: "Intelligence stratégique",
     description: "Maîtrise des algorithmes, data, performance marketing et ciblage digital.",
     gradient: "from-blue-500 via-cyan-500 to-blue-600",
   },
   {
-    icon: GraduationCap,
+    badge: "Transmission",
     title: "Transmission & accompagnement",
     description: "Formations, ateliers, accompagnement stratégique pour faire grandir les marques.",
     gradient: "from-emerald-500 via-teal-500 to-emerald-600",
@@ -50,19 +50,19 @@ export function AgenceHomeSection() {
 
   const commitments = [
     {
-      icon: Shield,
+      badge: "Transparence",
       title: "Transparence & contrat clair",
       description: "CGV et droit à l'image sécurisés.",
       gradient: "from-blue-500 via-cyan-500 to-blue-600",
     },
     {
-      icon: BarChart3,
+      badge: "Excellence",
       title: "Excellence mesurable",
       description: "KPI, reporting, ROI mensuel.",
       gradient: "from-purple-500 via-pink-500 to-purple-600",
     },
     {
-      icon: Globe,
+      badge: "Vision",
       title: "Vision responsable",
       description: "Production locale, engagement durable et éthique.",
       gradient: "from-emerald-500 via-teal-500 to-emerald-600",
@@ -81,7 +81,6 @@ export function AgenceHomeSection() {
         <Reveal>
           <div className="mb-20 text-left">
             <span className="inline-flex w-fit items-center gap-3 rounded-full border border-white/20 bg-white/10 px-6 py-2 text-sm font-semibold uppercase tracking-[0.5em] text-white shadow-[0_0_35px_rgba(89,129,255,0.25)] backdrop-blur-md">
-              <Sparkles className="h-3.5 w-3.5 text-sky-300" />
               {t("agenceHome.valuesBadge")}
             </span>
             <h2 className="mt-8 text-4xl font-black leading-tight text-white md:text-5xl lg:text-6xl text-left">
@@ -96,7 +95,6 @@ export function AgenceHomeSection() {
         {/* Values Cards - Style Réalisations Premium */}
         <div className="mb-32 grid gap-8 md:grid-cols-3">
           {values.map((value, index) => {
-            const IconComponent = value.icon
             return (
               <Reveal key={index} delay={index * 100}>
                 <div className="group relative overflow-hidden rounded-3xl border border-white/20 bg-white/8 text-white backdrop-blur-2xl transition duration-700 ease-out hover:-translate-y-3 hover:scale-[1.01] hover:border-white/30 hover:bg-white/12 hover:shadow-[0_45px_140px_rgba(0,0,0,0.55)]">
@@ -106,36 +104,22 @@ export function AgenceHomeSection() {
                     <div className="absolute inset-0 rounded-[30px] border border-white/20 opacity-60" />
                   </div>
 
-                  {/* Icon Header Section - Enhanced Clarity */}
+                  {/* Badge Header Section - Replacing Icon - Same height as original */}
                   <div className="relative h-64 w-full overflow-hidden flex items-center justify-center">
                     {/* Background Gradient - More Visible */}
                     <div className="absolute inset-0 bg-gradient-to-br from-white/15 via-white/8 to-white/15" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
                     
-                    {/* Icon Container - Premium */}
+                    {/* Badge - Centered - Larger size */}
                     <div className="relative z-10 flex items-center justify-center">
-                      <div className="relative w-32 h-32 flex items-center justify-center">
-                        {/* Icon Glow */}
-                        <div className="absolute -inset-8 bg-white/20 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                        <div className="absolute -inset-4 bg-white/10 rounded-full blur-xl opacity-0 group-hover:opacity-80 transition-opacity duration-700" />
-                        
-                        {/* Icon */}
-                        <div className="relative w-24 h-24 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center backdrop-blur-sm transition-all duration-700 group-hover:bg-white/15 group-hover:border-white/30 group-hover:scale-110">
-                          <IconComponent className="w-14 h-14 text-white transition-all duration-700 group-hover:scale-110" style={{ 
-                            filter: 'drop-shadow(0 0 12px rgba(255, 255, 255, 0.3))',
-                          }} />
-                        </div>
-                      </div>
+                      <span className="inline-block rounded-full border border-white/25 bg-white/20 px-6 py-3 text-sm font-bold uppercase tracking-[0.35em] text-white backdrop-blur-md">
+                        {value.badge}
+                      </span>
                     </div>
-                    
-                    {/* Badge - Enhanced Visibility */}
-                    <span className="absolute bottom-5 left-5 rounded-full border border-white/25 bg-white/20 px-5 py-2.5 text-[11px] font-bold uppercase tracking-[0.32em] text-white backdrop-blur-md">
-                      {value.title.split(' ')[0]}
-                    </span>
                   </div>
 
-                  {/* Content Section - Enhanced Clarity */}
-                  <div className="flex flex-col gap-5 px-8 py-10 text-white">
+                  {/* Content Section - Centered */}
+                  <div className="flex flex-col gap-5 px-8 pt-8 pb-10 text-white text-center">
                     <h3 className="text-2xl font-bold leading-tight md:text-3xl text-white">
                       {value.title}
                     </h3>
@@ -388,61 +372,45 @@ export function AgenceHomeSection() {
         <Reveal>
           <div className="mb-16 text-left">
             <span className="inline-flex w-fit items-center gap-3 rounded-full border border-white/20 bg-white/10 px-6 py-2 text-sm font-semibold uppercase tracking-[0.5em] text-white shadow-[0_0_35px_rgba(89,129,255,0.25)] backdrop-blur-md">
-              <Sparkles className="h-3.5 w-3.5 text-sky-300" />
               {t("agenceHome.commitmentsBadge")}
             </span>
             <h2 className="mt-8 text-4xl font-black leading-tight text-white md:text-5xl lg:text-6xl text-left">
               {t("agenceHome.commitmentsTitle")}
             </h2>
-            <p className="mt-6 max-w-3xl text-base text-white/70 md:text-lg text-left">
+            <p className="mt-6 max-w-3xl text-base text-white/70 md:text-lg text-left whitespace-pre-line">
               {t("agenceHome.commitmentsDesc")}
             </p>
           </div>
         </Reveal>
 
         {/* Commitments Cards - Style Réalisations Premium */}
-        <div className="grid gap-8 md:grid-cols-3">
+        <div className="grid gap-8 md:grid-cols-3 md:items-stretch">
           {commitments.map((commitment, index) => {
-            const IconComponent = commitment.icon
             return (
               <Reveal key={index} delay={index * 100}>
-                <div className="group relative overflow-hidden rounded-3xl border border-white/20 bg-white/8 text-white backdrop-blur-2xl transition duration-700 ease-out hover:-translate-y-3 hover:scale-[1.01] hover:border-white/30 hover:bg-white/12 hover:shadow-[0_45px_140px_rgba(0,0,0,0.55)]">
+                <div className="group relative overflow-hidden rounded-3xl border border-white/20 bg-white/8 text-white backdrop-blur-2xl transition duration-700 ease-out hover:-translate-y-3 hover:scale-[1.01] hover:border-white/30 hover:bg-white/12 hover:shadow-[0_45px_140px_rgba(0,0,0,0.55)] h-full flex flex-col">
                   {/* Premium Glow Effects - Style Réalisations */}
                   <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-700 ease-out group-hover:opacity-100">
                     <div className="absolute -inset-6 rounded-[40px] bg-gradient-to-r from-primary/20 via-white/10 to-cyan-400/20 blur-3xl animate-pulse" />
                     <div className="absolute inset-0 rounded-[30px] border border-white/20 opacity-60" />
                   </div>
 
-                  {/* Icon Header Section - Enhanced Clarity */}
+                  {/* Badge Header Section - Replacing Icon - Same height as original */}
                   <div className="relative h-64 w-full overflow-hidden flex items-center justify-center">
                     {/* Background Gradient - More Visible */}
                     <div className="absolute inset-0 bg-gradient-to-br from-white/15 via-white/8 to-white/15" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
                     
-                    {/* Icon Container - Premium */}
+                    {/* Badge - Centered - Larger size */}
                     <div className="relative z-10 flex items-center justify-center">
-                      <div className="relative w-32 h-32 flex items-center justify-center">
-                        {/* Icon Glow */}
-                        <div className="absolute -inset-8 bg-white/20 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                        <div className="absolute -inset-4 bg-white/10 rounded-full blur-xl opacity-0 group-hover:opacity-80 transition-opacity duration-700" />
-                        
-                        {/* Icon */}
-                        <div className="relative w-24 h-24 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center backdrop-blur-sm transition-all duration-700 group-hover:bg-white/15 group-hover:border-white/30 group-hover:scale-110">
-                          <IconComponent className="w-14 h-14 text-white transition-all duration-700 group-hover:scale-110" style={{ 
-                            filter: 'drop-shadow(0 0 12px rgba(255, 255, 255, 0.3))',
-                          }} />
-                        </div>
-                      </div>
+                      <span className="inline-block rounded-full border border-white/25 bg-white/20 px-6 py-3 text-sm font-bold uppercase tracking-[0.35em] text-white backdrop-blur-md">
+                        {commitment.badge}
+                      </span>
                     </div>
-                    
-                    {/* Badge - Enhanced Visibility */}
-                    <span className="absolute bottom-5 left-5 rounded-full border border-white/25 bg-white/20 px-5 py-2.5 text-[11px] font-bold uppercase tracking-[0.32em] text-white backdrop-blur-md">
-                      {commitment.title.split(' ')[0]}
-                    </span>
                   </div>
 
-                  {/* Content Section - Enhanced Clarity */}
-                  <div className="flex flex-col gap-5 px-8 py-10 text-white">
+                  {/* Content Section - Centered */}
+                  <div className="flex flex-col gap-5 px-8 pt-8 pb-10 text-white text-center flex-1">
                     <h3 className="text-2xl font-bold leading-tight md:text-3xl text-white">
                       {commitment.title}
                     </h3>

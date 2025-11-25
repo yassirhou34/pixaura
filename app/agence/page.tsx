@@ -377,6 +377,7 @@ export default function AgencePage() {
                             fontFamily: 'Montserrat, sans-serif',
                             textShadow: '0 2px 12px rgba(0,0,0,0.5), 0 4px 24px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.7)',
                             lineHeight: '1.8',
+                            textAlign: 'justify',
                           }}>
                             {member.description}
                           </p>
@@ -389,6 +390,7 @@ export default function AgencePage() {
                               fontFamily: 'Montserrat, sans-serif',
                               textShadow: '0 2px 12px rgba(0,0,0,0.5), 0 4px 24px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.7)',
                               lineHeight: '1.85',
+                              textAlign: 'justify',
                             }}>
                               {member.vision}
                             </p>
@@ -452,12 +454,12 @@ export default function AgencePage() {
                               </p>
                               
                               {/* Description */}
-                              <p className="text-gray-300 text-sm md:text-base leading-relaxed mb-3" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+                              <p className="text-gray-300 text-sm md:text-base leading-relaxed mb-3" style={{ fontFamily: 'Montserrat, sans-serif', textAlign: 'justify' }}>
                                 {member.description}
                               </p>
                               
                               {/* Vision */}
-                              <p className="text-gray-400 text-sm leading-relaxed italic" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+                              <p className="text-gray-400 text-sm leading-relaxed italic" style={{ fontFamily: 'Montserrat, sans-serif', textAlign: 'justify' }}>
                                 {member.vision}
                               </p>
                               

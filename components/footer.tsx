@@ -29,9 +29,10 @@ export function Footer() {
         <div className="flex flex-col gap-8 sm:gap-10 md:gap-12 md:grid md:grid-cols-[1.3fr_1fr] md:gap-16">
           {/* Brand Section - Premium Mobile Design */}
           <div className="space-y-6 sm:space-y-8">
-            <div className="relative group">
+            {/* Mobile: Logo first, Desktop: Tagline first */}
+            <div className="relative group md:hidden">
               {/* Glow Effect Behind Logo */}
-              <div className="md:hidden absolute -inset-4 bg-gradient-to-r from-cyan-400/20 via-purple-500/20 to-cyan-400/20 rounded-2xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="absolute -inset-4 bg-gradient-to-r from-cyan-400/20 via-purple-500/20 to-cyan-400/20 rounded-2xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <Image
                 src="/Pixaura_it .png"
                 alt="Pixaura International"
@@ -41,10 +42,23 @@ export function Footer() {
               />
             </div>
             
-            <p className="text-xs sm:text-sm text-white/70 leading-relaxed relative">
+            <p className="text-xs sm:text-sm text-white/70 leading-relaxed relative md:mt-7">
               <span className="absolute -left-2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-cyan-400/50 to-purple-500/50 opacity-0 md:opacity-100" />
               <span className="md:pl-4 block">{t("footer.tagline")}</span>
             </p>
+            
+            {/* Desktop: Logo second */}
+            <div className="hidden md:block relative group md:-mt-30">
+              {/* Glow Effect Behind Logo */}
+              <div className="absolute -inset-4 bg-gradient-to-r from-cyan-400/20 via-purple-500/20 to-cyan-400/20 rounded-2xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <Image
+                src="/Pixaura_it .png"
+                alt="Pixaura International"
+                width={320}
+                height={96}
+                className="relative h-16 sm:h-20 w-auto transition-transform duration-500 group-hover:scale-105"
+              />
+            </div>
             
             {/* Premium Badge */}
             <div className="relative group inline-flex items-center gap-2 rounded-full border border-white/20 bg-gradient-to-r from-white/10 via-white/5 to-white/10 px-4 py-2 text-[10px] sm:text-xs uppercase tracking-[0.3em] text-white/70 backdrop-blur-md overflow-hidden">

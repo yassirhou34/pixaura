@@ -1,7 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useRef, useState, useMemo } from "react"
-import { Pause, Play, Volume2, VolumeX, ChevronLeft, ChevronRight, Sparkles } from "lucide-react"
+import { Pause, Play, Volume2, VolumeX, ChevronLeft, ChevronRight } from "lucide-react"
 import { useTranslation } from "@/contexts/translation-context"
 
 export function HomeVideoCarousel() {
@@ -615,7 +615,7 @@ export function HomeVideoCarousel() {
                 {currentSlide.tags.map((tag, index) => (
                   <span
                     key={tag}
-                    className={`group/tag inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-gradient-to-br from-white/12 via-white/8 to-white/5 px-5 py-2 text-[10px] font-black uppercase tracking-[0.45em] text-white backdrop-blur-2xl transition-all duration-700 hover:border-cyan-300/50 hover:bg-gradient-to-br hover:from-cyan-400/20 hover:via-cyan-300/15 hover:to-cyan-400/10 hover:scale-110 hover:shadow-[0_0_30px_rgba(34,211,238,0.5),0_0_60px_rgba(34,211,238,0.2)] ${
+                    className={`group/tag inline-flex items-center rounded-full border border-white/30 bg-gradient-to-br from-white/12 via-white/8 to-white/5 px-5 py-2 text-[10px] font-black uppercase tracking-[0.45em] text-white backdrop-blur-2xl transition-all duration-700 hover:border-cyan-300/50 hover:bg-gradient-to-br hover:from-cyan-400/20 hover:via-cyan-300/15 hover:to-cyan-400/10 hover:scale-110 hover:shadow-[0_0_30px_rgba(34,211,238,0.5),0_0_60px_rgba(34,211,238,0.2)] ${
                       isVisible 
                         ? 'opacity-100 translate-y-0 scale-100' 
                         : 'opacity-0 translate-y-8 scale-90'
@@ -625,7 +625,6 @@ export function HomeVideoCarousel() {
                       textShadow: '0 0 20px rgba(34,211,238,0.3)',
                     }}
                   >
-                    <Sparkles className="h-3 w-3 text-cyan-300 transition-all duration-500 group-hover/tag:rotate-180 group-hover/tag:scale-125" />
                     {tag}
                   </span>
                 ))}

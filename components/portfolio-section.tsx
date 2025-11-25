@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowRight, ArrowUpRight, Sparkles } from "lucide-react"
+import { ArrowRight, ArrowUpRight } from "lucide-react"
 import { Reveal } from "@/components/reveal"
 import { useTranslation } from "@/contexts/translation-context"
 
@@ -369,7 +369,6 @@ export function PortfolioSection() {
           <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div className="space-y-4 flex-1 max-w-6xl">
               <span className="inline-flex w-fit items-center gap-3 rounded-full border border-white/20 bg-white/10 px-6 py-2 text-sm font-semibold uppercase tracking-[0.5em] text-white shadow-[0_0_35px_rgba(89,129,255,0.25)] backdrop-blur-md">
-                <Sparkles className="h-3.5 w-3.5 text-sky-300" />
                 {t("portfolio.badge")}
               </span>
               <h2 className="latest-heading">

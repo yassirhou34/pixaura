@@ -4,7 +4,6 @@ import { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Reveal } from "@/components/reveal"
-import { Sparkles, Mic2, Video } from "lucide-react"
 import { useTranslation } from "@/contexts/translation-context"
 
 const featuredEpisode = {
@@ -74,7 +73,6 @@ export function HumindSection() {
             <div className="humind-badge inline-flex items-center gap-3 rounded-full border border-white/20 bg-gradient-to-r from-white/12 via-white/8 to-white/5 px-7 py-3 text-[0.7rem] font-black uppercase tracking-[0.5em] text-white/95 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.3)] relative overflow-hidden transition-all duration-500 hover:border-white/30 hover:shadow-[0_12px_40px_rgba(80,120,255,0.2)]">
               <div className="absolute inset-0 bg-gradient-to-r from-blue-500/25 via-purple-500/25 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-500" />
               <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/30 via-purple-500/30 to-transparent opacity-0 hover:opacity-100 blur-xl transition-opacity duration-500 -z-10" />
-              <Sparkles className="w-4 h-4 text-blue-400 relative z-10 animate-pulse" />
               <span className="relative z-10">Humind</span>
             </div>
           </Reveal>
@@ -85,7 +83,7 @@ export function HumindSection() {
                 {t("humindHome.heading")}
               </span>
             </h2>
-            <p className="text-base text-white/70 md:text-lg leading-relaxed max-w-xl">
+            <p className="text-base text-white/70 md:text-lg leading-relaxed max-w-xl text-justify">
               {t("humindHome.description")}
             </p>
           </Reveal>
@@ -96,9 +94,6 @@ export function HumindSection() {
               <div className="absolute -inset-1 bg-gradient-to-br from-blue-500/20 via-purple-500/20 to-transparent opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-500 -z-10" />
               <div className="relative z-10">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2.5 rounded-xl bg-gradient-to-br from-blue-500/25 to-blue-500/15 backdrop-blur-sm border border-blue-400/20">
-                    <Video className="w-4 h-4 text-blue-400" />
-                  </div>
                   <p className="text-[0.7rem] uppercase tracking-[0.45em] text-white/60 font-bold">{t("humindHome.formatsLabel")}</p>
                 </div>
                 <p className="text-base md:text-lg font-bold leading-snug text-white/95">{t("humindHome.formatsDesc")}</p>
@@ -109,9 +104,6 @@ export function HumindSection() {
               <div className="absolute -inset-1 bg-gradient-to-br from-purple-500/20 via-blue-500/20 to-transparent opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-500 -z-10" />
               <div className="relative z-10">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2.5 rounded-xl bg-gradient-to-br from-purple-500/25 to-purple-500/15 backdrop-blur-sm border border-purple-400/20">
-                    <Mic2 className="w-4 h-4 text-purple-400" />
-                  </div>
                   <p className="text-[0.7rem] uppercase tracking-[0.45em] text-white/60 font-bold">{t("humindHome.distributionLabel")}</p>
                 </div>
                 <p className="text-base md:text-lg font-bold leading-snug text-white/95">{t("humindHome.distributionDesc")}</p>
@@ -165,7 +157,6 @@ export function HumindSection() {
           <div className="humind-badge inline-flex items-center gap-3 rounded-full border border-white/20 bg-gradient-to-r from-white/12 via-white/8 to-white/5 px-7 py-3 text-[0.7rem] font-black uppercase tracking-[0.5em] text-white/95 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.3)] relative overflow-hidden transition-all duration-500 hover:border-white/30 hover:shadow-[0_12px_40px_rgba(80,120,255,0.2)]">
             <div className="absolute inset-0 bg-gradient-to-r from-blue-500/25 via-purple-500/25 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-500" />
             <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/30 via-purple-500/30 to-transparent opacity-0 hover:opacity-100 blur-xl transition-opacity duration-500 -z-10" />
-            <Sparkles className="w-4 h-4 text-blue-400 relative z-10 animate-pulse" />
             <span className="relative z-10">Humind</span>
           </div>
         </Reveal>

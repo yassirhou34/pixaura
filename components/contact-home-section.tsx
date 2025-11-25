@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { ArrowRight, Calendar, Check, ChevronRight } from "lucide-react"
+import { ArrowRight, Check, ChevronRight } from "lucide-react"
 import { Reveal } from "@/components/reveal"
 import { useTranslation } from "@/contexts/translation-context"
 
@@ -351,7 +351,6 @@ export function ContactHomeSection() {
         <Reveal>
           <div id="rendez-vous" className="text-center scroll-mt-24">
             <div className="mb-12">
-              <Calendar className="w-16 h-16 text-primary mx-auto mb-6" />
               <h2 className="text-4xl md:text-5xl font-black text-white mb-6" style={{ 
                 fontFamily: 'Montserrat, sans-serif',
                 letterSpacing: '-0.02em',
@@ -373,9 +372,6 @@ export function ContactHomeSection() {
               <div className="absolute bottom-0 left-0 w-96 h-96 bg-cyan-400/5 rounded-full blur-3xl" />
               
               <div className="relative z-10 text-center py-12">
-                <p className="text-white/60 mb-8 text-lg" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-                  {t("contactHome.calendarPlaceholder")}
-                </p>
                 <Link 
                   href="mailto:contact@pixaura.eu?subject=Demande de rendez-vous"
                   className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-primary to-cyan-400 text-white font-bold rounded-full hover:scale-105 transition-all duration-300 shadow-[0_0_20px_rgba(0,115,255,0.3)] hover:shadow-[0_0_30px_rgba(0,115,255,0.5)]"

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
-import { Factory, Sparkles, BarChart3, Check, ArrowRight } from "lucide-react"
+import { Check, ArrowRight } from "lucide-react"
 import { Reveal } from "@/components/reveal"
 import { OffreModal } from "@/components/offre-modal"
 import { useTranslation } from "@/contexts/translation-context"
@@ -163,13 +163,12 @@ export function OffreSection() {
         <Reveal>
           <div className="mb-16 text-left">
             <span className="inline-flex w-fit items-center gap-3 rounded-full border border-white/20 bg-white/10 px-6 py-2 text-sm font-semibold uppercase tracking-[0.5em] text-white shadow-[0_0_35px_rgba(89,129,255,0.25)] backdrop-blur-md">
-              <Sparkles className="h-3.5 w-3.5 text-sky-300" />
               {t("offreHome.badge")}
             </span>
             <h2 className="mt-8 text-4xl font-black leading-tight text-white md:text-5xl lg:text-6xl text-left">
               {t("offreHome.title")}
             </h2>
-            <p className="mt-6 max-w-3xl text-base text-white/70 md:text-lg text-left">
+            <p className="mt-6 text-base text-white/70 md:text-lg text-left whitespace-nowrap">
               {t("offreHome.description")}
             </p>
           </div>
@@ -178,15 +177,15 @@ export function OffreSection() {
         {/* Premium Design Cards - Style Réalisations */}
         <div className="mb-24 grid gap-8 md:grid-cols-3">
           {[
-            { key: "production", icon: Factory, badge: t("offreHome.productionBadge") },
-            { key: "creativite", icon: Sparkles, badge: t("offreHome.creativityBadge") },
-            { key: "suivi", icon: BarChart3, badge: t("offreHome.analyticsBadge") }
-          ].map(({ key, icon: Icon, badge }) => {
+            { key: "production", badge: t("offreHome.productionBadge") },
+            { key: "creativite", badge: t("offreHome.creativityBadge") },
+            { key: "suivi", badge: t("offreHome.analyticsBadge") }
+          ].map(({ key, badge }) => {
             const detail = differentiatorDetails[key as keyof typeof differentiatorDetails]
 
             return (
               <Reveal key={key} delay={key === "production" ? 0 : key === "creativite" ? 100 : 200}>
-                <div className="group relative overflow-hidden rounded-3xl border border-white/15 bg-white/5 text-white backdrop-blur-xl transition duration-700 ease-out hover:-translate-y-3 hover:scale-[1.01] hover:border-white/25 hover:bg-white/10 hover:shadow-[0_45px_140px_rgba(0,0,0,0.55)]">
+                <div className="group relative overflow-hidden rounded-3xl border border-white/15 bg-white/5 text-white backdrop-blur-xl transition duration-700 ease-out hover:-translate-y-3 hover:scale-[1.01] hover:border-white/25 hover:bg-white/10 hover:shadow-[0_45px_140px_rgba(0,0,0,0.55)] h-full flex flex-col">
                   {/* Premium Glow Effects - Style Réalisations */}
                   <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-700 ease-out group-hover:opacity-100">
                     <div className={`absolute -inset-6 rounded-[40px] bg-gradient-to-r ${detail.gradient} blur-3xl animate-pulse`} style={{ opacity: 0.2 }} />
@@ -228,21 +227,17 @@ export function OffreSection() {
                         <span className="rounded-full border border-white/30 bg-white/20 px-5 py-2.5 text-[11px] font-bold uppercase tracking-[0.35em] text-white backdrop-blur-md shadow-lg transition-all duration-500 group-hover:border-white/40 group-hover:bg-white/25 group-hover:scale-105">
                           {badge}
                         </span>
-                        {/* Icon indicator */}
-                        <div className={`rounded-full border border-white/20 bg-white/10 p-2.5 backdrop-blur-sm transition-all duration-500 group-hover:border-white/30 group-hover:bg-white/20 group-hover:scale-110 group-hover:rotate-12`}>
-                          <Icon className="h-4 w-4 text-white" />
-                        </div>
                       </div>
                     </div>
 
                     {/* Enhanced Content Section with Premium Typography */}
-                    <div className="flex flex-col gap-5 px-8 py-10 text-white">
+                    <div className="flex flex-col gap-5 px-8 py-10 text-white flex-1">
                       {/* Title with enhanced styling */}
-                      <div className="space-y-2">
+                      <div className="space-y-2 text-center">
                         <h3 className="text-2xl font-black leading-tight tracking-tight md:text-3xl bg-gradient-to-r from-white via-white to-white/80 bg-clip-text text-transparent group-hover:from-white group-hover:via-white group-hover:to-white transition-all duration-500">
                           {detail.title}
                         </h3>
-                        <p className="text-sm font-medium text-white/60 md:text-base leading-relaxed">
+                        <p className="text-sm font-medium text-white/60 md:text-base leading-relaxed text-center">
                           {detail.subtitle}
                         </p>
                       </div>
@@ -286,10 +281,10 @@ export function OffreSection() {
         </Reveal>
 
         {/* Premium Packs Cards - Style 3 Piliers */}
-        <div className="grid gap-8 md:grid-cols-3">
+        <div className="grid gap-8 md:grid-cols-3 md:items-stretch">
           {packs.map((pack, index) => (
             <Reveal key={pack.name} delay={index * 100}>
-              <div className="group relative overflow-hidden rounded-3xl border border-white/15 bg-white/5 text-white backdrop-blur-xl transition duration-700 ease-out hover:-translate-y-3 hover:scale-[1.01] hover:border-white/25 hover:bg-white/10 hover:shadow-[0_45px_140px_rgba(0,0,0,0.55)]">
+              <div className="group relative overflow-hidden rounded-3xl border border-white/15 bg-white/5 text-white backdrop-blur-xl transition duration-700 ease-out hover:-translate-y-3 hover:scale-[1.01] hover:border-white/25 hover:bg-white/10 hover:shadow-[0_45px_140px_rgba(0,0,0,0.55)] h-full flex flex-col">
                 {/* Premium Glow Effects - Style Réalisations */}
                 <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-700 ease-out group-hover:opacity-100">
                   <div className={`absolute -inset-6 rounded-[40px] bg-gradient-to-r ${pack.gradient} blur-3xl animate-pulse`} style={{ opacity: 0.2 }} />
@@ -312,49 +307,43 @@ export function OffreSection() {
                   <div className={`absolute inset-0 bg-gradient-to-br ${pack.gradient} opacity-0 transition-opacity duration-700 group-hover:opacity-20`} />
                   
                   {/* Premium Badge with enhanced styling */}
-                  <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between">
+                  <div className="absolute bottom-5 left-5 right-5 flex items-end justify-center">
                     <span className={`rounded-full border border-white/30 bg-white/20 px-5 py-2.5 text-[11px] font-bold uppercase tracking-[0.35em] text-white backdrop-blur-md shadow-lg transition-all duration-500 group-hover:border-white/40 group-hover:bg-white/25 group-hover:scale-105 ${pack.premium ? 'bg-gradient-to-r from-amber-500/30 to-yellow-500/30 border-amber-400/40' : ''}`}>
                       {pack.badge}
                     </span>
-                    {/* Premium indicator for Signature pack */}
-                    {pack.premium && (
-                      <span className="rounded-full border-2 border-amber-400/50 bg-amber-500/20 px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.3em] text-white backdrop-blur-md shadow-lg">
-                        {t("offreHome.premium")}
-                      </span>
-                    )}
                   </div>
                 </div>
 
                 {/* Enhanced Content Section */}
-                <div className="flex flex-col gap-5 px-8 py-10 text-white">
-                  {/* Title with enhanced styling */}
-                  <div className="space-y-2">
+                <div className="flex flex-col gap-5 px-8 py-10 text-white flex-1">
+                  {/* Title with enhanced styling - Fixed height for alignment */}
+                  <div className="space-y-2 text-center h-[120px] flex flex-col justify-center flex-shrink-0">
                     <h3 className="text-2xl font-black leading-tight tracking-tight md:text-3xl bg-gradient-to-r from-white via-white to-white/80 bg-clip-text text-transparent group-hover:from-white group-hover:via-white group-hover:to-white transition-all duration-500">
                       {pack.name}
                     </h3>
-                    <p className="text-sm font-medium text-white/60 md:text-base leading-relaxed">
+                    <p className="text-sm font-medium text-white/60 md:text-base leading-relaxed text-center">
                       {pack.description}
                     </p>
                   </div>
 
-                  {/* Price Section - Premium Design */}
-                  <div className="relative overflow-hidden rounded-2xl border border-white/20 bg-white/5 p-6 backdrop-blur-sm transition-all duration-500 group-hover:border-white/30 group-hover:bg-white/10">
+                  {/* Price Section - Premium Design - Fixed height for alignment */}
+                  <div className="relative overflow-hidden rounded-2xl border border-white/20 bg-white/5 p-6 backdrop-blur-sm transition-all duration-500 group-hover:border-white/30 group-hover:bg-white/10 h-[120px] flex items-center justify-center flex-shrink-0">
                     <div className={`absolute inset-0 bg-gradient-to-br ${pack.gradient} opacity-0 transition-opacity duration-500 group-hover:opacity-10`} />
-                    <div className="relative z-10 space-y-1">
+                    <div className="relative z-10 space-y-1 text-center">
                       <div className="text-2xl font-black text-white md:text-3xl">{pack.price}</div>
                       <div className="text-xs font-semibold text-white/50 md:text-sm uppercase tracking-wide">{pack.priceDetail}</div>
                     </div>
                   </div>
 
                   {/* Features List - Compact Premium Design */}
-                  <div className="space-y-3 pt-2">
+                  <div className="space-y-3 pt-2 flex-1">
                     {pack.features.map((feature, idx) => (
                       <div
                         key={idx}
                         className="flex items-start gap-3 text-sm text-white/70 transition-colors duration-300 group-hover:text-white/90"
                       >
                         <Check className="h-4 w-4 text-white/60 mt-0.5 flex-shrink-0 transition-colors duration-300 group-hover:text-white/80" />
-                        <span className="leading-relaxed">{feature}</span>
+                        <span className="leading-relaxed flex-1">{feature}</span>
                       </div>
                     ))}
                   </div>

@@ -2,7 +2,6 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { Palette, Clapperboard, Share2, Rocket, Target, Sparkles } from "lucide-react"
 import { Reveal } from "@/components/reveal"
 import { useTranslation } from "@/contexts/translation-context"
 
@@ -19,7 +18,6 @@ const offers = [
         t("services.brandingDeliverable2"),
         t("services.brandingDeliverable3"),
     ],
-    Icon: Palette,
   },
   {
       tag: t("services.productionTag"),
@@ -30,7 +28,6 @@ const offers = [
         t("services.productionDeliverable2"),
         t("services.productionDeliverable3"),
     ],
-    Icon: Clapperboard,
   },
   {
       tag: t("services.socialTag"),
@@ -41,7 +38,6 @@ const offers = [
         t("services.socialDeliverable2"),
         t("services.socialDeliverable3"),
     ],
-    Icon: Share2,
   },
   {
       tag: t("services.campaignTag"),
@@ -52,7 +48,6 @@ const offers = [
         t("services.campaignDeliverable2"),
         t("services.campaignDeliverable3"),
     ],
-    Icon: Rocket,
   },
   {
       tag: t("services.strategyTag"),
@@ -63,7 +58,6 @@ const offers = [
         t("services.strategyDeliverable2"),
         t("services.strategyDeliverable3"),
     ],
-    Icon: Target,
   },
 ]
   return (
@@ -88,13 +82,12 @@ const offers = [
           <div className="relative flex flex-col gap-6 sm:gap-8 md:flex-row md:items-end md:justify-between z-10">
             <Reveal className="max-w-3xl space-y-4 sm:space-y-6">
               <span className="inline-flex w-fit items-center gap-2.5 sm:gap-3 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 sm:px-6 sm:py-2 text-xs sm:text-sm font-semibold uppercase tracking-[0.4em] sm:tracking-[0.5em] text-white shadow-[0_0_35px_rgba(89,129,255,0.25)] backdrop-blur-md">
-                <Sparkles className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-sky-300" />
                 {t("services.badge")}
               </span>
               <h2 className="max-w-2xl text-2xl sm:text-3xl md:text-4xl lg:text-[52px] font-black leading-tight">
                 {t("services.title")}
               </h2>
-              <p className="max-w-2xl text-sm sm:text-base text-white/90 md:text-white/80 md:text-lg leading-relaxed">
+              <p className="max-w-2xl text-sm sm:text-base text-white/90 md:text-white/80 md:text-lg leading-relaxed whitespace-pre-line text-justify">
                 {t("services.description")}
               </p>
             </Reveal>
@@ -121,11 +114,6 @@ const offers = [
                       <div className="flex items-center gap-3">
                         <span className="text-xs font-bold uppercase tracking-[0.4em] text-white/80">{t("services.process")}</span>
                         <div className="flex-1 h-px bg-gradient-to-r from-white/40 via-white/25 to-transparent" />
-                        <div className="h-6 w-6 flex items-center justify-center text-white/60 group-hover/process:text-white transition-all duration-500 group-hover/process:scale-110">
-                          <svg className="h-4 w-4 transition-transform duration-500 group-hover/process:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                          </svg>
-                        </div>
                       </div>
                       <p className="text-sm text-white/75 leading-relaxed group-hover/process:text-white/95 transition-colors duration-500">
                         {t("services.processDesc")}
@@ -151,11 +139,6 @@ const offers = [
                       <div className="flex items-center gap-3">
                         <span className="text-xs font-bold uppercase tracking-[0.4em] text-white/80">{t("services.team")}</span>
                         <div className="flex-1 h-px bg-gradient-to-r from-white/40 via-white/25 to-transparent" />
-                        <div className="h-6 w-6 flex items-center justify-center text-white/60 group-hover/team:text-white transition-all duration-500 group-hover/team:scale-110">
-                          <svg className="h-4 w-4 transition-transform duration-500 group-hover/team:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                          </svg>
-                        </div>
                       </div>
                       <p className="text-sm text-white/75 leading-relaxed group-hover/team:text-white/95 transition-colors duration-500">
                         {t("services.teamDesc")}
@@ -168,19 +151,19 @@ const offers = [
           </Reveal>
         </div>
 
-        <div className="grid gap-10 md:grid-cols-2">
+        <div className="grid gap-10 md:grid-cols-2 md:items-start">
           {offers.map((offer, index) => (
             <Reveal
               key={offer.title}
               delay={index * 120}
-              className="group relative overflow-hidden rounded-[24px] sm:rounded-[32px] md:rounded-[38px] border border-white/12 bg-white/[0.06] p-6 sm:p-8 md:p-10 text-white backdrop-blur-2xl transition-all duration-500 hover:-translate-y-1 hover:border-white/30 hover:bg-white/[0.12]"
+              className={`group relative overflow-hidden rounded-[24px] sm:rounded-[32px] md:rounded-[38px] border border-white/12 bg-white/[0.06] p-6 sm:p-8 md:p-10 text-white backdrop-blur-2xl transition-all duration-500 hover:-translate-y-1 hover:border-white/30 hover:bg-white/[0.12] flex flex-col h-full ${index === 4 ? 'md:col-span-2 md:max-w-2xl md:mx-auto' : ''}`}
             >
               <div className="pointer-events-none absolute -inset-x-16 top-[-40%] h-[420px] rounded-full bg-[radial-gradient(circle,_rgba(0,115,255,0.36)_0%,_transparent_65%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent" />
               <div className="pointer-events-none absolute inset-0 bg-[url('/Banque d_images/noise.png')] opacity-[0.12] mix-blend-screen" />
 
-              <div className="relative flex flex-col gap-4 sm:gap-6">
-                <div className="flex items-start justify-between">
+              <div className="relative flex flex-col gap-4 sm:gap-6 flex-1">
+                <div className="flex items-start justify-between h-[70px] sm:h-[80px] md:h-[85px] flex-shrink-0">
                   <div className="flex flex-col gap-2 sm:gap-3 text-[10px] sm:text-xs uppercase tracking-[0.35em] sm:tracking-[0.42em] text-white/60 sm:text-white/55">
                     <span>{offer.tag}</span>
                     <span className="h-px w-8 sm:w-9 bg-white/25 sm:bg-white/20" />
@@ -190,15 +173,10 @@ const offers = [
                   </span>
                 </div>
 
-                <div className="flex items-center gap-3 sm:gap-4">
-                  <div className="inline-flex h-14 w-14 sm:h-12 sm:w-12 items-center justify-center rounded-xl sm:rounded-2xl border-2 sm:border border-white/30 sm:border-white/20 bg-white/15 sm:bg-white/10 text-white sm:text-white/80 transition-colors duration-500 group-hover:border-white/50 sm:group-hover:border-white/40 group-hover:text-white shadow-[0_4px_12px_rgba(0,0,0,0.3)] sm:shadow-none">
-                    <offer.Icon className="h-6 w-6 sm:h-5 sm:w-5" />
-                  </div>
-                  <h3 className="text-xl sm:text-2xl font-semibold md:text-[30px] leading-tight">{offer.title}</h3>
-                </div>
-                <p className="text-sm text-white/70 md:text-base">{offer.description}</p>
+                <h3 className="text-xl sm:text-2xl font-semibold md:text-[30px] leading-tight flex-shrink-0">{offer.title}</h3>
+                <p className="text-sm text-white/70 md:text-base text-justify min-h-[80px] sm:min-h-[90px] md:min-h-[100px] flex-shrink-0">{offer.description}</p>
 
-                <div className="flex flex-col gap-4 pt-4 text-[11px] font-semibold uppercase tracking-[0.32em] text-white/45">
+                <div className="flex flex-col gap-4 pt-4 text-[11px] font-semibold uppercase tracking-[0.32em] text-white/45 flex-shrink-0">
                   {offer.deliverables.map((item) => (
                     <div
                       key={item}
@@ -206,9 +184,6 @@ const offers = [
                     >
                       <span className="flex-1 text-left text-white/65 transition-colors duration-500 group-hover:text-white/95">
                         {item}
-                      </span>
-                      <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/20 text-[10px] text-white/40 transition-all duration-500 group-hover:border-white group-hover:text-white">
-                        ↗
                       </span>
                     </div>
                   ))}
@@ -220,7 +195,7 @@ const offers = [
 
         <Reveal delay={200} className="mx-auto flex w-full max-w-6xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between rounded-[24px] sm:rounded-[32px] md:rounded-[36px] border border-white/12 bg-white/[0.06] px-6 py-5 sm:px-8 sm:py-6 text-white backdrop-blur-2xl">
           <div className="flex flex-col gap-2 sm:gap-1">
-            <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.3em] sm:tracking-[0.35em] text-white/50 sm:text-white/45">{t("services.ctaTitle")}</span>
+            <span className="text-base sm:text-lg md:text-xl font-semibold uppercase tracking-[0.3em] sm:tracking-[0.35em] text-white/90 sm:text-white">{t("services.ctaTitle")}</span>
             <p className="text-xs sm:text-sm text-white/75 sm:text-white/70 leading-relaxed">
               {t("services.ctaDesc")}
             </p>
@@ -240,9 +215,6 @@ function LinkCTA() {
       className="group inline-flex items-center justify-center gap-2.5 sm:gap-3 rounded-full border-2 sm:border border-white/30 sm:border-white/25 bg-white/15 sm:bg-white/10 px-6 py-3 sm:px-8 sm:py-3 text-[10px] sm:text-xs font-semibold uppercase tracking-[0.3em] sm:tracking-[0.35em] text-white transition-all duration-500 hover:border-white hover:bg-white/20 sm:hover:bg-white/15 active:scale-95 sm:active:scale-100"
     >
       {t("services.ctaButton")}
-      <span className="inline-flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full border border-white/40 sm:border-white/30 text-[10px] sm:text-[11px] transition-transform duration-500 group-hover:translate-x-1">
-        ↗
-      </span>
     </a>
   )
 }
