@@ -661,14 +661,20 @@ export default function RealisationsPage() {
                   if (currentPath !== "/") {
                     e.preventDefault()
                     
-                    // Use the same smooth navigation logic as "Agence" button
+                    // Use the same smooth navigation logic with improved timing for Vercel
                     // Mark that we're navigating from special page
                     sessionStorage.setItem('navFromSpecialPage', 'true')
+                    
+                    // Remove any existing overlay first
+                    const existingOverlay = document.getElementById('nav-transition-overlay')
+                    if (existingOverlay) {
+                      existingOverlay.remove()
+                    }
                     
                     // Add instant black overlay to prevent white flash (below navbar z-50, above content)
                     const overlay = document.createElement('div')
                     overlay.id = 'nav-transition-overlay'
-                    overlay.style.cssText = 'position: fixed; inset: 0; background: #000; z-index: 40; pointer-events: none; opacity: 1;'
+                    overlay.style.cssText = 'position: fixed; inset: 0; background: #000; z-index: 40; pointer-events: none; opacity: 1; transition: opacity 0ms;'
                     document.body.appendChild(overlay)
                     
                     // Ensure navbar stays visible above overlay
@@ -678,7 +684,11 @@ export default function RealisationsPage() {
                       navbar.style.setProperty('position', 'fixed')
                     }
                     
-                    // Prefetch the home page for instant navigation
+                    // Set black background for smooth transition
+                    document.documentElement.style.backgroundColor = '#000000'
+                    document.body.style.backgroundColor = '#000000'
+                    
+                    // Prefetch the home page for instant navigation BEFORE navigating
                     router.prefetch(`/?skipIntro=true#rendez-vous`)
                     
                     // Disable smooth scroll during navigation
@@ -688,17 +698,76 @@ export default function RealisationsPage() {
                     // Navigate immediately
                     router.push(`/?skipIntro=true#rendez-vous`)
                     
-                    // Remove overlay and restore after navigation completes
+                    // Remove overlay with improved timing for Vercel
+                    const removeOverlay = () => {
+                      const overlayEl = document.getElementById('nav-transition-overlay')
+                      if (overlayEl) {
+                        // Check if page has loaded - use multiple checks for Vercel
+                        if (document.readyState === 'complete') {
+                          // Additional check: wait for Next.js hydration
+                          setTimeout(() => {
+                            const el = document.getElementById('nav-transition-overlay')
+                            if (el) {
+                              el.style.opacity = '0'
+                              el.style.transition = 'opacity 300ms ease-out'
+                              setTimeout(() => {
+                                el.remove()
+                                // Remove black background after overlay is removed
+                                setTimeout(() => {
+                                  document.documentElement.style.backgroundColor = ''
+                                  document.body.style.backgroundColor = ''
+                                }, 50)
+                              }, 300)
+                            }
+                            document.documentElement.style.scrollBehavior = ''
+                            document.body.style.scrollBehavior = ''
+                          }, 200) // Extra delay for Vercel
+                        } else {
+                          // Wait for page to load
+                          window.addEventListener('load', () => {
+                            setTimeout(() => {
+                              const el = document.getElementById('nav-transition-overlay')
+                              if (el) {
+                                el.style.opacity = '0'
+                                el.style.transition = 'opacity 300ms ease-out'
+                                setTimeout(() => {
+                                  el.remove()
+                                  document.documentElement.style.backgroundColor = ''
+                                  document.body.style.backgroundColor = ''
+                                }, 300)
+                              }
+                              document.documentElement.style.scrollBehavior = ''
+                              document.body.style.scrollBehavior = ''
+                            }, 200) // Extra delay for Vercel
+                          }, { once: true })
+                        }
+                      } else {
+                        // If overlay was already removed, just remove background
+                        document.documentElement.style.backgroundColor = ''
+                        document.body.style.backgroundColor = ''
+                        document.documentElement.style.scrollBehavior = ''
+                        document.body.style.scrollBehavior = ''
+                      }
+                    }
+                    
+                    // Start checking after a short delay
+                    setTimeout(removeOverlay, 100)
+                    
+                    // Fallback: if still not loaded after 1.5s, remove anyway (for Vercel)
                     setTimeout(() => {
                       const overlayEl = document.getElementById('nav-transition-overlay')
                       if (overlayEl) {
                         overlayEl.style.opacity = '0'
-                        overlayEl.style.transition = 'opacity 200ms'
-                        setTimeout(() => overlayEl.remove(), 200)
+                        overlayEl.style.transition = 'opacity 300ms ease-out'
+                        setTimeout(() => {
+                          overlayEl.remove()
+                          document.documentElement.style.backgroundColor = ''
+                          document.body.style.backgroundColor = ''
+                        }, 300)
                       }
                       document.documentElement.style.scrollBehavior = ''
                       document.body.style.scrollBehavior = ''
-                    }, 300)
+                    }, 1500)
                   }
                 }}
                 className="group relative inline-flex items-center gap-3 rounded-full bg-gradient-to-br from-[#0073FF] via-[#0066E6] to-[#0052CC] px-12 py-5 text-sm font-bold uppercase tracking-[0.28em] text-white transition-all duration-300 hover:scale-105 hover:shadow-[0_12px_40px_rgba(0,115,255,0.5)] shadow-[0_8px_24px_rgba(0,115,255,0.4)] border border-white/20"
