@@ -73,6 +73,8 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
   const [videoLoaded, setVideoLoaded] = useState(false)
   const [videoError, setVideoError] = useState(false)
   const videoRef = useRef<HTMLVideoElement | null>(null)
+  const preloadVideoRef1 = useRef<HTMLVideoElement | null>(null)
+  const preloadVideoRef2 = useRef<HTMLVideoElement | null>(null)
 
   const overlayTone =
     stage === "hold" || stage === "finishing"
@@ -319,21 +321,94 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
     }
   }, [stage])
 
-  // Preload video when component mounts
+  // Preload both videos immediately on mount for Vercel optimization
+  useEffect(() => {
+    if (typeof document === 'undefined') return
+
+    // Create hidden preload videos for both background videos
+    const preloadVideo1 = document.createElement('video')
+    preloadVideo1.src = "/Banque d_images/back3.mp4"
+    preloadVideo1.preload = "auto"
+    preloadVideo1.muted = true
+    preloadVideo1.playsInline = true
+    preloadVideo1.style.display = 'none'
+    preloadVideo1.style.position = 'absolute'
+    preloadVideo1.style.width = '1px'
+    preloadVideo1.style.height = '1px'
+    preloadVideo1.style.opacity = '0'
+    preloadVideo1.style.pointerEvents = 'none'
+    document.body.appendChild(preloadVideo1)
+    preloadVideoRef1.current = preloadVideo1
+
+    const preloadVideo2 = document.createElement('video')
+    preloadVideo2.src = "/Banque d_images/Backv2.mp4"
+    preloadVideo2.preload = "auto"
+    preloadVideo2.muted = true
+    preloadVideo2.playsInline = true
+    preloadVideo2.style.display = 'none'
+    preloadVideo2.style.position = 'absolute'
+    preloadVideo2.style.width = '1px'
+    preloadVideo2.style.height = '1px'
+    preloadVideo2.style.opacity = '0'
+    preloadVideo2.style.pointerEvents = 'none'
+    document.body.appendChild(preloadVideo2)
+    preloadVideoRef2.current = preloadVideo2
+
+    // Force immediate loading with multiple attempts for Vercel CDN
+    const loadVideo = (video: HTMLVideoElement) => {
+      video.load()
+      // Retry loading for Vercel CDN optimization
+      setTimeout(() => video.load(), 50)
+      setTimeout(() => video.load(), 200)
+    }
+    
+    loadVideo(preloadVideo1)
+    loadVideo(preloadVideo2)
+
+    return () => {
+      if (preloadVideo1.parentNode) {
+        preloadVideo1.parentNode.removeChild(preloadVideo1)
+      }
+      if (preloadVideo2.parentNode) {
+        preloadVideo2.parentNode.removeChild(preloadVideo2)
+      }
+    }
+  }, [])
+
+  // Load current video aggressively when it changes
   useEffect(() => {
     const video = videoRef.current
     if (video && backgroundVideo) {
-      // Force video to load
+      // Reset loaded state when video changes
+      setVideoLoaded(false)
+      
+      // Set source immediately
+      video.src = backgroundVideo
+      video.preload = "auto"
+      
+      // Force immediate load - multiple attempts for Vercel CDN
       video.load()
       
-      // Set timeout to ensure video starts loading
-      const loadTimeout = setTimeout(() => {
-        if (video.readyState < 2) {
-          video.load()
-        }
-      }, 100)
+      // Additional aggressive loading for Vercel CDN with exponential backoff
+      const loadAttempts = [0, 50, 150, 300, 600]
+      const timeouts: NodeJS.Timeout[] = []
       
-      return () => clearTimeout(loadTimeout)
+      loadAttempts.forEach((delay) => {
+        const timeout = setTimeout(() => {
+          if (video && video.readyState < 2) {
+            video.load()
+          }
+          // If video has enough data, mark as loaded
+          if (video && video.readyState >= 2) {
+            setVideoLoaded(true)
+          }
+        }, delay)
+        timeouts.push(timeout)
+      })
+      
+      return () => {
+        timeouts.forEach(clearTimeout)
+      }
     }
   }, [backgroundVideo])
 
@@ -410,17 +485,29 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
           setVideoLoaded(true)
           setVideoError(false)
         }}
+        onLoadedMetadata={() => {
+          setVideoLoaded(true)
+          setVideoError(false)
+        }}
+        onProgress={() => {
+          // Show video as soon as we have some data for Vercel
+          const video = videoRef.current
+          if (video && video.readyState >= 2) {
+            setVideoLoaded(true)
+            setVideoError(false)
+          }
+        }}
         onError={(e) => {
           console.warn('Video loading error:', backgroundVideo)
           setVideoError(true)
           setVideoLoaded(false)
         }}
         onLoadStart={() => {
-          setVideoLoaded(false)
+          // Don't reset loaded state on load start to prevent flickering
         }}
         style={{
           opacity: videoLoaded ? 1 : 0,
-          transition: 'opacity 0.5s ease-in-out',
+          transition: 'opacity 0.3s ease-in-out',
         }}
       >
         <source src={backgroundVideo} type="video/mp4" />
