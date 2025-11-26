@@ -53,26 +53,48 @@ export function HeroSection() {
   const [previousIndex, setPreviousIndex] = useState<number | null>(null)
   const [isAnimating, setIsAnimating] = useState(false)
 
-  // Preload the first card image immediately on mount for faster loading
+  // Preload all hero card images immediately on mount for faster loading on Vercel
   useEffect(() => {
-    if (heroProjects[0]?.image) {
-      const link = document.createElement('link')
-      link.rel = 'preload'
-      link.as = 'image'
-      link.href = heroProjects[0].image
-      link.fetchPriority = 'high'
-      document.head.appendChild(link)
-      
-      // Also preload using Image constructor for better browser support
-      const img = new window.Image()
-      img.src = heroProjects[0].image
-      
-      return () => {
-        // Cleanup
-        if (document.head.contains(link)) {
-          document.head.removeChild(link)
+    if (typeof document === 'undefined') return
+
+    const preloadLinks: HTMLLinkElement[] = []
+    const preloadImages: HTMLImageElement[] = []
+
+    // Preload all images aggressively for Vercel
+    heroProjects.forEach((project, index) => {
+      if (project.image) {
+        // Method 1: Link preload
+        const link = document.createElement('link')
+        link.rel = 'preload'
+        link.as = 'image'
+        link.href = project.image
+        link.fetchPriority = index === 0 ? 'high' : 'auto'
+        document.head.appendChild(link)
+        preloadLinks.push(link)
+
+        // Method 2: Image constructor for immediate browser cache
+        const img = new window.Image()
+        img.src = project.image
+        img.loading = 'eager'
+        preloadImages.push(img)
+
+        // Method 3: Additional fetch for Vercel CDN optimization
+        if (index === 0) {
+          // Force immediate fetch for first image
+          fetch(project.image, { method: 'HEAD', cache: 'force-cache' }).catch(() => {
+            // Silent fail - just warming up the CDN
+          })
         }
       }
+    })
+    
+    return () => {
+      // Cleanup
+      preloadLinks.forEach(link => {
+        if (link.parentNode) {
+          link.parentNode.removeChild(link)
+        }
+      })
     }
   }, [])
 
@@ -315,12 +337,13 @@ export function HeroSection() {
                             fill
                             className="object-cover transition duration-700 ease-out group-hover:scale-[1.05]"
                             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                            priority={index === 0}
-                            loading={index === 0 ? "eager" : "lazy"}
-                            quality={index === 0 ? 95 : 85}
+                            priority={index <= 1}
+                            loading={index <= 1 ? "eager" : "lazy"}
+                            quality={index === 0 ? 95 : 90}
                             placeholder="blur"
                             blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWEREiMxUf/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
-                            fetchPriority={index === 0 ? "high" : "auto"}
+                            fetchPriority={index === 0 ? "high" : index === 1 ? "high" : "auto"}
+                            unoptimized={false}
                           />
                           <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/0 via-black/20 to-black/80" />
                           <div className="absolute inset-x-0 bottom-0 flex flex-col gap-2 px-5 pb-4">
@@ -366,11 +389,13 @@ export function HeroSection() {
                       fill
                       className="object-cover transition duration-700 ease-out group-hover:scale-[1.05]"
                       sizes="(max-width: 1280px) 220px, 260px"
-                      priority={index === 0}
-                      loading={index === 0 ? "eager" : "lazy"}
-                      quality={90}
+                      priority={index <= 1}
+                      loading={index <= 1 ? "eager" : "lazy"}
+                      quality={index === 0 ? 95 : 90}
                       placeholder="blur"
                       blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWEREiMxUf/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
+                      fetchPriority={index === 0 ? "high" : index === 1 ? "high" : "auto"}
+                      unoptimized={false}
                     />
                     <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/0 via-black/20 to-black/80" />
                     <div className="absolute inset-x-0 bottom-0 flex flex-col gap-2 px-6 pb-5">

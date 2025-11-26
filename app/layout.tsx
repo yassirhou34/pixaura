@@ -22,6 +22,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="bg-transparent" suppressHydrationWarning>
       <head>
+        {/* Preconnect to Vercel CDN for faster asset loading */}
+        <link rel="preconnect" href="https://pixaura-woad.vercel.app" />
+        <link rel="dns-prefetch" href="https://pixaura-woad.vercel.app" />
         {/* Prevent white flash on Vercel - minimal script that runs before paint */}
         <script
           dangerouslySetInnerHTML={{
@@ -75,6 +78,10 @@ export default function RootLayout({
         {/* Preload immersive intro videos for instant loading on Vercel */}
         <link rel="preload" href="/Banque d_images/back3.mp4" as="video" type="video/mp4" />
         <link rel="preload" href="/Banque d_images/Backv2.mp4" as="video" type="video/mp4" />
+        {/* Preload hero section project card images for instant loading on Vercel */}
+        <link rel="preload" href="/Banque d_images/Copie de M7_03225 - Copie.jpg" as="image" fetchPriority="high" />
+        <link rel="preload" href="/Banque d_images/StageUfc.jpg" as="image" fetchPriority="high" />
+        <link rel="preload" href="/Banque d_images/Copie de M7_01248.jpg" as="image" fetchPriority="high" />
       </head>
       <body
         className={`${geist.className} ${spaceGrotesk.variable} antialiased bg-transparent text-foreground`}
