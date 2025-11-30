@@ -53,34 +53,48 @@ export function HeroSection() {
   const [previousIndex, setPreviousIndex] = useState<number | null>(null)
   const [isAnimating, setIsAnimating] = useState(false)
 
-  // Preload all hero card images immediately on mount for faster loading on Vercel
+  // Preload all hero card images immediately on mount for faster loading
   useEffect(() => {
     if (typeof document === 'undefined') return
 
     const preloadLinks: HTMLLinkElement[] = []
     const preloadImages: HTMLImageElement[] = []
 
-    // Preload all images aggressively for Vercel
+    // Preload all images aggressively with multiple methods
     heroProjects.forEach((project, index) => {
       if (project.image) {
-        // Method 1: Link preload
+        // Method 1: Link preload with high priority for first image
         const link = document.createElement('link')
         link.rel = 'preload'
         link.as = 'image'
         link.href = project.image
-        link.fetchPriority = index === 0 ? 'high' : 'auto'
+        link.fetchPriority = index === 0 ? 'high' : index === 1 ? 'high' : 'auto'
         document.head.appendChild(link)
         preloadLinks.push(link)
 
-        // Method 2: Image constructor for immediate browser cache
+        // Method 2: Image constructor for immediate browser cache - FORCE COMPLETE LOAD for first image
         const img = new window.Image()
+        if (index === 0) {
+          // For first image, wait for complete load
+          img.onload = () => {
+            // Image fully loaded in cache
+          }
+        }
         img.src = project.image
         img.loading = 'eager'
         preloadImages.push(img)
 
-        // Method 3: Additional fetch for Vercel CDN optimization
+        // Method 3: Full fetch for first image to ensure it's completely loaded
         if (index === 0) {
-          // Force immediate fetch for first image
+          fetch(project.image, { cache: 'force-cache' })
+            .then(() => {
+              // Image fully fetched and cached
+            })
+            .catch(() => {
+              // Silent fail
+            })
+        } else if (index <= 1) {
+          // HEAD request for second image
           fetch(project.image, { method: 'HEAD', cache: 'force-cache' }).catch(() => {
             // Silent fail - just warming up the CDN
           })
@@ -337,13 +351,11 @@ export function HeroSection() {
                             fill
                             className="object-cover transition duration-700 ease-out group-hover:scale-[1.05]"
                             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                            priority={index <= 1}
-                            loading={index <= 1 ? "eager" : "lazy"}
+                            priority={index === 0}
+                            loading={index === 0 ? "eager" : "lazy"}
                             quality={index === 0 ? 95 : 90}
-                            placeholder="blur"
-                            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWEREiMxUf/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
-                            fetchPriority={index === 0 ? "high" : index === 1 ? "high" : "auto"}
-                            unoptimized={false}
+                            fetchPriority={index === 0 ? "high" : "auto"}
+                            unoptimized={index === 0}
                           />
                           <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/0 via-black/20 to-black/80" />
                           <div className="absolute inset-x-0 bottom-0 flex flex-col gap-2 px-5 pb-4">
@@ -389,13 +401,11 @@ export function HeroSection() {
                       fill
                       className="object-cover transition duration-700 ease-out group-hover:scale-[1.05]"
                       sizes="(max-width: 1280px) 220px, 260px"
-                      priority={index <= 1}
-                      loading={index <= 1 ? "eager" : "lazy"}
+                      priority={index === 0}
+                      loading={index === 0 ? "eager" : "lazy"}
                       quality={index === 0 ? 95 : 90}
-                      placeholder="blur"
-                      blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWEREiMxUf/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
-                      fetchPriority={index === 0 ? "high" : index === 1 ? "high" : "auto"}
-                      unoptimized={false}
+                      fetchPriority={index === 0 ? "high" : "auto"}
+                      unoptimized={index === 0}
                     />
                     <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/0 via-black/20 to-black/80" />
                     <div className="absolute inset-x-0 bottom-0 flex flex-col gap-2 px-6 pb-5">

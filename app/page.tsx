@@ -21,6 +21,27 @@ export default function Home() {
   // Always start with false to avoid hydration mismatch
   const [introComplete, setIntroComplete] = useState(false)
 
+  // Preload hero section images immediately - before first render
+  useLayoutEffect(() => {
+    if (typeof document === 'undefined') return
+
+    // Preload the first hero image (Night Drive Experience) immediately
+    const firstHeroImage = "/Banque d_images/Copie de M7_03225 - Copie.jpg"
+    
+    // Multiple preload methods for maximum speed
+    const link = document.createElement('link')
+    link.rel = 'preload'
+    link.as = 'image'
+    link.href = firstHeroImage
+    link.fetchPriority = 'high'
+    document.head.appendChild(link)
+
+    // Also preload via Image constructor
+    const img = new window.Image()
+    img.src = firstHeroImage
+    img.loading = 'eager'
+  }, [])
+
   // Use useLayoutEffect to check URL parameter and handle scroll
   // This runs synchronously before paint, preventing intro from showing
   useLayoutEffect(() => {
@@ -123,15 +144,11 @@ export default function Home() {
   return (
     <main className="relative min-h-screen overflow-hidden bg-transparent">
       <div className="pointer-events-none fixed inset-0 -z-10">
-        {/* Background video - hidden on mobile, visible on desktop */}
-        <video
-          key="home-bg-video"
+        {/* Background image - visible on desktop */}
+        <img
+          src="/Banque d_images/ippppp1.png"
+          alt="Background"
           className="hidden md:block h-full w-full object-cover"
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="auto"
           style={{
             opacity: 1,
             visibility: 'visible',
@@ -139,13 +156,7 @@ export default function Home() {
             width: '100%',
             height: '100%'
           }}
-          onError={() => {
-            // Silent error handling - don't break the page
-            // Video will show poster or remain hidden if it fails
-          }}
-        >
-          <source src="/Banque d_images/backv1.mp4" type="video/mp4" />
-        </video>
+        />
         {/* Background image - visible only on mobile */}
         <img
           src="/Banque d_images/backnoiree.png"
