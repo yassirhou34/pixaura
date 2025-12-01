@@ -199,53 +199,7 @@ export default function RealisationsPage() {
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
   }, [])
 
-  // Preload hero section images for faster homepage loading when navigating back
-  useEffect(() => {
-    if (typeof document === 'undefined') return
-
-    const heroImages = [
-      "/Banque d_images/Copie de M7_03225 - Copie.jpg", // Touraine Cars - Night Drive Experience
-      "/Banque d_images/StageUfc.jpg", // BSD / UFC Paris
-      "/Banque d_images/Copie de M7_01248.jpg", // Immobilier Signature
-    ]
-
-    const preloadLinks: HTMLLinkElement[] = []
-    const preloadImages: HTMLImageElement[] = []
-
-    // Aggressive preload for homepage hero images
-    heroImages.forEach((imageSrc, index) => {
-      // Method 1: Link preload with high priority for first image
-      const link = document.createElement('link')
-      link.rel = 'preload'
-      link.as = 'image'
-      link.href = imageSrc
-      link.fetchPriority = index === 0 ? 'high' : 'auto'
-      document.head.appendChild(link)
-      preloadLinks.push(link)
-
-      // Method 2: Image constructor for immediate browser cache
-      const img = new window.Image()
-      img.src = imageSrc
-      img.loading = 'eager'
-      preloadImages.push(img)
-
-      // Method 3: Additional fetch for CDN optimization (especially for first image)
-      if (index === 0) {
-        fetch(imageSrc, { method: 'HEAD', cache: 'force-cache' }).catch(() => {
-          // Silent fail - just warming up the CDN
-        })
-      }
-    })
-
-    return () => {
-      // Cleanup preload links
-      preloadLinks.forEach(link => {
-        if (link.parentNode) {
-          link.parentNode.removeChild(link)
-        }
-      })
-    }
-  }, [])
+  // REMOVED: Aggressive preloads - let images load on demand to save bandwidth
   
           // Get translated projects
           const translatedProjects = useMemo(() => {
@@ -637,6 +591,7 @@ export default function RealisationsPage() {
                           loop
                           muted
                           playsInline
+                          preload="auto"
                           className="h-full w-full object-cover transition duration-700 ease-out group-hover:scale-105"
                         />
                       ) : (

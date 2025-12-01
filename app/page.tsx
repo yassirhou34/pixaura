@@ -27,19 +27,7 @@ export default function Home() {
 
     // Preload the first hero image (Night Drive Experience) immediately
     const firstHeroImage = "/Banque d_images/Copie de M7_03225 - Copie.jpg"
-    
-    // Multiple preload methods for maximum speed
-    const link = document.createElement('link')
-    link.rel = 'preload'
-    link.as = 'image'
-    link.href = firstHeroImage
-    link.fetchPriority = 'high'
-    document.head.appendChild(link)
-
-    // Also preload via Image constructor
-    const img = new window.Image()
-    img.src = firstHeroImage
-    img.loading = 'eager'
+    // REMOVED: Aggressive preload - let images load naturally to save bandwidth
   }, [])
 
   // Use useLayoutEffect to check URL parameter and handle scroll

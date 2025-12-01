@@ -446,7 +446,7 @@ export function PortfolioSection() {
                                 loop
                                 autoPlay
                                 playsInline
-                                preload="metadata"
+                                preload="auto"
                               />
                             ) : (
                               <Image

@@ -142,31 +142,21 @@ export function HomeVideoCarousel() {
           video.src = slides[index].video
         }
         video.muted = isMuted
-        video.preload = index === currentIndex ? 'auto' : 'none'
-        // Load in idle time for non-active videos
-        if (index !== currentIndex) {
-          if ('requestIdleCallback' in window) {
-            requestIdleCallback(() => {
-              video.load()
-            }, { timeout: 2000 })
-          } else {
-            setTimeout(() => video.load(), 100)
-          }
-        } else {
+        // CRITICAL: Use 'metadata' instead of 'auto' to prevent full video download
+        video.preload = index === currentIndex ? 'metadata' : 'none'
+        // Only load metadata for current video, nothing for others until needed
+        if (index === currentIndex) {
+          // Only load metadata, not full video
           video.load()
         }
       }
     }
 
-    // Load current video immediately
+    // Load current video metadata only (not full video)
     loadVideo(currentIndex)
     
-    // Load adjacent videos with delay
-    const nextIndex = (currentIndex + 1) % slides.length
-    const prevIndex = (currentIndex - 1 + slides.length) % slides.length
-    
-    setTimeout(() => loadVideo(nextIndex), 300)
-    setTimeout(() => loadVideo(prevIndex), 500)
+    // DO NOT preload adjacent videos - wait until user actually navigates
+    // This saves massive bandwidth
 
     // Unload distant videos to free memory
     videoRefs.current.forEach((video, index) => {

@@ -70,18 +70,8 @@ export default function RootLayout({
             `,
           }}
         />
-        {/* Preload critical background assets for faster loading on Vercel */}
+        {/* Only preload critical background image for mobile - NO VIDEO PRELOADS */}
         <link rel="preload" href="/Banque d_images/backnoiree.png" as="image" />
-        <link rel="preload" href="/Banque d_images/backv1.mp4" as="video" type="video/mp4" />
-        <link rel="preload" href="/Banque d_images/i3.mp4" as="video" type="video/mp4" />
-        <link rel="preload" href="/Banque d_images/noir.mp4" as="video" type="video/mp4" />
-        {/* Preload immersive intro videos for instant loading on Vercel */}
-        <link rel="preload" href="/Banque d_images/back3.mp4" as="video" type="video/mp4" />
-        <link rel="preload" href="/Banque d_images/Backv2.mp4" as="video" type="video/mp4" />
-        {/* Preload hero section project card images for instant loading on Vercel */}
-        <link rel="preload" href="/Banque d_images/Copie de M7_03225 - Copie.jpg" as="image" fetchPriority="high" />
-        <link rel="preload" href="/Banque d_images/StageUfc.jpg" as="image" fetchPriority="high" />
-        <link rel="preload" href="/Banque d_images/Copie de M7_01248.jpg" as="image" fetchPriority="high" />
       </head>
       <body
         className={`${geist.className} ${spaceGrotesk.variable} antialiased bg-transparent text-foreground`}

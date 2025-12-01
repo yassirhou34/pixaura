@@ -73,8 +73,7 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
   const [videoLoaded, setVideoLoaded] = useState(false)
   const [videoError, setVideoError] = useState(false)
   const videoRef = useRef<HTMLVideoElement | null>(null)
-  const preloadVideoRef1 = useRef<HTMLVideoElement | null>(null)
-  const preloadVideoRef2 = useRef<HTMLVideoElement | null>(null)
+  // Removed: preload video refs - no longer needed
 
   const overlayTone =
     stage === "hold" || stage === "finishing"
@@ -322,93 +321,21 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
   }, [stage])
 
   // Preload both videos immediately on mount for Vercel optimization
-  useEffect(() => {
-    if (typeof document === 'undefined') return
+  // REMOVED: Hidden video preloads - these were downloading full videos unnecessarily
+  // Videos will load naturally when needed
 
-    // Create hidden preload videos for both background videos
-    const preloadVideo1 = document.createElement('video')
-    preloadVideo1.src = "/Banque d_images/back3.mp4"
-    preloadVideo1.preload = "auto"
-    preloadVideo1.muted = true
-    preloadVideo1.playsInline = true
-    preloadVideo1.style.display = 'none'
-    preloadVideo1.style.position = 'absolute'
-    preloadVideo1.style.width = '1px'
-    preloadVideo1.style.height = '1px'
-    preloadVideo1.style.opacity = '0'
-    preloadVideo1.style.pointerEvents = 'none'
-    document.body.appendChild(preloadVideo1)
-    preloadVideoRef1.current = preloadVideo1
-
-    const preloadVideo2 = document.createElement('video')
-    preloadVideo2.src = "/Banque d_images/Backv2.mp4"
-    preloadVideo2.preload = "auto"
-    preloadVideo2.muted = true
-    preloadVideo2.playsInline = true
-    preloadVideo2.style.display = 'none'
-    preloadVideo2.style.position = 'absolute'
-    preloadVideo2.style.width = '1px'
-    preloadVideo2.style.height = '1px'
-    preloadVideo2.style.opacity = '0'
-    preloadVideo2.style.pointerEvents = 'none'
-    document.body.appendChild(preloadVideo2)
-    preloadVideoRef2.current = preloadVideo2
-
-    // Force immediate loading with multiple attempts for Vercel CDN
-    const loadVideo = (video: HTMLVideoElement) => {
-      video.load()
-      // Retry loading for Vercel CDN optimization
-      setTimeout(() => video.load(), 50)
-      setTimeout(() => video.load(), 200)
-    }
-    
-    loadVideo(preloadVideo1)
-    loadVideo(preloadVideo2)
-
-    return () => {
-      if (preloadVideo1.parentNode) {
-        preloadVideo1.parentNode.removeChild(preloadVideo1)
-      }
-      if (preloadVideo2.parentNode) {
-        preloadVideo2.parentNode.removeChild(preloadVideo2)
-      }
-    }
-  }, [])
-
-  // Load current video aggressively when it changes
+  // Load current video when it changes - optimized to prevent full download
   useEffect(() => {
     const video = videoRef.current
     if (video && backgroundVideo) {
       // Reset loaded state when video changes
       setVideoLoaded(false)
       
-      // Set source immediately
+      // Set source immediately (preload is already set in JSX to "metadata")
       video.src = backgroundVideo
-      video.preload = "auto"
       
-      // Force immediate load - multiple attempts for Vercel CDN
+      // Single load call - browser will handle streaming
       video.load()
-      
-      // Additional aggressive loading for Vercel CDN with exponential backoff
-      const loadAttempts = [0, 50, 150, 300, 600]
-      const timeouts: NodeJS.Timeout[] = []
-      
-      loadAttempts.forEach((delay) => {
-        const timeout = setTimeout(() => {
-          if (video && video.readyState < 2) {
-            video.load()
-          }
-          // If video has enough data, mark as loaded
-          if (video && video.readyState >= 2) {
-            setVideoLoaded(true)
-          }
-        }, delay)
-        timeouts.push(timeout)
-      })
-      
-      return () => {
-        timeouts.forEach(clearTimeout)
-      }
     }
   }, [backgroundVideo])
 
@@ -472,10 +399,10 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
         ref={videoRef}
         key={backgroundVideo}
         className="hidden md:block absolute inset-0 h-full w-full object-cover"
-        autoPlay
-        loop
-        muted
-        playsInline
+        autoPlay={true}
+        loop={true}
+        muted={true}
+        playsInline={true}
         preload="auto"
         onLoadedData={() => {
           setVideoLoaded(true)

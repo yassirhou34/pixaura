@@ -487,7 +487,7 @@ export function ProjectModal({ open, onOpenChange, project }: ProjectModalProps)
                     controls
                     loop
                     playsInline
-                    preload="auto"
+                    preload="metadata"
                     onLoadedData={() => setMediaLoaded(true)}
                     onCanPlay={() => setMediaLoaded(true)}
                     onError={() => setMediaLoaded(true)}
@@ -499,8 +499,7 @@ export function ProjectModal({ open, onOpenChange, project }: ProjectModalProps)
                     fill
                     className="object-contain"
                     sizes="90vw"
-                    priority
-                    loading="eager"
+                    loading="lazy"
                     onLoad={() => setMediaLoaded(true)}
                     onError={() => setMediaLoaded(true)}
                   />
