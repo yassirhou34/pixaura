@@ -58,6 +58,8 @@ export function HomeVideoCarousel() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [isVisible, setIsVisible] = useState(false)
   const [isPreTransition, setIsPreTransition] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+  const [connectionType, setConnectionType] = useState<'slow' | 'fast'>('fast')
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([])
   const containerRef = useRef<HTMLDivElement>(null)
   const sectionRef = useRef<HTMLElement>(null)
@@ -127,12 +129,42 @@ export function HomeVideoCarousel() {
     }
   }, [])
 
+  // Detect mobile and connection type
+  useEffect(() => {
+    const checkMobile = () => {
+      const isMobileDevice = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || 
+                            window.innerWidth < 768
+      setIsMobile(isMobileDevice)
+      
+      // Detect connection type
+      const connection = (navigator as any).connection || 
+                       (navigator as any).mozConnection || 
+                       (navigator as any).webkitConnection
+      
+      if (connection) {
+        const effectiveType = connection.effectiveType
+        const isSlowConnection = effectiveType === 'slow-2g' || 
+                                 effectiveType === '2g' || 
+                                 effectiveType === '3g' ||
+                                 connection.saveData === true
+        setConnectionType(isSlowConnection ? 'slow' : 'fast')
+      } else {
+        // Default to fast if we can't detect
+        setConnectionType('fast')
+      }
+    }
+    
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
   // Initialize video refs array
   useEffect(() => {
     videoRefs.current = videoRefs.current.slice(0, slides.length)
   }, [])
 
-  // Lazy load videos - Only load current and next/previous
+  // Lazy load videos - Optimized for mobile and slow connections
   useEffect(() => {
     const loadVideo = (index: number) => {
       const video = videoRefs.current[index]
@@ -142,20 +174,25 @@ export function HomeVideoCarousel() {
           video.src = slides[index].video
         }
         video.muted = isMuted
-        // CRITICAL: Use 'metadata' instead of 'auto' to prevent full video download
-        video.preload = index === currentIndex ? 'metadata' : 'none'
+        // CRITICAL: On mobile or slow connection, use 'metadata' to prevent full video download
+        // On desktop with fast connection, can use 'auto' for smoother experience
+        if (isMobile || connectionType === 'slow') {
+          video.preload = index === currentIndex ? 'metadata' : 'none'
+        } else {
+          video.preload = index === currentIndex ? 'auto' : 'none'
+        }
         // Only load metadata for current video, nothing for others until needed
         if (index === currentIndex) {
-          // Only load metadata, not full video
+          // Only load metadata on mobile/slow, full load on desktop/fast
           video.load()
         }
       }
     }
 
-    // Load current video metadata only (not full video)
+    // Load current video metadata only (not full video on mobile/slow)
     loadVideo(currentIndex)
     
-    // DO NOT preload adjacent videos - wait until user actually navigates
+    // DO NOT preload adjacent videos on mobile/slow - wait until user actually navigates
     // This saves massive bandwidth
 
     // Unload distant videos to free memory
@@ -169,11 +206,14 @@ export function HomeVideoCarousel() {
         if (distance > 1) {
           video.pause()
           video.currentTime = 0
-          // Don't clear src, just pause to allow quick reload
+          // On mobile, clear src to free memory
+          if (isMobile || connectionType === 'slow') {
+            video.src = ''
+          }
         }
       }
     })
-  }, [currentIndex, isMuted])
+  }, [currentIndex, isMuted, isMobile, connectionType])
 
   // Handle video playback - Optimized
   useEffect(() => {
@@ -198,10 +238,12 @@ export function HomeVideoCarousel() {
           if (currentVideo.src !== window.location.origin + slides[currentIndex].video && 
               currentVideo.src !== slides[currentIndex].video) {
             currentVideo.src = slides[currentIndex].video
-            currentVideo.preload = 'auto'
+            // Use metadata on mobile/slow, auto on desktop/fast
+            currentVideo.preload = (isMobile || connectionType === 'slow') ? 'metadata' : 'auto'
           }
           
-          // Wait for video to be ready
+          // Wait for video to be ready - shorter timeout on mobile
+          const timeoutDuration = (isMobile || connectionType === 'slow') ? 5000 : 3000
           if (currentVideo.readyState < 2) {
             await new Promise<void>((resolve) => {
               if (currentVideo.readyState >= 2) {
@@ -210,15 +252,26 @@ export function HomeVideoCarousel() {
               }
               const onCanPlay = () => {
                 currentVideo.removeEventListener('canplay', onCanPlay)
+                currentVideo.removeEventListener('loadedmetadata', onLoadedMetadata)
                 resolve()
               }
+              const onLoadedMetadata = () => {
+                // On mobile, start playing as soon as metadata is loaded
+                if (isMobile || connectionType === 'slow') {
+                  currentVideo.removeEventListener('canplay', onCanPlay)
+                  currentVideo.removeEventListener('loadedmetadata', onLoadedMetadata)
+                  resolve()
+                }
+              }
               currentVideo.addEventListener('canplay', onCanPlay, { once: true })
+              currentVideo.addEventListener('loadedmetadata', onLoadedMetadata, { once: true })
               currentVideo.load()
-              // Timeout after 3 seconds to ensure video loads
+              // Timeout - longer on mobile to account for slower connections
               setTimeout(() => {
                 currentVideo.removeEventListener('canplay', onCanPlay)
+                currentVideo.removeEventListener('loadedmetadata', onLoadedMetadata)
                 resolve()
-              }, 3000)
+              }, timeoutDuration)
             })
           }
           
@@ -226,7 +279,18 @@ export function HomeVideoCarousel() {
           requestAnimationFrame(() => {
             currentVideo.play()
               .then(() => setIsPlaying(true))
-              .catch(() => setIsPlaying(false))
+              .catch(() => {
+                // On mobile, if play fails, try again after a short delay
+                if (isMobile) {
+                  setTimeout(() => {
+                    currentVideo.play()
+                      .then(() => setIsPlaying(true))
+                      .catch(() => setIsPlaying(false))
+                  }, 500)
+                } else {
+                  setIsPlaying(false)
+                }
+              })
           })
         } catch (error) {
           console.error('Error playing video:', error)
@@ -234,10 +298,11 @@ export function HomeVideoCarousel() {
         }
       }
       
-      // Delay to prevent blocking
-      setTimeout(playVideo, 50)
+      // Delay to prevent blocking - longer on mobile
+      const delay = (isMobile || connectionType === 'slow') ? 100 : 50
+      setTimeout(playVideo, delay)
     }
-  }, [currentIndex, isMuted, isTransitioning])
+  }, [currentIndex, isMuted, isTransitioning, isMobile, connectionType, slides])
 
   // Listen to video events
   useEffect(() => {
@@ -280,36 +345,48 @@ export function HomeVideoCarousel() {
     setDirection(dir)
     setNextIndex(newIndex)
 
-    // Load and prepare next video
+    // Load and prepare next video - optimized for mobile
     const nextVideo = videoRefs.current[newIndex]
     if (nextVideo && slides[newIndex]?.video) {
       // Ensure source is set correctly
       if (nextVideo.src !== window.location.origin + slides[newIndex].video && 
           nextVideo.src !== slides[newIndex].video) {
         nextVideo.src = slides[newIndex].video
-        nextVideo.preload = 'auto'
+        // Use metadata on mobile/slow, auto on desktop/fast
+        nextVideo.preload = (isMobile || connectionType === 'slow') ? 'metadata' : 'auto'
       }
       
       nextVideo.muted = isMuted
       nextVideo.currentTime = 0
       
-      // Load video in idle time
+      // Load video in idle time - optimized for mobile
       const loadAndPlay = () => {
+        const timeoutDuration = (isMobile || connectionType === 'slow') ? 5000 : 3000
         if (nextVideo.readyState < 2) {
           nextVideo.load()
-          nextVideo.addEventListener('canplay', () => {
+          const onCanPlay = () => {
             requestAnimationFrame(() => {
               nextVideo.play().catch(() => {})
             })
-          }, { once: true })
-          // Fallback timeout to ensure video loads
+          }
+          const onLoadedMetadata = () => {
+            // On mobile, start playing as soon as metadata is loaded
+            if (isMobile || connectionType === 'slow') {
+              requestAnimationFrame(() => {
+                nextVideo.play().catch(() => {})
+              })
+            }
+          }
+          nextVideo.addEventListener('canplay', onCanPlay, { once: true })
+          nextVideo.addEventListener('loadedmetadata', onLoadedMetadata, { once: true })
+          // Fallback timeout - longer on mobile
           setTimeout(() => {
             if (nextVideo.readyState >= 2) {
               requestAnimationFrame(() => {
                 nextVideo.play().catch(() => {})
               })
             }
-          }, 3000)
+          }, timeoutDuration)
         } else {
           requestAnimationFrame(() => {
             nextVideo.play().catch(() => {})
@@ -317,10 +394,12 @@ export function HomeVideoCarousel() {
         }
       }
       
-      if ('requestIdleCallback' in window) {
+      // Use longer delay on mobile
+      const delay = (isMobile || connectionType === 'slow') ? 200 : 100
+      if ('requestIdleCallback' in window && !isMobile) {
         requestIdleCallback(loadAndPlay, { timeout: 500 })
       } else {
-        setTimeout(loadAndPlay, 100)
+        setTimeout(loadAndPlay, delay)
       }
     }
 
@@ -333,7 +412,7 @@ export function HomeVideoCarousel() {
         setDirection(null)
       }, 150)
     }, 800)
-  }, [currentIndex, isTransitioning, isMuted])
+  }, [currentIndex, isTransitioning, isMuted, isMobile, connectionType, slides])
 
   // Right button -> Next video (move right)
   const handleNext = useCallback(() => {
@@ -763,7 +842,9 @@ export function HomeVideoCarousel() {
                         loop
                         muted={isMuted}
                         playsInline
-                        preload={index === currentIndex ? 'auto' : 'none'}
+                        preload={index === currentIndex 
+                          ? ((isMobile || connectionType === 'slow') ? 'metadata' : 'auto')
+                          : 'none'}
                         src={slide.video || undefined}
                         poster={slide.poster || undefined}
                         style={{ 
@@ -775,9 +856,29 @@ export function HomeVideoCarousel() {
                           if (index === currentIndex && isPlaying) {
                             const video = videoRefs.current[index]
                             if (video) {
+                              video.play().catch(() => {
+                                // Retry on mobile if first attempt fails
+                                if (isMobile) {
+                                  setTimeout(() => {
+                                    video.play().catch(() => {})
+                                  }, 300)
+                                }
+                              })
+                            }
+                          }
+                        }}
+                        onLoadedMetadata={() => {
+                          // On mobile, try to play as soon as metadata is loaded
+                          if ((isMobile || connectionType === 'slow') && index === currentIndex && isPlaying) {
+                            const video = videoRefs.current[index]
+                            if (video && video.readyState >= 1) {
                               video.play().catch(() => {})
                             }
                           }
+                        }}
+                        onError={(e) => {
+                          // Log error but don't break the UI
+                          console.warn('Video load error:', slide.video, e)
                         }}
                       />
                     </div>
