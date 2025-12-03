@@ -174,11 +174,11 @@ const projects = [
 ]
 
 // Icons mapping
-const formatIcons: Record<string, JSX.Element> = {
+const formatIcons: Record<string, React.ReactElement> = {
   "Branding": <Palette className="w-4 h-4" />,
 }
 
-const sectorIcons: Record<string, JSX.Element> = {
+const sectorIcons: Record<string, React.ReactElement> = {
   "Tous": <Briefcase className="w-4 h-4" />,
   "Automobile": <Car className="w-4 h-4" />,
   "Immobilier": <Building2 className="w-4 h-4" />,
@@ -664,114 +664,20 @@ export default function RealisationsPage() {
                   if (currentPath !== "/") {
                     e.preventDefault()
                     
-                    // Simple navigation - NO ANIMATIONS, just black overlay
-                    // Mark that we're navigating from special page
+                    // Simple navigation - NO OVERLAY, just smooth navigation
                     sessionStorage.setItem('navFromSpecialPage', 'true')
                     
-                    // CRITICAL: Create overlay SYNCHRONOUSLY before any navigation
-                    // Remove any existing overlay first
+                    // Remove any existing overlay (cleanup)
                     const existingOverlay = document.getElementById('nav-transition-overlay')
                     if (existingOverlay) {
                       existingOverlay.remove()
                     }
                     
-                    // Create overlay IMMEDIATELY - no delays
-                    const overlay = document.createElement('div')
-                    overlay.id = 'nav-transition-overlay'
-                    overlay.style.cssText = 'position: fixed; inset: 0; background: #000; z-index: 99999; pointer-events: none; opacity: 1;'
-                    // Insert at the very top of body to ensure it's above everything
-                    if (document.body.firstChild) {
-                      document.body.insertBefore(overlay, document.body.firstChild)
-                    } else {
-                      document.body.appendChild(overlay)
-                    }
-                    
-                    // Set black background IMMEDIATELY
-                    document.documentElement.style.backgroundColor = '#000000'
-                    document.body.style.backgroundColor = '#000000'
-                    
-                    // Ensure navbar stays visible
-                    const navbar = document.querySelector('nav') as HTMLElement
-                    if (navbar) {
-                      navbar.style.setProperty('z-index', '999999', 'important')
-                      navbar.style.setProperty('position', 'fixed')
-                    }
-                    
-                    // Prefetch BEFORE navigation
+                    // Prefetch BEFORE navigation for faster loading
                     router.prefetch(`/?skipIntro=true#rendez-vous`)
                     
-                    // Disable smooth scroll to prevent animations
-                    document.documentElement.style.scrollBehavior = 'auto'
-                    document.body.style.scrollBehavior = 'auto'
-                    
-                    // Add navigating class to html/body to keep black background
-                    document.documentElement.classList.add('navigating')
-                    document.body.classList.add('navigating')
-                    
-                    // Navigate immediately - use replace to avoid history stack
-                    // No delay - navigate synchronously after overlay is created
-                    router.replace(`/?skipIntro=true#rendez-vous`)
-                    
-                    // Keep overlay until page is fully loaded
-                    const checkAndRemove = () => {
-                      // Wait for both DOM and Next.js to be ready
-                      if (document.readyState === 'complete') {
-                        // Additional wait for Next.js hydration on Vercel
-                        setTimeout(() => {
-                          const el = document.getElementById('nav-transition-overlay')
-                          if (el) {
-                            el.remove()
-                          }
-                          document.documentElement.style.backgroundColor = ''
-                          document.body.style.backgroundColor = ''
-                          document.documentElement.style.scrollBehavior = ''
-                          document.body.style.scrollBehavior = ''
-                          document.documentElement.classList.remove('navigating')
-                          document.body.classList.remove('navigating')
-                          if (navbar) {
-                            navbar.style.removeProperty('z-index')
-                          }
-                        }, 800) // Longer wait for Vercel
-                      } else {
-                        window.addEventListener('load', () => {
-                          setTimeout(() => {
-                            const el = document.getElementById('nav-transition-overlay')
-                            if (el) {
-                              el.remove()
-                            }
-                            document.documentElement.style.backgroundColor = ''
-                            document.body.style.backgroundColor = ''
-                            document.documentElement.style.scrollBehavior = ''
-                            document.body.style.scrollBehavior = ''
-                            document.documentElement.classList.remove('navigating')
-                            document.body.classList.remove('navigating')
-                            if (navbar) {
-                              navbar.style.removeProperty('z-index')
-                            }
-                          }, 800)
-                        }, { once: true })
-                      }
-                    }
-                    
-                    // Start checking immediately
-                    checkAndRemove()
-                    
-                    // Fallback: remove after 3 seconds max (for Vercel slow loading)
-                    setTimeout(() => {
-                      const el = document.getElementById('nav-transition-overlay')
-                      if (el) {
-                        el.remove()
-                      }
-                      document.documentElement.style.backgroundColor = ''
-                      document.body.style.backgroundColor = ''
-                      document.documentElement.style.scrollBehavior = ''
-                      document.body.style.scrollBehavior = ''
-                      document.documentElement.classList.remove('navigating')
-                      document.body.classList.remove('navigating')
-                      if (navbar) {
-                        navbar.style.removeProperty('z-index')
-                      }
-                    }, 3000)
+                    // Navigate immediately - simple and fast
+                    router.push(`/?skipIntro=true#rendez-vous`)
                   }
                 }}
                 className="group relative inline-flex items-center gap-3 rounded-full bg-gradient-to-br from-[#0073FF] via-[#0066E6] to-[#0052CC] px-12 py-5 text-sm font-bold uppercase tracking-[0.28em] text-white transition-all duration-300 hover:scale-105 hover:shadow-[0_12px_40px_rgba(0,115,255,0.5)] shadow-[0_8px_24px_rgba(0,115,255,0.4)] border border-white/20"
