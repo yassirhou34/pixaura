@@ -174,24 +174,25 @@ export function HomeVideoCarousel() {
           video.src = slides[index].video
         }
         video.muted = isMuted
-        // FORCE AUTO PRELOAD FOR VERCEL - Mobile needs full preload to work on Vercel CDN
-        // Use 'auto' for current video to force loading on Vercel
-        video.preload = index === currentIndex ? 'auto' : 'none'
-        // Only load metadata for current video, nothing for others until needed
-        if (index === currentIndex) {
-          // Only load metadata on mobile/slow, full load on desktop/fast
+        // FORCE AUTO PRELOAD FOR VERCEL - Load first video immediately, others on demand
+        // Use 'auto' for current video and first video to force loading on Vercel
+        video.preload = (index === currentIndex || index === 0) ? 'auto' : 'none'
+        // Load current video and first video immediately for Vercel
+        if (index === currentIndex || index === 0) {
+          // Force immediate load for Vercel
           video.load()
         }
       }
     }
 
-    // Load current video metadata only (not full video on mobile/slow)
+    // FORCE LOAD CURRENT AND FIRST VIDEO IMMEDIATELY FOR VERCEL
     loadVideo(currentIndex)
-    
-    // DO NOT preload adjacent videos on mobile/slow - wait until user actually navigates
-    // This saves massive bandwidth
+    // Also preload first video immediately for faster initial load
+    if (currentIndex !== 0) {
+      loadVideo(0)
+    }
 
-    // Unload distant videos to free memory
+    // Unload only very distant videos (keep adjacent ones loaded for Vercel)
     videoRefs.current.forEach((video, index) => {
       if (video && video.src) {
         const distance = Math.min(
@@ -199,17 +200,17 @@ export function HomeVideoCarousel() {
           Math.abs(index - currentIndex + slides.length),
           Math.abs(index - currentIndex - slides.length)
         )
-        if (distance > 1) {
+        if (distance > 2) {
           video.pause()
           video.currentTime = 0
-          // On mobile, clear src to free memory
-          if (isMobile || connectionType === 'slow') {
+          // Only clear src for very distant videos on mobile
+          if ((isMobile || connectionType === 'slow') && distance > 3) {
             video.src = ''
           }
         }
       }
     })
-  }, [currentIndex, isMuted, isMobile, connectionType])
+  }, [currentIndex, isMuted, isMobile, connectionType, slides])
 
   // Handle video playback - Optimized
   useEffect(() => {
@@ -303,9 +304,8 @@ export function HomeVideoCarousel() {
         }
       }
       
-      // FORCE IMMEDIATE PLAY ON VERCEL - No delay for first video
-      const delay = currentIndex === 0 ? 0 : (isMobile || connectionType === 'slow') ? 100 : 50
-      setTimeout(playVideo, delay)
+      // FORCE IMMEDIATE PLAY ON VERCEL - No delay for all videos
+      setTimeout(playVideo, 0)
       
       return () => {
         isMounted = false
@@ -403,12 +403,11 @@ export function HomeVideoCarousel() {
         }
       }
       
-      // Use longer delay on mobile
-      const delay = (isMobile || connectionType === 'slow') ? 200 : 100
+      // FORCE IMMEDIATE LOAD FOR VERCEL - No delay
       if ('requestIdleCallback' in window && !isMobile) {
-        requestIdleCallback(loadAndPlay, { timeout: 500 })
+        requestIdleCallback(loadAndPlay, { timeout: 100 })
       } else {
-        setTimeout(loadAndPlay, delay)
+        setTimeout(loadAndPlay, 0)
       }
     }
 

@@ -108,7 +108,9 @@ export function PortfolioSection() {
             muted
             loop
             playsInline
-            preload={activeProject.id === latestProjects[0]?.id ? "auto" : "none"}
+            preload={(activeProject.id === latestProjects[0]?.id || 
+                     activeProject.id === latestProjects[1]?.id || 
+                     activeProject.id === latestProjects[2]?.id) ? "auto" : "none"}
             style={{
               opacity: 1,
               willChange: 'auto',
@@ -125,7 +127,9 @@ export function PortfolioSection() {
             alt={activeProject?.title ?? "Project preview"}
             fill
             className="object-cover"
-            priority
+            priority={activeProject.id === latestProjects[0]?.id || 
+                     activeProject.id === latestProjects[1]?.id || 
+                     activeProject.id === latestProjects[2]?.id}
           />
         )}
         <div className="latest-preview-glass" />
@@ -302,11 +306,16 @@ export function PortfolioSection() {
     let retryCount = 0
     const maxRetries = 3
 
+    // FORCE IMMEDIATE LOAD FOR ALL FIRST 3 CARDS ON VERCEL
+    const isFirstThreeCards = activeProject.id === latestProjects[0]?.id || 
+                              activeProject.id === latestProjects[1]?.id || 
+                              activeProject.id === latestProjects[2]?.id
+
     // Defer video loading to avoid blocking
     const handleCanPlay = () => {
       if (!isMounted || !video) return
-      // FORCE IMMEDIATE PLAY FOR FIRST CARD ON VERCEL
-      const playDelay = isFirstCard ? 0 : 100
+      // FORCE IMMEDIATE PLAY FOR FIRST 3 CARDS ON VERCEL
+      const playDelay = isFirstThreeCards ? 0 : 100
       playTimeout = setTimeout(() => {
         if (video && isMounted && video.readyState >= 2) {
           // Force play with aggressive retry for Vercel
@@ -326,15 +335,15 @@ export function PortfolioSection() {
       // FORCE PLAY ON VERCEL - Start playing as soon as metadata is available
       if (!isMounted || !video) return
       if (video.readyState >= 1) {
-        // Aggressive retry for Vercel, especially for first card
-        const forcePlay = (attempt = 0) => {
-          video.play().catch(() => {
-            if (attempt < (isFirstCard ? 10 : maxRetries) && video && isMounted) {
-              setTimeout(() => forcePlay(attempt + 1), isFirstCard ? 50 * (attempt + 1) : 500 * (attempt + 1))
-            }
-          })
-        }
-        forcePlay()
+          // Aggressive retry for Vercel, especially for first 3 cards
+          const forcePlay = (attempt = 0) => {
+            video.play().catch(() => {
+              if (attempt < (isFirstThreeCards ? 10 : maxRetries) && video && isMounted) {
+                setTimeout(() => forcePlay(attempt + 1), isFirstThreeCards ? 50 * (attempt + 1) : 500 * (attempt + 1))
+              }
+            })
+          }
+          forcePlay()
       }
     }
 
@@ -354,26 +363,24 @@ export function PortfolioSection() {
       }
     }
 
-    // FORCE IMMEDIATE LOAD FOR FIRST CARD ON VERCEL - No delay at all
-    const isFirstCard = activeProject.id === latestProjects[0]?.id
-    const loadDelay = isFirstCard ? 0 : 200 // Load first card IMMEDIATELY
+    const loadDelay = isFirstThreeCards ? 0 : 200 // Load first 3 cards IMMEDIATELY
 
     // Delay video loading to prevent blocking on hover
     videoLoadTimeoutRef.current = setTimeout(() => {
       if (!isMounted || !video) return
 
-      // FORCE AUTO PRELOAD FOR FIRST CARD ON VERCEL
+      // FORCE AUTO PRELOAD FOR FIRST 3 CARDS ON VERCEL
       video.src = activeProject.video
-      video.preload = isFirstCard ? 'auto' : 'metadata'
+      video.preload = isFirstThreeCards ? 'auto' : 'metadata'
       
       // Simple event listeners
       video.addEventListener('canplay', handleCanPlay, { once: true, passive: true })
       video.addEventListener('loadedmetadata', handleLoadedMetadata, { once: true, passive: true })
       video.addEventListener('error', handleError, { once: false, passive: true })
 
-      // FORCE IMMEDIATE LOAD FOR FIRST CARD ON VERCEL
-      if (isFirstCard) {
-        // Load IMMEDIATELY for first card - no delays, no idle callbacks
+      // FORCE IMMEDIATE LOAD FOR FIRST 3 CARDS ON VERCEL
+      if (isFirstThreeCards) {
+        // Load IMMEDIATELY for first 3 cards - no delays, no idle callbacks
         video.load()
         // Also try to play immediately if ready
         if (video.readyState >= 1) {

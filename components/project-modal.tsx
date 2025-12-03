@@ -31,6 +31,7 @@ export function ProjectModal({ open, onOpenChange, project }: ProjectModalProps)
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [mediaLoaded, setMediaLoaded] = useState(false)
+  const [showFullText, setShowFullText] = useState(false)
   const lightboxVideoRef = useRef<HTMLVideoElement>(null)
   const galleryVideoRefs = useRef<Map<number, HTMLVideoElement>>(new Map())
 
@@ -41,6 +42,7 @@ export function ProjectModal({ open, onOpenChange, project }: ProjectModalProps)
     if (project) {
       setCurrentImageIndex(0)
       setMediaLoaded(false)
+      setShowFullText(false)
     }
   }, [project?.id])
 
@@ -290,9 +292,9 @@ export function ProjectModal({ open, onOpenChange, project }: ProjectModalProps)
                     <div className="h-px flex-1 bg-white/12" />
                   </div>
  
-                   {/* Section VIDÉOS - Design Ultra Premium */}
+                   {/* Section VIDÉOS - Hidden on mobile, visible on desktop */}
                    {videos.length > 0 && (
-                     <div className="relative z-10 space-y-4">
+                     <div className="relative z-10 space-y-4 hidden md:block">
                       <div className="flex items-center gap-3">
                         <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/12 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.3em] text-white/75 backdrop-blur-sm">
                           <Video className="h-4 w-4 text-white/80" />
@@ -368,9 +370,9 @@ export function ProjectModal({ open, onOpenChange, project }: ProjectModalProps)
                     </div>
                   )}
  
-                  {/* Section PHOTOS - Design Premium */}
+                  {/* Section PHOTOS - Hidden on mobile, visible on desktop */}
                   {photos.length > 0 && (
-                    <div className="relative z-10 space-y-4">
+                    <div className="relative z-10 space-y-4 hidden md:block">
                       <div className="flex items-center gap-3">
                         <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/12 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.3em] text-white/75 backdrop-blur-sm">
                           <ImageIcon className="h-4 w-4 text-white/80" />
@@ -415,6 +417,105 @@ export function ProjectModal({ open, onOpenChange, project }: ProjectModalProps)
                             </div>
                           )
                         })}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Mobile Alternative - Visual Design Better Than Images */}
+                  {(videos.length > 0 || photos.length > 0) && (
+                    <div className="relative z-10 block md:hidden">
+                      {/* Compact Visual Impact Card */}
+                      <div className="relative overflow-hidden rounded-2xl border border-white/15 bg-gradient-to-br from-white/8 via-white/5 to-white/3 p-4 backdrop-blur-xl">
+                        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-cyan-400/5" />
+                        <div className="absolute top-0 right-0 h-32 w-32 rounded-full bg-primary/10 blur-2xl" />
+                        
+                        <div className="relative z-10 space-y-3">
+                          {/* Compact Header */}
+                          <div className="flex items-center">
+                            <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/80">
+                              Creative Impact
+                            </span>
+                          </div>
+
+                          {/* Visual Metrics Grid - Compact */}
+                          <div className="grid grid-cols-3 gap-2">
+                            <div className="rounded-lg border border-white/10 bg-white/5 p-2.5 backdrop-blur-sm text-center">
+                              <div className="text-base font-bold text-white/95 mb-0.5">
+                                {videos.length + photos.length}
+                              </div>
+                              <div className="text-[9px] font-medium text-white/60">
+                                Assets
+                              </div>
+                            </div>
+
+                            <div className="rounded-lg border border-white/10 bg-white/5 p-2.5 backdrop-blur-sm text-center">
+                              <div className="text-base font-bold text-white/95 mb-0.5">
+                                {videos.length > 0 ? videos.length : '0'}
+                              </div>
+                              <div className="text-[9px] font-medium text-white/60">
+                                Video
+                              </div>
+                            </div>
+
+                            <div className="rounded-lg border border-white/10 bg-white/5 p-2.5 backdrop-blur-sm text-center">
+                              <div className="text-base font-bold text-white/95 mb-0.5">
+                                {photos.length > 0 ? photos.length : '0'}
+                              </div>
+                              <div className="text-[9px] font-medium text-white/60">
+                                Photo
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Visual Progress Indicator - Elegant */}
+                          <div className="relative rounded-lg border border-white/10 bg-white/5 p-3 backdrop-blur-sm">
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="text-[10px] font-medium text-white/70">Project Status</span>
+                              <span className="text-[10px] font-medium text-white/80">Complete</span>
+                            </div>
+                            <div className="relative h-1 rounded-full bg-white/10 overflow-hidden">
+                              <div className="absolute inset-y-0 left-0 bg-gradient-to-r from-primary/70 via-cyan-400/60 to-primary/70 rounded-full" style={{ width: '100%' }} />
+                            </div>
+                          </div>
+
+                          {/* Compact Project Essence */}
+                          <div className="rounded-lg border border-white/10 bg-white/5 p-3 backdrop-blur-sm">
+                            <div className={`text-[11px] font-medium text-white/85 leading-snug ${showFullText ? '' : 'line-clamp-1'}`}>
+                              {showFullText 
+                                ? (project.objective || project.creativeIdea || 'Creative project execution')
+                                : (project.objective?.split('.')[0]?.substring(0, 80) || project.creativeIdea?.split('.')[0]?.substring(0, 80) || 'Creative project execution')
+                              }
+                            </div>
+                            {project.results && (
+                              <>
+                                <div className="h-px bg-white/10 my-2" />
+                                <div className={`text-[10px] text-white/65 leading-snug ${showFullText ? '' : 'line-clamp-1'}`}>
+                                  {showFullText 
+                                    ? project.results
+                                    : project.results.split('.')[0]?.substring(0, 80)
+                                  }
+                                </div>
+                              </>
+                            )}
+                          </div>
+
+                          {/* Visual Category Badge */}
+                          <div className="flex items-center gap-2">
+                            <div className="rounded-lg border border-white/10 bg-gradient-to-r from-primary/10 to-cyan-400/10 px-3 py-1.5">
+                              <span className="text-[10px] font-semibold text-white/80">{project.category}</span>
+                            </div>
+                            <div className="h-px flex-1 bg-white/10" />
+                            <div className="text-[10px] text-white/60">{project.sector}</div>
+                          </div>
+
+                          {/* View More Text Button */}
+                          <button
+                            onClick={() => setShowFullText(!showFullText)}
+                            className="w-full rounded-lg border border-white/20 bg-gradient-to-r from-primary/20 to-cyan-400/20 px-4 py-2.5 text-[11px] font-semibold text-white/90 hover:from-primary/30 hover:to-cyan-400/30 transition-all duration-300"
+                          >
+                            {showFullText ? 'Voir moins' : 'Voir plus'}
+                          </button>
+                        </div>
                       </div>
                     </div>
                   )}
