@@ -174,13 +174,9 @@ export function HomeVideoCarousel() {
           video.src = slides[index].video
         }
         video.muted = isMuted
-        // CRITICAL: On mobile or slow connection, use 'metadata' to prevent full video download
-        // On desktop with fast connection, can use 'auto' for smoother experience
-        if (isMobile || connectionType === 'slow') {
-          video.preload = index === currentIndex ? 'metadata' : 'none'
-        } else {
-          video.preload = index === currentIndex ? 'auto' : 'none'
-        }
+        // FORCE AUTO PRELOAD FOR VERCEL - Mobile needs full preload to work on Vercel CDN
+        // Use 'auto' for current video to force loading on Vercel
+        video.preload = index === currentIndex ? 'auto' : 'none'
         // Only load metadata for current video, nothing for others until needed
         if (index === currentIndex) {
           // Only load metadata on mobile/slow, full load on desktop/fast
@@ -227,19 +223,21 @@ export function HomeVideoCarousel() {
       }
     })
 
-    // Play current video with delay to prevent blocking
+    // FORCE PLAY CURRENT VIDEO ON VERCEL
     const currentVideo = videoRefs.current[currentIndex]
     if (currentVideo && slides[currentIndex]?.video) {
+      let isMounted = true
       const playVideo = async () => {
         try {
+          if (!isMounted) return
           currentVideo.muted = isMuted
           
           // Ensure src is set correctly
           if (currentVideo.src !== window.location.origin + slides[currentIndex].video && 
               currentVideo.src !== slides[currentIndex].video) {
             currentVideo.src = slides[currentIndex].video
-            // Use metadata on mobile/slow, auto on desktop/fast
-            currentVideo.preload = (isMobile || connectionType === 'slow') ? 'metadata' : 'auto'
+            // FORCE AUTO PRELOAD FOR VERCEL
+            currentVideo.preload = 'auto'
           }
           
           // Wait for video to be ready - shorter timeout on mobile
@@ -275,32 +273,43 @@ export function HomeVideoCarousel() {
             })
           }
           
-          // Use requestAnimationFrame to prevent blocking
-          requestAnimationFrame(() => {
+          // FORCE PLAY ON VERCEL - Multiple aggressive retries
+          const forcePlay = (attempt = 0) => {
+            if (!isMounted || !currentVideo) return
             currentVideo.play()
-              .then(() => setIsPlaying(true))
+              .then(() => {
+                if (isMounted) setIsPlaying(true)
+              })
               .catch(() => {
-                // On mobile, if play fails, try again after a short delay
-                if (isMobile) {
+                // Aggressive retry for Vercel, especially on mobile
+                if (attempt < 10 && isMounted && currentVideo) {
                   setTimeout(() => {
-                    currentVideo.play()
-                      .then(() => setIsPlaying(true))
-                      .catch(() => setIsPlaying(false))
-                  }, 500)
-                } else {
+                    if (currentVideo && isMounted) {
+                      forcePlay(attempt + 1)
+                    }
+                  }, 100 * (attempt + 1))
+                } else if (isMounted) {
                   setIsPlaying(false)
                 }
               })
+          }
+          // Use requestAnimationFrame but force play immediately
+          requestAnimationFrame(() => {
+            if (isMounted) forcePlay()
           })
         } catch (error) {
           console.error('Error playing video:', error)
-          setIsPlaying(false)
+          if (isMounted) setIsPlaying(false)
         }
       }
       
-      // Delay to prevent blocking - longer on mobile
-      const delay = (isMobile || connectionType === 'slow') ? 100 : 50
+      // FORCE IMMEDIATE PLAY ON VERCEL - No delay for first video
+      const delay = currentIndex === 0 ? 0 : (isMobile || connectionType === 'slow') ? 100 : 50
       setTimeout(playVideo, delay)
+      
+      return () => {
+        isMounted = false
+      }
     }
   }, [currentIndex, isMuted, isTransitioning, isMobile, connectionType, slides])
 
@@ -842,9 +851,7 @@ export function HomeVideoCarousel() {
                         loop
                         muted={isMuted}
                         playsInline
-                        preload={index === currentIndex 
-                          ? ((isMobile || connectionType === 'slow') ? 'metadata' : 'auto')
-                          : 'none'}
+                        preload={index === currentIndex ? 'auto' : 'none'}
                         src={slide.video || undefined}
                         poster={slide.poster || undefined}
                         style={{ 
@@ -852,27 +859,54 @@ export function HomeVideoCarousel() {
                           willChange: index === currentIndex ? 'auto' : 'none',
                         }}
                         onLoadedData={() => {
-                          // Only play if this is the current video
+                          // FORCE PLAY ON VERCEL - Only play if this is the current video
                           if (index === currentIndex && isPlaying) {
                             const video = videoRefs.current[index]
                             if (video) {
-                              video.play().catch(() => {
-                                // Retry on mobile if first attempt fails
-                                if (isMobile) {
-                                  setTimeout(() => {
-                                    video.play().catch(() => {})
-                                  }, 300)
-                                }
-                              })
+                              // Force play immediately with multiple retries for Vercel
+                              const forcePlay = (retryCount = 0) => {
+                                video.play().catch(() => {
+                                  if (retryCount < 5) {
+                                    setTimeout(() => forcePlay(retryCount + 1), 200 * (retryCount + 1))
+                                  }
+                                })
+                              }
+                              forcePlay()
                             }
                           }
                         }}
                         onLoadedMetadata={() => {
-                          // On mobile, try to play as soon as metadata is loaded
-                          if ((isMobile || connectionType === 'slow') && index === currentIndex && isPlaying) {
+                          // FORCE PLAY ON VERCEL - Try to play as soon as metadata is loaded
+                          if (index === currentIndex && isPlaying) {
                             const video = videoRefs.current[index]
                             if (video && video.readyState >= 1) {
-                              video.play().catch(() => {})
+                              video.play().catch(() => {
+                                // Retry multiple times for Vercel
+                                let retryCount = 0
+                                const retryPlay = () => {
+                                  if (retryCount < 5 && video) {
+                                    retryCount++
+                                    setTimeout(() => {
+                                      video.play().catch(() => retryPlay())
+                                    }, 200 * retryCount)
+                                  }
+                                }
+                                retryPlay()
+                              })
+                            }
+                          }
+                        }}
+                        onCanPlay={() => {
+                          // FORCE PLAY ON VERCEL - Play as soon as video can play
+                          if (index === currentIndex && isPlaying) {
+                            const video = videoRefs.current[index]
+                            if (video) {
+                              video.play().catch(() => {
+                                // Retry for Vercel
+                                setTimeout(() => {
+                                  video.play().catch(() => {})
+                                }, 300)
+                              })
                             }
                           }
                         }}

@@ -108,7 +108,7 @@ export function PortfolioSection() {
             muted
             loop
             playsInline
-            preload={activeProject.id === latestProjects[0]?.id ? "metadata" : "none"}
+            preload={activeProject.id === latestProjects[0]?.id ? "auto" : "none"}
             style={{
               opacity: 1,
               willChange: 'auto',
@@ -305,39 +305,36 @@ export function PortfolioSection() {
     // Defer video loading to avoid blocking
     const handleCanPlay = () => {
       if (!isMounted || !video) return
-      // Play only when ready - simple and safe
+      // FORCE IMMEDIATE PLAY FOR FIRST CARD ON VERCEL
+      const playDelay = isFirstCard ? 0 : 100
       playTimeout = setTimeout(() => {
         if (video && isMounted && video.readyState >= 2) {
-          video.play().catch(() => {
-            // Retry on error for Vercel
-            if (retryCount < maxRetries) {
-              retryCount++
-              setTimeout(() => {
-                if (video && isMounted) {
-                  video.play().catch(() => {})
-                }
-              }, 500 * retryCount)
-            }
-          })
+          // Force play with aggressive retry for Vercel
+          const forcePlay = (attempt = 0) => {
+            video.play().catch(() => {
+              if (attempt < 10 && video && isMounted) {
+                setTimeout(() => forcePlay(attempt + 1), 100 * (attempt + 1))
+              }
+            })
+          }
+          forcePlay()
         }
-      }, 100) // Reduced delay for faster loading
+      }, playDelay)
     }
 
     const handleLoadedMetadata = () => {
-      // On Vercel, start loading as soon as metadata is available
+      // FORCE PLAY ON VERCEL - Start playing as soon as metadata is available
       if (!isMounted || !video) return
       if (video.readyState >= 1) {
-        video.play().catch(() => {
-          // Retry on error
-          if (retryCount < maxRetries) {
-            retryCount++
-            setTimeout(() => {
-              if (video && isMounted) {
-                video.play().catch(() => {})
-              }
-            }, 500 * retryCount)
-          }
-        })
+        // Aggressive retry for Vercel, especially for first card
+        const forcePlay = (attempt = 0) => {
+          video.play().catch(() => {
+            if (attempt < (isFirstCard ? 10 : maxRetries) && video && isMounted) {
+              setTimeout(() => forcePlay(attempt + 1), isFirstCard ? 50 * (attempt + 1) : 500 * (attempt + 1))
+            }
+          })
+        }
+        forcePlay()
       }
     }
 
@@ -357,28 +354,33 @@ export function PortfolioSection() {
       }
     }
 
-    // Reduced delay for first card (activeProject.id === 1) to load faster on Vercel
+    // FORCE IMMEDIATE LOAD FOR FIRST CARD ON VERCEL - No delay at all
     const isFirstCard = activeProject.id === latestProjects[0]?.id
-    const loadDelay = isFirstCard ? 50 : 200 // Load first card much faster
+    const loadDelay = isFirstCard ? 0 : 200 // Load first card IMMEDIATELY
 
     // Delay video loading to prevent blocking on hover
     videoLoadTimeoutRef.current = setTimeout(() => {
       if (!isMounted || !video) return
 
-      // Set source
+      // FORCE AUTO PRELOAD FOR FIRST CARD ON VERCEL
       video.src = activeProject.video
-      // Use metadata for faster initial load on Vercel
-      video.preload = 'metadata'
+      video.preload = isFirstCard ? 'auto' : 'metadata'
       
       // Simple event listeners
       video.addEventListener('canplay', handleCanPlay, { once: true, passive: true })
       video.addEventListener('loadedmetadata', handleLoadedMetadata, { once: true, passive: true })
       video.addEventListener('error', handleError, { once: false, passive: true })
 
-      // Load immediately for first card, otherwise in idle time
+      // FORCE IMMEDIATE LOAD FOR FIRST CARD ON VERCEL
       if (isFirstCard) {
-        // Load immediately for first card to show faster on Vercel
+        // Load IMMEDIATELY for first card - no delays, no idle callbacks
         video.load()
+        // Also try to play immediately if ready
+        if (video.readyState >= 1) {
+          video.play().catch(() => {
+            // Will retry in handleLoadedMetadata
+          })
+        }
       } else if ('requestIdleCallback' in window) {
         requestIdleCallback(() => {
           if (isMounted && video) {
