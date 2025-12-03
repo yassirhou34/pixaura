@@ -356,7 +356,7 @@ export default function RealisationsPage() {
           loop
           muted
           playsInline
-          preload="auto"
+          preload="metadata"
           style={{ 
             opacity: 1,
             visibility: 'visible',
@@ -364,9 +364,32 @@ export default function RealisationsPage() {
             width: '100%',
             height: '100%'
           }}
-          onError={() => {
-            // Silent error handling - don't break the page
-            // Video will show poster or remain hidden if it fails
+          onLoadedMetadata={(e) => {
+            // Start playing as soon as metadata is loaded (faster on Vercel)
+            const video = e.currentTarget
+            if (video.readyState >= 1) {
+              video.play().catch(() => {
+                // Retry after a short delay
+                setTimeout(() => {
+                  video.play().catch(() => {})
+                }, 500)
+              })
+            }
+          }}
+          onError={(e) => {
+            // Retry loading on error (common on Vercel CDN)
+            const video = e.currentTarget
+            let retryCount = 0
+            const maxRetries = 2
+            const retryLoad = () => {
+              if (retryCount < maxRetries) {
+                retryCount++
+                setTimeout(() => {
+                  video.load()
+                }, 1000 * retryCount)
+              }
+            }
+            retryLoad()
           }}
         >
           <source src="/Banque d_images/i3.mp4" type="video/mp4" />

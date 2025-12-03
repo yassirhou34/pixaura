@@ -403,16 +403,26 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
         loop={true}
         muted={true}
         playsInline={true}
-        preload="auto"
+        preload="metadata"
+        onLoadedMetadata={(e) => {
+          // Start playing as soon as metadata is loaded (faster on Vercel)
+          const video = e.currentTarget
+          setVideoLoaded(true)
+          setVideoError(false)
+          if (video.readyState >= 1) {
+            video.play().catch(() => {
+              // Retry after a short delay
+              setTimeout(() => {
+                video.play().catch(() => {})
+              }, 500)
+            })
+          }
+        }}
         onLoadedData={() => {
           setVideoLoaded(true)
           setVideoError(false)
         }}
         onCanPlay={() => {
-          setVideoLoaded(true)
-          setVideoError(false)
-        }}
-        onLoadedMetadata={() => {
           setVideoLoaded(true)
           setVideoError(false)
         }}
@@ -425,9 +435,23 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
           }
         }}
         onError={(e) => {
-          console.warn('Video loading error:', backgroundVideo)
-          setVideoError(true)
-          setVideoLoaded(false)
+          // Retry loading on error (common on Vercel CDN)
+          const video = e.currentTarget
+          let retryCount = 0
+          const maxRetries = 2
+          const retryLoad = () => {
+            if (retryCount < maxRetries) {
+              retryCount++
+              setTimeout(() => {
+                video.load()
+              }, 1000 * retryCount)
+            } else {
+              console.warn('Video loading error after retries:', backgroundVideo)
+              setVideoError(true)
+              setVideoLoaded(false)
+            }
+          }
+          retryLoad()
         }}
         onLoadStart={() => {
           // Don't reset loaded state on load start to prevent flickering

@@ -108,11 +108,15 @@ export function PortfolioSection() {
             muted
             loop
             playsInline
-            preload="none"
+            preload={activeProject.id === latestProjects[0]?.id ? "metadata" : "none"}
             style={{
               opacity: 1,
               willChange: 'auto',
               pointerEvents: 'none'
+            }}
+            onError={(e) => {
+              // Silent error handling for Vercel
+              console.warn('Video load error:', activeProject.video)
             }}
           />
         ) : (
@@ -281,7 +285,7 @@ export function PortfolioSection() {
     setTimeout(() => updatePreviewPosition(activeId), 120)
   }, [])
 
-  // Ultra-simplified video loading - ASYNC, NON-BLOCKING, DEFERRED
+  // Ultra-simplified video loading - OPTIMIZED FOR VERCEL
   useEffect(() => {
     const video = videoRef.current
     if (!video || !activeProject?.video) {
@@ -295,6 +299,8 @@ export function PortfolioSection() {
     
     let isMounted = true
     let playTimeout: NodeJS.Timeout | null = null
+    let retryCount = 0
+    const maxRetries = 3
 
     // Defer video loading to avoid blocking
     const handleCanPlay = () => {
@@ -303,18 +309,57 @@ export function PortfolioSection() {
       playTimeout = setTimeout(() => {
         if (video && isMounted && video.readyState >= 2) {
           video.play().catch(() => {
-            // Silent error - don't block UI
+            // Retry on error for Vercel
+            if (retryCount < maxRetries) {
+              retryCount++
+              setTimeout(() => {
+                if (video && isMounted) {
+                  video.play().catch(() => {})
+                }
+              }, 500 * retryCount)
+            }
           })
         }
-      }, 150)
+      }, 100) // Reduced delay for faster loading
+    }
+
+    const handleLoadedMetadata = () => {
+      // On Vercel, start loading as soon as metadata is available
+      if (!isMounted || !video) return
+      if (video.readyState >= 1) {
+        video.play().catch(() => {
+          // Retry on error
+          if (retryCount < maxRetries) {
+            retryCount++
+            setTimeout(() => {
+              if (video && isMounted) {
+                video.play().catch(() => {})
+              }
+            }, 500 * retryCount)
+          }
+        })
+      }
     }
 
     const handleError = () => {
-      // Just pause on error - show poster
-      if (isMounted && video) {
+      // Retry loading on error (common on Vercel CDN)
+      if (isMounted && video && retryCount < maxRetries) {
+        retryCount++
+        setTimeout(() => {
+          if (isMounted && video) {
+            video.src = activeProject.video
+            video.load()
+          }
+        }, 1000 * retryCount)
+      } else if (isMounted && video) {
+        // Just pause on final error - show poster
         video.pause()
       }
     }
+
+    // Reduced delay for first card (activeProject.id === 1) to load faster on Vercel
+    const isFirstCard = activeProject.id === latestProjects[0]?.id
+    const loadDelay = isFirstCard ? 50 : 200 // Load first card much faster
 
     // Delay video loading to prevent blocking on hover
     videoLoadTimeoutRef.current = setTimeout(() => {
@@ -322,14 +367,19 @@ export function PortfolioSection() {
 
       // Set source
       video.src = activeProject.video
-      video.preload = 'metadata' // Only metadata, not full video
+      // Use metadata for faster initial load on Vercel
+      video.preload = 'metadata'
       
       // Simple event listeners
       video.addEventListener('canplay', handleCanPlay, { once: true, passive: true })
-      video.addEventListener('error', handleError, { once: true, passive: true })
+      video.addEventListener('loadedmetadata', handleLoadedMetadata, { once: true, passive: true })
+      video.addEventListener('error', handleError, { once: false, passive: true })
 
-      // Load in idle time - non-blocking
-      if ('requestIdleCallback' in window) {
+      // Load immediately for first card, otherwise in idle time
+      if (isFirstCard) {
+        // Load immediately for first card to show faster on Vercel
+        video.load()
+      } else if ('requestIdleCallback' in window) {
         requestIdleCallback(() => {
           if (isMounted && video) {
             video.load()
@@ -343,7 +393,7 @@ export function PortfolioSection() {
           }
         }, 200)
       }
-    }, 200)
+    }, loadDelay)
 
     return () => {
       isMounted = false
@@ -360,7 +410,7 @@ export function PortfolioSection() {
         video.load()
       }
     }
-  }, [activeProject?.video, activeId])
+  }, [activeProject?.video, activeId, latestProjects])
 
   return (
     <section id="portfolio" className="portfolio-latest-section relative overflow-hidden px-4 pb-24 pt-24 text-white md:px-8">
