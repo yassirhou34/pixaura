@@ -21,7 +21,7 @@ export function HomeVideoCarousel() {
       title: t("portfolio.carouselSlide2Title"),
       description: t("portfolio.carouselSlide2Description"),
       video: "/Banque d_images/rally1.mp4",
-      poster: "/Banque d_images/Copie de M7_01248 - Copie.jpg",
+      poster: "/Banque d_images/Copie de M7_01248.jpg",
       tags: [t("portfolio.carouselSlide2Tag1"), t("portfolio.carouselSlide2Tag2"), t("portfolio.carouselSlide2Tag3")],
     },
     {

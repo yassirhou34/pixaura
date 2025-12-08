@@ -26,7 +26,7 @@ export default function Home() {
     if (typeof document === 'undefined') return
 
     // Preload the first hero image (Night Drive Experience) immediately
-    const firstHeroImage = "/Banque d_images/Copie de M7_03225 - Copie.jpg"
+    const firstHeroImage = "/Banque d_images/Copie de M7_03225.jpg"
     // REMOVED: Aggressive preload - let images load naturally to save bandwidth
   }, [])
 

@@ -29,7 +29,7 @@ const projects = [
     gallery: [
       "/Banque d_images/Copie de M7_00259.jpg",
       "/Banque d_images/Copie de M7_00197.jpg",
-      "/Banque d_images/Copie de M7_00197 - Copie.jpg",
+      "/Banque d_images/Copie de M7_00197.jpg",
       "/Banque d_images/halowen.mp4",
     ],
     objective: "Créer une campagne visuelle pour Halloween avec Touraine Cars, combinant ambiance automnale et message de sécurité routière pour une soirée terrifiante mais prudente.",
@@ -191,8 +191,8 @@ export default function RealisationsPage() {
   const { t } = useTranslation()
   const router = useRouter()
   const [mounted, setMounted] = useState(false)
-  
-  
+
+
   useEffect(() => {
     setMounted(true)
     // Scroll to top immediately without animation
@@ -200,35 +200,35 @@ export default function RealisationsPage() {
   }, [])
 
   // REMOVED: Aggressive preloads - let images load on demand to save bandwidth
-  
-          // Get translated projects
-          const translatedProjects = useMemo(() => {
-            return projects.map((project) => ({
-              ...project,
-              category: project.category === "Film / Vidéo" ? t("portfolio.categoryFilmVideo") : 
-                       project.category === "Photo" ? t("portfolio.categoryPhoto") : project.category,
-              formats: project.formats.map((format) => 
-                format === "Film / Vidéo" ? t("portfolio.categoryFilmVideo") :
-                format === "Photo" ? t("portfolio.categoryPhoto") :
-                format === "Social" ? t("portfolio.tagSocial") :
-                format === "Event" ? t("portfolio.tagEvent") :
+
+  // Get translated projects
+  const translatedProjects = useMemo(() => {
+    return projects.map((project) => ({
+      ...project,
+      category: project.category === "Film / Vidéo" ? t("portfolio.categoryFilmVideo") :
+        project.category === "Photo" ? t("portfolio.categoryPhoto") : project.category,
+      formats: project.formats.map((format) =>
+        format === "Film / Vidéo" ? t("portfolio.categoryFilmVideo") :
+          format === "Photo" ? t("portfolio.categoryPhoto") :
+            format === "Social" ? t("portfolio.tagSocial") :
+              format === "Event" ? t("portfolio.tagEvent") :
                 format === "Branding" ? t("portfolio.tagBranding") :
-                format === "Corporate" ? t("portfolio.tagCorporate") :
-                format === "Design" ? t("portfolio.tagDesign") :
-                format === "Podcast" ? t("portfolio.tagPodcast") : format
-              ),
-              sector: project.sector === "Automobile" ? t("realisationsPage.filterAutomobile") :
-                     project.sector === "Immobilier" ? t("realisationsPage.filterRealEstate") :
-                     project.sector === "Sport & Bien-être" ? t("realisationsPage.filterSport") :
-                     project.sector === "Restauration" ? t("realisationsPage.filterRestaurant") :
-                     project.sector === "Artistes & Créateurs" ? t("realisationsPage.filterArtists") : project.sector,
-              objective: t(`projects.project${project.id}.objective`),
-              creativeIdea: t(`projects.project${project.id}.creativeIdea`),
-              device: t(`projects.project${project.id}.device`),
-              results: t(`projects.project${project.id}.results`),
-            }))
-          }, [t])
-  
+                  format === "Corporate" ? t("portfolio.tagCorporate") :
+                    format === "Design" ? t("portfolio.tagDesign") :
+                      format === "Podcast" ? t("portfolio.tagPodcast") : format
+      ),
+      sector: project.sector === "Automobile" ? t("realisationsPage.filterAutomobile") :
+        project.sector === "Immobilier" ? t("realisationsPage.filterRealEstate") :
+          project.sector === "Sport & Bien-être" ? t("realisationsPage.filterSport") :
+            project.sector === "Restauration" ? t("realisationsPage.filterRestaurant") :
+              project.sector === "Artistes & Créateurs" ? t("realisationsPage.filterArtists") : project.sector,
+      objective: t(`projects.project${project.id}.objective`),
+      creativeIdea: t(`projects.project${project.id}.creativeIdea`),
+      device: t(`projects.project${project.id}.device`),
+      results: t(`projects.project${project.id}.results`),
+    }))
+  }, [t])
+
   const [activeFilter, setActiveFilter] = useState<string>(t("realisationsPage.filterAll"))
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedProject, setSelectedProject] = useState<typeof translatedProjects[0] | null>(null)
@@ -240,7 +240,7 @@ export default function RealisationsPage() {
     if (activeFilter === t("realisationsPage.filterAll")) {
       return translatedProjects
     }
-    
+
     // Map translated filters to translated values (since translatedProjects has translated values)
     const sectorMap: Record<string, string> = {
       [t("realisationsPage.filterAutomobile")]: t("realisationsPage.filterAutomobile"),
@@ -252,29 +252,29 @@ export default function RealisationsPage() {
     const formatMap: Record<string, string> = {
       [t("realisationsPage.filterBranding")]: t("portfolio.tagBranding"),
     }
-    
+
     // Check if it's a format filter
     const translatedFormat = formatMap[activeFilter]
     if (translatedFormat) {
       return translatedProjects.filter((project) => project.formats.includes(translatedFormat))
     }
-    
+
     // Otherwise it's a sector filter
     const translatedSector = sectorMap[activeFilter]
     if (translatedSector) {
       return translatedProjects.filter((project) => project.sector === translatedSector)
     }
-    
+
     return translatedProjects
   }, [activeFilter, t, translatedProjects])
 
   // Calculate counts for each filter
   const filterCounts = useMemo(() => {
     const counts: Record<string, number> = {}
-    
+
     // Count for "Tous"
     counts[t("realisationsPage.filterAll")] = translatedProjects.length
-    
+
     // Count for format filters - use translated format since translatedProjects has translated formats
     const formatMap: Record<string, string> = {
       [t("realisationsPage.filterBranding")]: t("portfolio.tagBranding"),
@@ -282,7 +282,7 @@ export default function RealisationsPage() {
     Object.entries(formatMap).forEach(([translatedFilter, translatedFormat]) => {
       counts[translatedFilter] = translatedProjects.filter((p) => p.formats.includes(translatedFormat)).length
     })
-    
+
     // Count for sector filters - use translated sectors since translatedProjects has translated sectors
     const sectorMap: Record<string, string> = {
       [t("realisationsPage.filterAutomobile")]: t("realisationsPage.filterAutomobile"),
@@ -294,7 +294,7 @@ export default function RealisationsPage() {
     Object.entries(sectorMap).forEach(([translatedFilter, translatedSector]) => {
       counts[translatedFilter] = translatedProjects.filter((p) => p.sector === translatedSector).length
     })
-    
+
     return counts
   }, [t, translatedProjects])
 
@@ -306,7 +306,7 @@ export default function RealisationsPage() {
   // Sticky filters on scroll with smooth transitions
   useEffect(() => {
     let ticking = false
-    
+
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
@@ -357,7 +357,7 @@ export default function RealisationsPage() {
           muted
           playsInline
           preload="metadata"
-          style={{ 
+          style={{
             opacity: 1,
             visibility: 'visible',
             objectFit: 'cover',
@@ -371,7 +371,7 @@ export default function RealisationsPage() {
               video.play().catch(() => {
                 // Retry after a short delay
                 setTimeout(() => {
-                  video.play().catch(() => {})
+                  video.play().catch(() => { })
                 }, 500)
               })
             }
@@ -452,11 +452,10 @@ export default function RealisationsPage() {
           {/* Sticky Filters Section - Premium Design */}
           <div
             ref={filtersRef}
-            className={`mb-12 space-y-6 transition-all duration-300 ${
-              isSticky
-                ? "sticky top-0 z-30 py-3"
-                : ""
-            }`}
+            className={`mb-12 space-y-6 transition-all duration-300 ${isSticky
+              ? "sticky top-0 z-30 py-3"
+              : ""
+              }`}
           >
             {/* All Filters Combined in One Line - Ultra Premium Design */}
             {/* Mobile: horizontal scroll, Desktop: centered */}
@@ -464,113 +463,107 @@ export default function RealisationsPage() {
               className="relative -mx-4 px-4 flex flex-nowrap gap-2.5 justify-start md:justify-center overflow-x-auto overflow-y-visible pb-2 scrollbar-hide"
               style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
             >
-                {/* Tous Button */}
-                <button
-                  onClick={() => setActiveFilter(t("realisationsPage.filterAll"))}
-                  className={`group relative px-5 py-2.5 rounded-full font-medium text-xs transition-all duration-300 ease-out flex items-center gap-2 backdrop-blur-xl flex-shrink-0 overflow-visible cursor-pointer ${
-                    activeFilter === t("realisationsPage.filterAll")
+              {/* Tous Button */}
+              <button
+                onClick={() => setActiveFilter(t("realisationsPage.filterAll"))}
+                className={`group relative px-5 py-2.5 rounded-full font-medium text-xs transition-all duration-300 ease-out flex items-center gap-2 backdrop-blur-xl flex-shrink-0 overflow-visible cursor-pointer ${activeFilter === t("realisationsPage.filterAll")
+                  ? "bg-gradient-to-br from-[#0073FF] via-[#0066E6] to-[#0052CC] text-white shadow-[0_8px_24px_rgba(0,115,255,0.4)] border border-white/40"
+                  : "bg-gradient-to-br from-white/12 via-white/8 to-white/5 text-white/75 border border-white/20 hover:bg-gradient-to-br hover:from-white/18 hover:via-white/12 hover:to-white/8 hover:text-white hover:border-white/30"
+                  }`}
+                aria-label="Afficher tous les projets"
+                style={{
+                  fontFamily: 'Montserrat, sans-serif',
+                  letterSpacing: '0.01em',
+                }}
+              >
+
+                <span className={`relative z-10 transition-all duration-300 ${activeFilter === t("realisationsPage.filterAll") ? "text-white scale-105" : "text-white/70 group-hover:text-white group-hover:scale-110"}`} style={{ width: '14px', height: '14px' }}>
+                  <Briefcase className="w-3.5 h-3.5" />
+                </span>
+                <span className={`relative z-10 whitespace-nowrap text-xs transition-all duration-300 ${activeFilter !== t("realisationsPage.filterAll") ? "group-hover:tracking-wider" : ""}`}>{t("realisationsPage.filterAll")}</span>
+                <span className={`relative z-10 px-1.5 py-0.5 rounded-full text-[10px] font-bold transition-all duration-300 min-w-[18px] flex items-center justify-center ${activeFilter === t("realisationsPage.filterAll")
+                  ? "bg-white/25 text-white shadow-sm"
+                  : "bg-white/10 text-white/60 group-hover:bg-white/20 group-hover:text-white/90 group-hover:scale-110"
+                  }`}>
+                  {filterCounts[t("realisationsPage.filterAll")]}
+                </span>
+              </button>
+
+              {/* Format Filters */}
+              {[
+                { original: "Branding", translated: t("realisationsPage.filterBranding"), icon: formatIcons["Branding"] }
+              ].map(({ original, translated, icon }) => {
+                const isActive = activeFilter === translated
+                const count = filterCounts[translated] || 0
+                return (
+                  <button
+                    key={`format-${original}`}
+                    onClick={() => setActiveFilter(translated)}
+                    className={`group relative px-5 py-2.5 rounded-full font-medium text-xs transition-all duration-300 ease-out flex items-center gap-2 backdrop-blur-xl flex-shrink-0 overflow-visible cursor-pointer ${isActive
                       ? "bg-gradient-to-br from-[#0073FF] via-[#0066E6] to-[#0052CC] text-white shadow-[0_8px_24px_rgba(0,115,255,0.4)] border border-white/40"
                       : "bg-gradient-to-br from-white/12 via-white/8 to-white/5 text-white/75 border border-white/20 hover:bg-gradient-to-br hover:from-white/18 hover:via-white/12 hover:to-white/8 hover:text-white hover:border-white/30"
-                  }`}
-                  aria-label="Afficher tous les projets"
-                  style={{
-                    fontFamily: 'Montserrat, sans-serif',
-                    letterSpacing: '0.01em',
-                  }}
-                >
-                  
-                  <span className={`relative z-10 transition-all duration-300 ${activeFilter === t("realisationsPage.filterAll") ? "text-white scale-105" : "text-white/70 group-hover:text-white group-hover:scale-110"}`} style={{ width: '14px', height: '14px' }}>
-                    <Briefcase className="w-3.5 h-3.5" />
-                  </span>
-                  <span className={`relative z-10 whitespace-nowrap text-xs transition-all duration-300 ${activeFilter !== t("realisationsPage.filterAll") ? "group-hover:tracking-wider" : ""}`}>{t("realisationsPage.filterAll")}</span>
-                  <span className={`relative z-10 px-1.5 py-0.5 rounded-full text-[10px] font-bold transition-all duration-300 min-w-[18px] flex items-center justify-center ${
-                    activeFilter === t("realisationsPage.filterAll")
+                      }`}
+                    aria-label={`Filtrer par ${translated}`}
+                    style={{
+                      fontFamily: 'Montserrat, sans-serif',
+                      letterSpacing: '0.01em',
+                    }}
+                  >
+
+                    <span className={`relative z-10 transition-all duration-300 ${isActive ? "text-white scale-105" : "text-white/70 group-hover:text-white group-hover:scale-110"}`} style={{ width: '14px', height: '14px' }}>
+                      {icon}
+                    </span>
+                    <span className={`relative z-10 whitespace-nowrap text-xs transition-all duration-300 ${!isActive ? "group-hover:tracking-wider" : ""}`}>{translated}</span>
+                    <span className={`relative z-10 px-1.5 py-0.5 rounded-full text-[10px] font-bold transition-all duration-300 min-w-[18px] flex items-center justify-center ${isActive
                       ? "bg-white/25 text-white shadow-sm"
                       : "bg-white/10 text-white/60 group-hover:bg-white/20 group-hover:text-white/90 group-hover:scale-110"
-                  }`}>
-                    {filterCounts[t("realisationsPage.filterAll")]}
-                  </span>
-                </button>
-                
-                {/* Format Filters */}
-                {[
-                  { original: "Branding", translated: t("realisationsPage.filterBranding"), icon: formatIcons["Branding"] }
-                ].map(({ original, translated, icon }) => {
-                  const isActive = activeFilter === translated
-                  const count = filterCounts[translated] || 0
-                  return (
-                    <button
-                      key={`format-${original}`}
-                      onClick={() => setActiveFilter(translated)}
-                      className={`group relative px-5 py-2.5 rounded-full font-medium text-xs transition-all duration-300 ease-out flex items-center gap-2 backdrop-blur-xl flex-shrink-0 overflow-visible cursor-pointer ${
-                        isActive
-                          ? "bg-gradient-to-br from-[#0073FF] via-[#0066E6] to-[#0052CC] text-white shadow-[0_8px_24px_rgba(0,115,255,0.4)] border border-white/40"
-                          : "bg-gradient-to-br from-white/12 via-white/8 to-white/5 text-white/75 border border-white/20 hover:bg-gradient-to-br hover:from-white/18 hover:via-white/12 hover:to-white/8 hover:text-white hover:border-white/30"
-                      }`}
-                      aria-label={`Filtrer par ${translated}`}
-                      style={{
-                        fontFamily: 'Montserrat, sans-serif',
-                        letterSpacing: '0.01em',
-                      }}
-                    >
-                      
-                      <span className={`relative z-10 transition-all duration-300 ${isActive ? "text-white scale-105" : "text-white/70 group-hover:text-white group-hover:scale-110"}`} style={{ width: '14px', height: '14px' }}>
-                        {icon}
-                      </span>
-                      <span className={`relative z-10 whitespace-nowrap text-xs transition-all duration-300 ${!isActive ? "group-hover:tracking-wider" : ""}`}>{translated}</span>
-                      <span className={`relative z-10 px-1.5 py-0.5 rounded-full text-[10px] font-bold transition-all duration-300 min-w-[18px] flex items-center justify-center ${
-                        isActive
-                          ? "bg-white/25 text-white shadow-sm"
-                          : "bg-white/10 text-white/60 group-hover:bg-white/20 group-hover:text-white/90 group-hover:scale-110"
                       }`}>
-                        {count}
-                      </span>
-                    </button>
-                  )
-                })}
-                
-                {/* Sector Filters */}
-                {[
-                  { original: "Automobile", translated: t("realisationsPage.filterAutomobile"), icon: sectorIcons["Automobile"] },
-                  { original: "Immobilier", translated: t("realisationsPage.filterRealEstate"), icon: sectorIcons["Immobilier"] },
-                  { original: "Sport & Bien-être", translated: t("realisationsPage.filterSport"), icon: sectorIcons["Sport & Bien-être"] },
-                  { original: "Restauration", translated: t("realisationsPage.filterRestaurant"), icon: sectorIcons["Restauration"] },
-                  { original: "Artistes & Créateurs", translated: t("realisationsPage.filterArtists"), icon: sectorIcons["Artistes & Créateurs"] },
-                ].map(({ original, translated, icon }) => {
-                  const isActive = activeFilter === translated
-                  const count = filterCounts[translated] || 0
-                  return (
-                    <button
-                      key={`sector-${original}`}
-                      onClick={() => setActiveFilter(translated)}
-                      className={`group relative px-5 py-2.5 rounded-full font-medium text-xs transition-all duration-300 ease-out flex items-center gap-2 backdrop-blur-xl flex-shrink-0 overflow-visible cursor-pointer ${
-                        isActive
-                          ? "bg-gradient-to-br from-[#0073FF] via-[#0066E6] to-[#0052CC] text-white shadow-[0_8px_24px_rgba(0,115,255,0.4)] border border-white/40"
-                          : "bg-gradient-to-br from-white/12 via-white/8 to-white/5 text-white/75 border border-white/20 hover:bg-gradient-to-br hover:from-white/18 hover:via-white/12 hover:to-white/8 hover:text-white hover:border-white/30"
+                      {count}
+                    </span>
+                  </button>
+                )
+              })}
+
+              {/* Sector Filters */}
+              {[
+                { original: "Automobile", translated: t("realisationsPage.filterAutomobile"), icon: sectorIcons["Automobile"] },
+                { original: "Immobilier", translated: t("realisationsPage.filterRealEstate"), icon: sectorIcons["Immobilier"] },
+                { original: "Sport & Bien-être", translated: t("realisationsPage.filterSport"), icon: sectorIcons["Sport & Bien-être"] },
+                { original: "Restauration", translated: t("realisationsPage.filterRestaurant"), icon: sectorIcons["Restauration"] },
+                { original: "Artistes & Créateurs", translated: t("realisationsPage.filterArtists"), icon: sectorIcons["Artistes & Créateurs"] },
+              ].map(({ original, translated, icon }) => {
+                const isActive = activeFilter === translated
+                const count = filterCounts[translated] || 0
+                return (
+                  <button
+                    key={`sector-${original}`}
+                    onClick={() => setActiveFilter(translated)}
+                    className={`group relative px-5 py-2.5 rounded-full font-medium text-xs transition-all duration-300 ease-out flex items-center gap-2 backdrop-blur-xl flex-shrink-0 overflow-visible cursor-pointer ${isActive
+                      ? "bg-gradient-to-br from-[#0073FF] via-[#0066E6] to-[#0052CC] text-white shadow-[0_8px_24px_rgba(0,115,255,0.4)] border border-white/40"
+                      : "bg-gradient-to-br from-white/12 via-white/8 to-white/5 text-white/75 border border-white/20 hover:bg-gradient-to-br hover:from-white/18 hover:via-white/12 hover:to-white/8 hover:text-white hover:border-white/30"
                       }`}
-                      aria-label={`Filtrer par ${translated}`}
-                      style={{
-                        fontFamily: 'Montserrat, sans-serif',
-                        letterSpacing: '0.01em',
-                      }}
-                    >
-                      
-                      <span className={`relative z-10 transition-all duration-300 ${isActive ? "text-white scale-105" : "text-white/70 group-hover:text-white group-hover:scale-110"}`} style={{ width: '14px', height: '14px' }}>
-                        {icon}
-                      </span>
-                      <span className={`relative z-10 whitespace-nowrap text-xs transition-all duration-300 ${!isActive ? "group-hover:tracking-wider" : ""}`}>{translated}</span>
-                      <span className={`relative z-10 px-1.5 py-0.5 rounded-full text-[10px] font-bold transition-all duration-300 min-w-[18px] flex items-center justify-center ${
-                        isActive
-                          ? "bg-white/25 text-white shadow-sm"
-                          : "bg-white/10 text-white/60 group-hover:bg-white/20 group-hover:text-white/90 group-hover:scale-110"
+                    aria-label={`Filtrer par ${translated}`}
+                    style={{
+                      fontFamily: 'Montserrat, sans-serif',
+                      letterSpacing: '0.01em',
+                    }}
+                  >
+
+                    <span className={`relative z-10 transition-all duration-300 ${isActive ? "text-white scale-105" : "text-white/70 group-hover:text-white group-hover:scale-110"}`} style={{ width: '14px', height: '14px' }}>
+                      {icon}
+                    </span>
+                    <span className={`relative z-10 whitespace-nowrap text-xs transition-all duration-300 ${!isActive ? "group-hover:tracking-wider" : ""}`}>{translated}</span>
+                    <span className={`relative z-10 px-1.5 py-0.5 rounded-full text-[10px] font-bold transition-all duration-300 min-w-[18px] flex items-center justify-center ${isActive
+                      ? "bg-white/25 text-white shadow-sm"
+                      : "bg-white/10 text-white/60 group-hover:bg-white/20 group-hover:text-white/90 group-hover:scale-110"
                       }`}>
-                        {count}
-                      </span>
-                    </button>
-                  )
-                })}
-                </div>
+                      {count}
+                    </span>
+                  </button>
+                )
+              })}
             </div>
+          </div>
 
           {/* Portfolio Grid - Premium Cards */}
           {filteredProjects.length === 0 ? (
@@ -615,19 +608,16 @@ export default function RealisationsPage() {
                           muted
                           playsInline
                           preload="auto"
-                          className="h-full w-full object-cover transition duration-700 ease-out group-hover:scale-105"
+                          className="h-full w-full object-cover"
                         />
                       ) : (
-                        <Image
+                        <img
                           src={project.image || "/placeholder.jpg"}
                           alt={project.title}
-                          fill
-                          className={`object-cover transition duration-700 ease-out group-hover:scale-105 ${
-                            project.id === 8 ? "rotate-[-90deg]" : ""
-                          }`}
+                          className="absolute inset-0 h-full w-full object-cover"
                           style={project.id === 8 ? { transform: "rotate(-90deg) scale(1.3)" } : undefined}
-                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 30vw"
-                          loading="lazy"
+                          loading="eager"
+                          decoding="sync"
                         />
                       )}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
@@ -666,7 +656,7 @@ export default function RealisationsPage() {
                 <span className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/20 via-transparent to-cyan-400/20 opacity-50 blur-xl" />
                 <span className="relative z-10">{t("realisationsPage.ctaBadge")}</span>
               </span>
-              
+
               {/* Enhanced Text */}
               <p className="text-xl font-bold md:text-2xl leading-relaxed text-white/95">
                 {t("realisationsPage.ctaText1")}{' '}
@@ -678,7 +668,7 @@ export default function RealisationsPage() {
                 </span>
                 {' '}{t("realisationsPage.ctaText3")}
               </p>
-              
+
               {/* Premium Button */}
               <Link
                 href="/#rendez-vous"
@@ -686,19 +676,19 @@ export default function RealisationsPage() {
                   const currentPath = window.location.pathname
                   if (currentPath !== "/") {
                     e.preventDefault()
-                    
+
                     // Simple navigation - NO OVERLAY, just smooth navigation
                     sessionStorage.setItem('navFromSpecialPage', 'true')
-                    
+
                     // Remove any existing overlay (cleanup)
                     const existingOverlay = document.getElementById('nav-transition-overlay')
                     if (existingOverlay) {
                       existingOverlay.remove()
                     }
-                    
+
                     // Prefetch BEFORE navigation for faster loading
                     router.prefetch(`/?skipIntro=true#rendez-vous`)
-                    
+
                     // Navigate immediately - simple and fast
                     router.push(`/?skipIntro=true#rendez-vous`)
                   }

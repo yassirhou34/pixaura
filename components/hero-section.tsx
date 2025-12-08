@@ -13,7 +13,7 @@ const heroProjects = [
     client: "Touraine Cars",
     title: "Night Drive Experience",
     category: "Film • Activation",
-    image: "/Banque d_images/Copie de M7_03225 - Copie.jpg",
+    image: "/Banque d_images/Copie de M7_03225.jpg",
   },
   {
     id: 2,
