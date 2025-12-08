@@ -1,5 +1,0 @@
-# Ignore large files that might cause build issues
-public/Banque d_images/*.mp4
-public/Banque d_images/*.mov
-public/Banque d_images/*.avi
-
