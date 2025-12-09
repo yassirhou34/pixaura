@@ -166,7 +166,7 @@ export function Footer() {
                           <Phone className="relative h-3.5 w-3.5 text-white/40 group-hover/item:text-cyan-400 transition-all duration-400" />
                         </div>
                         <span className="leading-relaxed group-hover/item:translate-x-1 transition-transform duration-400">
-                          +33 6 17 48 88 01
+                          +33 6 77 88 44 69 
                         </span>
                       </a>
                     </li>
@@ -244,7 +244,7 @@ export function Footer() {
                 </li>
                 <li className="group flex items-start gap-3 hover:text-white transition-colors">
                   <Phone className="h-4 w-4 text-white/60 group-hover:text-cyan-400 transition-colors flex-shrink-0 mt-0.5" />
-                  <a href="tel:+33617488801" className="hover:text-cyan-400 transition-colors">+33 6 17 48 88 01</a>
+                  <a href="tel:+33617488801" className="hover:text-cyan-400 transition-colors">+33 6 77 88 44 69 </a>
                 </li>
                 <li className="flex items-start gap-3 text-white/60">
                   <MapPin className="h-4 w-4 flex-shrink-0 mt-0.5" />

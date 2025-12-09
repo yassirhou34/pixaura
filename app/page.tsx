@@ -25,9 +25,39 @@ export default function Home() {
   useLayoutEffect(() => {
     if (typeof document === 'undefined') return
 
-    // Preload the first hero image (Night Drive Experience) immediately
-    const firstHeroImage = "/Banque d_images/Copie de M7_03225.jpg"
-    // REMOVED: Aggressive preload - let images load naturally to save bandwidth
+    // Preload all hero images immediately
+    const heroImages = [
+      "/Banque d_images/Copie de M7_03225.jpg",
+      "/Banque d_images/StageUfc.jpg",
+      "/Banque d_images/Copie de M7_01248.jpg"
+    ]
+
+    // Create link elements for aggressive preloading
+    const links: HTMLLinkElement[] = []
+
+    heroImages.forEach(src => {
+      const link = document.createElement('link')
+      link.rel = 'preload'
+      link.as = 'image'
+      link.href = src
+      link.fetchPriority = 'high'
+      document.head.appendChild(link)
+      links.push(link)
+
+      // Also construct Image object for immediate browser cache priming
+      const img = new Image()
+      img.src = src
+    })
+
+    // We can leave these in the head as they are beneficial for the session
+    // but cleaning them up on unmount is good practice
+    return () => {
+      links.forEach(link => {
+        if (link.parentNode) {
+          link.parentNode.removeChild(link)
+        }
+      })
+    }
   }, [])
 
   // Use useLayoutEffect to check URL parameter and handle scroll
@@ -37,18 +67,18 @@ export default function Home() {
     const urlParams = new URLSearchParams(window.location.search)
     const skipIntroParam = urlParams.get('skipIntro')
     const hash = window.location.hash.substring(1) // Remove the # symbol
-    
+
     if (skipIntroParam === 'true') {
       // Skip intro immediately - before any paint happens
       setIntroComplete(true)
-      
+
       // Remove the parameter from URL without reload
       urlParams.delete('skipIntro')
-      const newUrl = urlParams.toString() 
+      const newUrl = urlParams.toString()
         ? `${window.location.pathname}?${urlParams.toString()}${hash ? `#${hash}` : ''}`
         : `${window.location.pathname}${hash ? `#${hash}` : ''}`
       window.history.replaceState({}, '', newUrl)
-      
+
       // Don't scroll here - let useEffect handle it after content renders
       // Just ensure we're at top initially
       window.scrollTo({ top: 0, behavior: 'instant' })
@@ -70,7 +100,7 @@ export default function Home() {
         // Check if we came from realisations or humind (via sessionStorage)
         const cameFromSpecialPage = sessionStorage.getItem('navFromSpecialPage') === 'true'
         sessionStorage.removeItem('navFromSpecialPage')
-        
+
         // Scroll immediately if coming from special page, otherwise wait a bit
         const scrollToSection = () => {
           try {
@@ -80,7 +110,7 @@ export default function Home() {
               const navbarHeight = 80
               const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
               const offsetPosition = elementPosition - navbarHeight
-              
+
               // Use instant scroll if coming from realisations/humind to avoid white flash
               window.scrollTo({
                 top: offsetPosition,
@@ -91,7 +121,7 @@ export default function Home() {
             // Silent error handling - don't break navigation
           }
         }
-        
+
         if (cameFromSpecialPage) {
           // Try immediately, then retry if element not ready
           scrollToSection()
@@ -114,16 +144,16 @@ export default function Home() {
     }
     return false
   })
-  
+
   const contentTransition = useMemo(
     () =>
       [
         "relative z-10",
         // Instant render if coming from special page, otherwise use transition
-        cameFromSpecialPage 
-          ? "opacity-100 translate-y-0 scale-100 blur-0" 
-          : introComplete 
-            ? "transition-all duration-[1400ms] ease-[cubic-bezier(0.16,0.84,0.34,1)] opacity-100 translate-y-0 scale-100 blur-0" 
+        cameFromSpecialPage
+          ? "opacity-100 translate-y-0 scale-100 blur-0"
+          : introComplete
+            ? "transition-all duration-[1400ms] ease-[cubic-bezier(0.16,0.84,0.34,1)] opacity-100 translate-y-0 scale-100 blur-0"
             : "pointer-events-none opacity-0 translate-y-6 scale-[0.97] blur-sm",
       ].join(" "),
     [introComplete, cameFromSpecialPage]

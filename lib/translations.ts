@@ -306,7 +306,7 @@ export const translations = {
       humind: 'Humind',
       copyright: '© 2025 Pixaura International — Tous droits réservés.',
       designBy: 'Design et développement par',
-      location: 'Lyon, France',
+      location: 'Tours, France',
       hours: 'Lun–Ven, 9h–18h30',
     },
     // Contact page
@@ -878,7 +878,7 @@ export const translations = {
       humind: 'Humind',
       copyright: '© 2025 Pixaura International — All rights reserved.',
       designBy: 'Design and development by',
-      location: 'Lyon, France',
+      location: 'Tours, France',
       hours: 'Mon–Fri, 9am–6:30pm',
     },
     // Contact page

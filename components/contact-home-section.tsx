@@ -120,16 +120,15 @@ export function ContactHomeSection() {
                     <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-r from-primary to-cyan-400 flex items-center justify-center shadow-[0_0_30px_rgba(0,115,255,0.4)]">
                       <Check className="w-10 h-10 text-black" />
                     </div>
-                    <h3 className="text-3xl font-black text-white mb-4" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+                    <h3 className="text-3xl font-black text-white mb-4">
                       {t("contactHome.thankYou")}
                     </h3>
-                    <p className="text-lg text-white/80 mb-8" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+                    <p className="text-lg text-white/80 mb-8">
                       {t("contactHome.contactWithin48h")}
                     </p>
                     <Link 
                       href="/"
                       className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-primary to-cyan-400 text-white font-bold rounded-full hover:scale-105 transition-all duration-300 shadow-[0_0_20px_rgba(0,115,255,0.3)] hover:shadow-[0_0_30px_rgba(0,115,255,0.5)]"
-                      style={{ fontFamily: 'Montserrat, sans-serif' }}
                     >
                       {t("contactHome.backToHome")}
                       <ArrowRight className="w-5 h-5" />
@@ -179,11 +178,11 @@ export function ContactHomeSection() {
                   {/* Step 1: Besoin */}
                   {currentStep === 1 && (
                     <div className="space-y-6 animate-fadeIn">
-                      <h3 className="text-2xl font-bold text-white mb-6" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+                      <h3 className="text-2xl font-bold text-white mb-6">
                         {t("contactHome.step1")}
                       </h3>
                       <div>
-                        <label className="block text-sm font-semibold text-white/80 mb-2" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+                        <label className="block text-sm font-semibold text-white/80 mb-2">
                           {t("contactHome.describeProject")}
                         </label>
                         <textarea
@@ -202,11 +201,11 @@ export function ContactHomeSection() {
                   {/* Step 2: Budget */}
                   {currentStep === 2 && (
                     <div className="space-y-6 animate-fadeIn">
-                      <h3 className="text-2xl font-bold text-white mb-6" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+                      <h3 className="text-2xl font-bold text-white mb-6">
                         {t("contactHome.step2")}
                       </h3>
                       <div>
-                        <label className="block text-sm font-semibold text-white/80 mb-2" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+                        <label className="block text-sm font-semibold text-white/80 mb-2">
                           {t("contactHome.estimatedBudget")}
                         </label>
                         <select
@@ -229,11 +228,11 @@ export function ContactHomeSection() {
                   {/* Step 3: Délai */}
                   {currentStep === 3 && (
                     <div className="space-y-6 animate-fadeIn">
-                      <h3 className="text-2xl font-bold text-white mb-6" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+                      <h3 className="text-2xl font-bold text-white mb-6">
                         {t("contactHome.step3")}
                       </h3>
                       <div>
-                        <label className="block text-sm font-semibold text-white/80 mb-2" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+                        <label className="block text-sm font-semibold text-white/80 mb-2">
                           {t("contactHome.desiredTimeline")}
                         </label>
                         <select
@@ -256,11 +255,11 @@ export function ContactHomeSection() {
                   {/* Step 4: Secteur */}
                   {currentStep === 4 && (
                     <div className="space-y-6 animate-fadeIn">
-                      <h3 className="text-2xl font-bold text-white mb-6" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+                      <h3 className="text-2xl font-bold text-white mb-6">
                         {t("contactHome.step4")}
                       </h3>
                       <div>
-                        <label className="block text-sm font-semibold text-white/80 mb-2" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+                        <label className="block text-sm font-semibold text-white/80 mb-2">
                           {t("contactHome.sector")}
                         </label>
                         <select
@@ -289,7 +288,7 @@ export function ContactHomeSection() {
                           required
                           className="mt-1 w-5 h-5 rounded border-white/20 bg-white/5 text-primary focus:ring-2 focus:ring-primary/20"
                         />
-                        <label className="text-sm text-white/80" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+                        <label className="text-sm text-white/80">
                           {t("contactHome.privacyAccept")}
                         </label>
                       </div>

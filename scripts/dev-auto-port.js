@@ -23,7 +23,8 @@ async function getAvailablePort() {
 
 (async () => {
   const port = await getAvailablePort();
-  const proc = spawn('next', ['dev', '-p', port.toString()], {
+  // Use --webpack to disable Turbopack (fixes jsx-dev-runtime HMR issue)
+  const proc = spawn('next', ['dev', '--webpack', '-p', port.toString()], {
     stdio: 'inherit',
     shell: true,
     env: process.env
