@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import { Mail, Phone, MapPin, Clock, Instagram, Linkedin, Music2, Youtube, Sparkles } from "lucide-react"
+import { Mail, Phone, MapPin, Clock, Instagram, Linkedin, Music2, Youtube } from "lucide-react"
 import { useTranslation } from "@/contexts/translation-context"
 
 export function Footer() {
@@ -69,7 +69,6 @@ export function Footer() {
               }} />
               {/* Animated Border Glow */}
               <div className="absolute inset-0 rounded-full border border-cyan-400/0 group-hover:border-cyan-400/30 transition-all duration-500" />
-              <Sparkles className="relative h-3 w-3 text-cyan-400 animate-pulse" />
               <span className="relative">{t("footer.production")}</span>
             </div>
 
@@ -166,7 +165,7 @@ export function Footer() {
                           <Phone className="relative h-3.5 w-3.5 text-white/40 group-hover/item:text-cyan-400 transition-all duration-400" />
                         </div>
                         <span className="leading-relaxed group-hover/item:translate-x-1 transition-transform duration-400">
-                          +33 6 77 88 44 69 
+                          06 77 88 44 69
                         </span>
                       </a>
                     </li>
@@ -244,7 +243,7 @@ export function Footer() {
                 </li>
                 <li className="group flex items-start gap-3 hover:text-white transition-colors">
                   <Phone className="h-4 w-4 text-white/60 group-hover:text-cyan-400 transition-colors flex-shrink-0 mt-0.5" />
-                  <a href="tel:+33617488801" className="hover:text-cyan-400 transition-colors">+33 6 77 88 44 69 </a>
+                  <a href="tel:+33617488801" className="hover:text-cyan-400 transition-colors">06 77 88 44 69</a>
                 </li>
                 <li className="flex items-start gap-3 text-white/60">
                   <MapPin className="h-4 w-4 flex-shrink-0 mt-0.5" />
@@ -290,12 +289,6 @@ export function Footer() {
           <div className="md:hidden absolute top-0 left-1/2 -translate-x-1/2 w-32 h-[1px] bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent" />
           
           <p className="relative">{t("footer.copyright")}</p>
-          <p className="relative">
-            {t("footer.designBy")} <span className="text-white hover:text-cyan-400 transition-colors cursor-pointer relative group">
-              <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-cyan-400 transition-all duration-300 group-hover:w-full"></span>
-              Pixaura_IT
-            </span>.
-          </p>
         </div>
       </div>
     </footer>

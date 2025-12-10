@@ -540,7 +540,7 @@ export function PortfolioSection() {
                 )
               })}
             </div>
-            <Reveal delay={260} className="latest-cta">
+            <Reveal delay={260} className="latest-cta flex justify-center">
               <Link
                 href="/realisations"
                 className="group inline-flex items-center justify-center gap-3 rounded-full border border-white/25 bg-white/5 px-8 py-3 text-xs font-semibold uppercase tracking-[0.3em] text-white transition duration-300 hover:border-white/40 hover:bg-white/10"

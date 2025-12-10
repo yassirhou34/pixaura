@@ -7,29 +7,29 @@ import { Sparkles, ArrowRight } from "lucide-react"
 import { Reveal } from "@/components/reveal"
 import { useTranslation } from "@/contexts/translation-context"
 
-const values = [
-  {
-    badge: "Créativité",
-    title: "Créativité contemporaine",
-    description: "Direction artistique, storytelling visuel, esthétique inspirée des codes cinématiques.",
-    gradient: "from-purple-500 via-pink-500 to-purple-600",
-  },
-  {
-    badge: "Intelligence",
-    title: "Intelligence stratégique",
-    description: "Maîtrise des algorithmes, data, performance marketing et ciblage digital.",
-    gradient: "from-blue-500 via-cyan-500 to-blue-600",
-  },
-  {
-    badge: "Transmission",
-    title: "Transmission & accompagnement",
-    description: "Formations, ateliers, accompagnement stratégique pour faire grandir les marques.",
-    gradient: "from-emerald-500 via-teal-500 to-emerald-600",
-  },
-]
-
 export function AgenceHomeSection() {
   const { t } = useTranslation()
+  
+  const values = [
+    {
+      badge: t("agenceHome.value1Badge"),
+      title: t("agenceHome.value1Title"),
+      description: t("agenceHome.value1Desc"),
+      gradient: "from-purple-500 via-pink-500 to-purple-600",
+    },
+    {
+      badge: t("agenceHome.value2Badge"),
+      title: t("agenceHome.value2Title"),
+      description: t("agenceHome.value2Desc"),
+      gradient: "from-blue-500 via-cyan-500 to-blue-600",
+    },
+    {
+      badge: t("agenceHome.value3Badge"),
+      title: t("agenceHome.value3Title"),
+      description: t("agenceHome.value3Desc"),
+      gradient: "from-emerald-500 via-teal-500 to-emerald-600",
+    },
+  ]
   
   const founders = [
     {
@@ -50,21 +50,21 @@ export function AgenceHomeSection() {
 
   const commitments = [
     {
-      badge: "Transparence",
-      title: "Transparence & contrat clair",
-      description: "CGV et droit à l'image sécurisés.",
+      badge: t("agenceHome.commitment1Badge"),
+      title: t("agenceHome.commitment1Title"),
+      description: t("agenceHome.commitment1Desc"),
       gradient: "from-blue-500 via-cyan-500 to-blue-600",
     },
     {
-      badge: "Excellence",
-      title: "Excellence mesurable",
-      description: "KPI, reporting, ROI mensuel.",
+      badge: t("agenceHome.commitment2Badge"),
+      title: t("agenceHome.commitment2Title"),
+      description: t("agenceHome.commitment2Desc"),
       gradient: "from-purple-500 via-pink-500 to-purple-600",
     },
     {
-      badge: "Vision",
-      title: "Vision responsable",
-      description: "Production locale, engagement durable et éthique.",
+      badge: t("agenceHome.commitment3Badge"),
+      title: t("agenceHome.commitment3Title"),
+      description: t("agenceHome.commitment3Desc"),
       gradient: "from-emerald-500 via-teal-500 to-emerald-600",
     },
   ]
@@ -146,7 +146,6 @@ export function AgenceHomeSection() {
         <Reveal>
           <div className="mb-16 text-left">
             <span className="inline-flex w-fit items-center gap-3 rounded-full border border-white/20 bg-white/10 px-6 py-2 text-sm font-semibold uppercase tracking-[0.5em] text-white shadow-[0_0_35px_rgba(89,129,255,0.25)] backdrop-blur-md">
-              <Sparkles className="h-3.5 w-3.5 text-sky-300" />
               {t("agenceHome.teamBadge")}
             </span>
             <h2 className="mt-8 text-4xl font-black leading-tight text-white md:text-5xl lg:text-6xl text-left">

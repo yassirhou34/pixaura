@@ -173,7 +173,7 @@ const projects = [
   },
 ]
 
-// Icons mapping
+// Icons mapping (no longer used, but kept for potential future use)
 const formatIcons: Record<string, React.ReactElement> = {
   "Branding": <Palette className="w-4 h-4" />,
 }
@@ -232,7 +232,7 @@ export default function RealisationsPage() {
   const [activeFilter, setActiveFilter] = useState<string>(t("realisationsPage.filterAll"))
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedProject, setSelectedProject] = useState<typeof translatedProjects[0] | null>(null)
-  const [isSticky, setIsSticky] = useState(false)
+
   const filtersRef = useRef<HTMLDivElement>(null)
 
   // Filter projects based on active filter (only one filter can be active at a time)
@@ -303,45 +303,8 @@ export default function RealisationsPage() {
     setIsModalOpen(true)
   }
 
-  // Sticky filters on scroll with smooth transitions
-  useEffect(() => {
-    let ticking = false
-
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          if (filtersRef.current) {
-            const rect = filtersRef.current.getBoundingClientRect()
-            const shouldBeSticky = rect.top <= 10 && window.scrollY > 200
-            setIsSticky(shouldBeSticky)
-          }
-          ticking = false
-        })
-        ticking = true
-      }
-    }
-
-    window.addEventListener("scroll", handleScroll, { passive: true })
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
-
-  // Mouse position tracking for background gradient
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-  const sectionRef = useRef<HTMLElement>(null)
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (sectionRef.current) {
-        const rect = sectionRef.current.getBoundingClientRect()
-        setMousePosition({
-          x: e.clientX - rect.left,
-          y: e.clientY - rect.top,
-        })
-      }
-    }
-    window.addEventListener("mousemove", handleMouseMove)
-    return () => window.removeEventListener("mousemove", handleMouseMove)
-  }, [])
+  // Sticky filters logic removed for performance/stability - using simple CSS sticky
+  // Mouse position tracking removed for performance
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-transparent">
@@ -409,12 +372,12 @@ export default function RealisationsPage() {
         />
       </div>
 
-      <section ref={sectionRef} className="relative pt-40 pb-20 px-6 bg-transparent overflow-visible">
+      <section className="relative pt-40 pb-20 px-6 bg-transparent overflow-visible">
         <div className="relative z-10 mx-auto max-w-6xl space-y-12">
           <div className="relative overflow-hidden px-6 py-12 text-center text-white md:px-10 md:py-16">
             <div className="relative mx-auto flex max-w-4xl flex-col items-center gap-6">
-              <span className="relative inline-flex items-center gap-3 rounded-full border border-white/30 bg-gradient-to-br from-white/15 via-white/10 to-white/5 px-6 py-2.5 text-[11px] font-semibold uppercase tracking-[0.32em] text-white/90 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,115,255,0.15)]">
-                <span className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/20 via-transparent to-cyan-400/20 opacity-50 blur-xl" />
+              <span className="relative inline-flex items-center gap-3 rounded-full border border-white/30 bg-black/50 px-6 py-2.5 text-[11px] font-semibold uppercase tracking-[0.32em] text-white/90 shadow-[0_8px_32px_rgba(0,115,255,0.15)]">
+                <span className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/20 via-transparent to-cyan-400/20 opacity-50" />
                 <span className="relative z-10">{t("realisationsPage.badge")}</span>
               </span>
               <h1 className="text-4xl font-black leading-tight md:text-5xl relative" style={{ fontFamily: "Montserrat, sans-serif" }}>
@@ -430,32 +393,29 @@ export default function RealisationsPage() {
                 </span>
               </h1>
               <p className="text-sm text-white/80 md:text-base leading-relaxed max-w-2xl">
-                Inspirez-vous de notre portfolio : un mix de formats premium conçus pour créer de l’impact, de l’émotion et des résultats mesurables.
+                {t("realisationsPage.description")}
               </p>
               <div className="mt-6 flex flex-wrap justify-center gap-3 text-xs uppercase tracking-[0.28em]">
-                <div className="group relative inline-flex items-center gap-2 rounded-full border border-white/25 bg-gradient-to-br from-white/12 via-white/8 to-white/5 px-5 py-2.5 backdrop-blur-xl shadow-[0_4px_20px_rgba(0,115,255,0.1)] transition-all duration-300 hover:border-white/40 hover:bg-white/15 hover:shadow-[0_8px_30px_rgba(0,115,255,0.2)]">
-                  <span className="h-2 w-2 rounded-full bg-gradient-to-br from-primary/90 to-primary/70 shadow-[0_0_8px_rgba(0,115,255,0.6)]" />
-                  <span className="text-white/80 group-hover:text-white transition-colors duration-300">{t("realisationsPage.filterFilmVideo")}</span>
+                <div className="group relative inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/40 px-5 py-2.5 shadow-[0_4px_20px_rgba(0,115,255,0.1)]">
+                  <span className="h-2 w-2 rounded-full bg-[#0073FF] shadow-[0_0_8px_rgba(0,115,255,0.6)]" />
+                  <span className="text-white/80">{t("realisationsPage.filterFilmVideo")}</span>
                 </div>
-                <div className="group relative inline-flex items-center gap-2 rounded-full border border-white/25 bg-gradient-to-br from-white/12 via-white/8 to-white/5 px-5 py-2.5 backdrop-blur-xl shadow-[0_4px_20px_rgba(52,211,153,0.1)] transition-all duration-300 hover:border-white/40 hover:bg-white/15 hover:shadow-[0_8px_30px_rgba(52,211,153,0.2)]">
-                  <span className="h-2 w-2 rounded-full bg-gradient-to-br from-cyan-400/90 to-cyan-400/70 shadow-[0_0_8px_rgba(52,211,153,0.6)]" />
-                  <span className="text-white/80 group-hover:text-white transition-colors duration-300">{t("realisationsPage.filterPhoto")}</span>
+                <div className="group relative inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/40 px-5 py-2.5 shadow-[0_4px_20px_rgba(52,211,153,0.1)]">
+                  <span className="h-2 w-2 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]" />
+                  <span className="text-white/80">{t("realisationsPage.filterPhoto")}</span>
                 </div>
-                <div className="group relative inline-flex items-center gap-2 rounded-full border border-white/25 bg-gradient-to-br from-white/12 via-white/8 to-white/5 px-5 py-2.5 backdrop-blur-xl shadow-[0_4px_20px_rgba(255,255,255,0.1)] transition-all duration-300 hover:border-white/40 hover:bg-white/15 hover:shadow-[0_8px_30px_rgba(255,255,255,0.2)]">
-                  <span className="h-2 w-2 rounded-full bg-gradient-to-br from-white/90 to-white/70 shadow-[0_0_8px_rgba(255,255,255,0.4)]" />
-                  <span className="text-white/80 group-hover:text-white transition-colors duration-300">{t("realisationsPage.filterActivation")}</span>
+                <div className="group relative inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/40 px-5 py-2.5 shadow-[0_4px_20px_rgba(255,255,255,0.1)]">
+                  <span className="h-2 w-2 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.4)]" />
+                  <span className="text-white/80">{t("realisationsPage.filterActivation")}</span>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Sticky Filters Section - Premium Design */}
+          {/* Sticky Filters Section - Simplified */}
           <div
             ref={filtersRef}
-            className={`mb-12 space-y-6 transition-all duration-300 ${isSticky
-              ? "sticky top-0 z-30 py-3"
-              : ""
-              }`}
+            className="mb-12 space-y-6 sticky top-0 z-30 py-3 bg-transparent"
           >
             {/* All Filters Combined in One Line - Ultra Premium Design */}
             {/* Mobile: horizontal scroll, Desktop: centered */}
@@ -466,9 +426,9 @@ export default function RealisationsPage() {
               {/* Tous Button */}
               <button
                 onClick={() => setActiveFilter(t("realisationsPage.filterAll"))}
-                className={`group relative px-5 py-2.5 rounded-full font-medium text-xs transition-all duration-300 ease-out flex items-center gap-2 backdrop-blur-xl flex-shrink-0 overflow-visible cursor-pointer ${activeFilter === t("realisationsPage.filterAll")
-                  ? "bg-gradient-to-br from-[#0073FF] via-[#0066E6] to-[#0052CC] text-white shadow-[0_8px_24px_rgba(0,115,255,0.4)] border border-white/40"
-                  : "bg-gradient-to-br from-white/12 via-white/8 to-white/5 text-white/75 border border-white/20 hover:bg-gradient-to-br hover:from-white/18 hover:via-white/12 hover:to-white/8 hover:text-white hover:border-white/30"
+                className={`group relative px-5 py-2.5 rounded-full font-medium text-xs flex items-center gap-2 flex-shrink-0 overflow-visible cursor-pointer ${activeFilter === t("realisationsPage.filterAll")
+                  ? "bg-[#0073FF] text-white shadow-[0_8px_24px_rgba(0,115,255,0.4)] border border-white/40"
+                  : "bg-white/10 text-white/75 border border-white/20 hover:bg-white/20 hover:text-white"
                   }`}
                 aria-label="Afficher tous les projets"
                 style={{
@@ -476,10 +436,6 @@ export default function RealisationsPage() {
                   letterSpacing: '0.01em',
                 }}
               >
-
-                <span className={`relative z-10 transition-all duration-300 ${activeFilter === t("realisationsPage.filterAll") ? "text-white scale-105" : "text-white/70 group-hover:text-white group-hover:scale-110"}`} style={{ width: '14px', height: '14px' }}>
-                  <Briefcase className="w-3.5 h-3.5" />
-                </span>
                 <span className={`relative z-10 whitespace-nowrap text-xs transition-all duration-300 ${activeFilter !== t("realisationsPage.filterAll") ? "group-hover:tracking-wider" : ""}`}>{t("realisationsPage.filterAll")}</span>
                 <span className={`relative z-10 px-1.5 py-0.5 rounded-full text-[10px] font-bold transition-all duration-300 min-w-[18px] flex items-center justify-center ${activeFilter === t("realisationsPage.filterAll")
                   ? "bg-white/25 text-white shadow-sm"
@@ -491,17 +447,17 @@ export default function RealisationsPage() {
 
               {/* Format Filters */}
               {[
-                { original: "Branding", translated: t("realisationsPage.filterBranding"), icon: formatIcons["Branding"] }
-              ].map(({ original, translated, icon }) => {
+                { original: "Branding", translated: t("realisationsPage.filterBranding") }
+              ].map(({ original, translated }) => {
                 const isActive = activeFilter === translated
                 const count = filterCounts[translated] || 0
                 return (
                   <button
                     key={`format-${original}`}
                     onClick={() => setActiveFilter(translated)}
-                    className={`group relative px-5 py-2.5 rounded-full font-medium text-xs transition-all duration-300 ease-out flex items-center gap-2 backdrop-blur-xl flex-shrink-0 overflow-visible cursor-pointer ${isActive
-                      ? "bg-gradient-to-br from-[#0073FF] via-[#0066E6] to-[#0052CC] text-white shadow-[0_8px_24px_rgba(0,115,255,0.4)] border border-white/40"
-                      : "bg-gradient-to-br from-white/12 via-white/8 to-white/5 text-white/75 border border-white/20 hover:bg-gradient-to-br hover:from-white/18 hover:via-white/12 hover:to-white/8 hover:text-white hover:border-white/30"
+                    className={`group relative px-5 py-2.5 rounded-full font-medium text-xs flex items-center gap-2 flex-shrink-0 overflow-visible cursor-pointer ${isActive
+                      ? "bg-[#0073FF] text-white shadow-[0_8px_24px_rgba(0,115,255,0.4)] border border-white/40"
+                      : "bg-white/10 text-white/75 border border-white/20 hover:bg-white/20 hover:text-white"
                       }`}
                     aria-label={`Filtrer par ${translated}`}
                     style={{
@@ -509,10 +465,6 @@ export default function RealisationsPage() {
                       letterSpacing: '0.01em',
                     }}
                   >
-
-                    <span className={`relative z-10 transition-all duration-300 ${isActive ? "text-white scale-105" : "text-white/70 group-hover:text-white group-hover:scale-110"}`} style={{ width: '14px', height: '14px' }}>
-                      {icon}
-                    </span>
                     <span className={`relative z-10 whitespace-nowrap text-xs transition-all duration-300 ${!isActive ? "group-hover:tracking-wider" : ""}`}>{translated}</span>
                     <span className={`relative z-10 px-1.5 py-0.5 rounded-full text-[10px] font-bold transition-all duration-300 min-w-[18px] flex items-center justify-center ${isActive
                       ? "bg-white/25 text-white shadow-sm"
@@ -526,21 +478,21 @@ export default function RealisationsPage() {
 
               {/* Sector Filters */}
               {[
-                { original: "Automobile", translated: t("realisationsPage.filterAutomobile"), icon: sectorIcons["Automobile"] },
-                { original: "Immobilier", translated: t("realisationsPage.filterRealEstate"), icon: sectorIcons["Immobilier"] },
-                { original: "Sport & Bien-être", translated: t("realisationsPage.filterSport"), icon: sectorIcons["Sport & Bien-être"] },
-                { original: "Restauration", translated: t("realisationsPage.filterRestaurant"), icon: sectorIcons["Restauration"] },
-                { original: "Artistes & Créateurs", translated: t("realisationsPage.filterArtists"), icon: sectorIcons["Artistes & Créateurs"] },
-              ].map(({ original, translated, icon }) => {
+                { original: "Automobile", translated: t("realisationsPage.filterAutomobile") },
+                { original: "Immobilier", translated: t("realisationsPage.filterRealEstate") },
+                { original: "Sport & Bien-être", translated: t("realisationsPage.filterSport") },
+                { original: "Restauration", translated: t("realisationsPage.filterRestaurant") },
+                { original: "Artistes & Créateurs", translated: t("realisationsPage.filterArtists") },
+              ].map(({ original, translated }) => {
                 const isActive = activeFilter === translated
                 const count = filterCounts[translated] || 0
                 return (
                   <button
                     key={`sector-${original}`}
                     onClick={() => setActiveFilter(translated)}
-                    className={`group relative px-5 py-2.5 rounded-full font-medium text-xs transition-all duration-300 ease-out flex items-center gap-2 backdrop-blur-xl flex-shrink-0 overflow-visible cursor-pointer ${isActive
-                      ? "bg-gradient-to-br from-[#0073FF] via-[#0066E6] to-[#0052CC] text-white shadow-[0_8px_24px_rgba(0,115,255,0.4)] border border-white/40"
-                      : "bg-gradient-to-br from-white/12 via-white/8 to-white/5 text-white/75 border border-white/20 hover:bg-gradient-to-br hover:from-white/18 hover:via-white/12 hover:to-white/8 hover:text-white hover:border-white/30"
+                    className={`group relative px-5 py-2.5 rounded-full font-medium text-xs flex items-center gap-2 flex-shrink-0 overflow-visible cursor-pointer ${isActive
+                      ? "bg-[#0073FF] text-white shadow-[0_8px_24px_rgba(0,115,255,0.4)] border border-white/40"
+                      : "bg-white/10 text-white/75 border border-white/20 hover:bg-white/20 hover:text-white"
                       }`}
                     aria-label={`Filtrer par ${translated}`}
                     style={{
@@ -548,10 +500,6 @@ export default function RealisationsPage() {
                       letterSpacing: '0.01em',
                     }}
                   >
-
-                    <span className={`relative z-10 transition-all duration-300 ${isActive ? "text-white scale-105" : "text-white/70 group-hover:text-white group-hover:scale-110"}`} style={{ width: '14px', height: '14px' }}>
-                      {icon}
-                    </span>
                     <span className={`relative z-10 whitespace-nowrap text-xs transition-all duration-300 ${!isActive ? "group-hover:tracking-wider" : ""}`}>{translated}</span>
                     <span className={`relative z-10 px-1.5 py-0.5 rounded-full text-[10px] font-bold transition-all duration-300 min-w-[18px] flex items-center justify-center ${isActive
                       ? "bg-white/25 text-white shadow-sm"
@@ -581,13 +529,9 @@ export default function RealisationsPage() {
               {filteredProjects.map((project, index) => (
                 <div
                   key={project.id}
-                  className="group relative overflow-hidden rounded-3xl border border-white/20 bg-gradient-to-br from-white/8 via-white/5 to-white/3 text-white backdrop-blur-2xl transition-all duration-500 ease-out hover:-translate-y-2 hover:scale-[1.02] hover:border-white/35 hover:bg-gradient-to-br hover:from-white/12 hover:via-white/8 hover:to-white/5 hover:shadow-[0_25px_80px_rgba(0,115,255,0.25),0_0_0_1px_rgba(255,255,255,0.1)]"
+                  className="group relative overflow-hidden rounded-3xl border border-white/20 bg-black/40 text-white isolation-isolate transform-gpu will-change-transform"
+                  style={{ transform: 'translate3d(0,0,0)', backfaceVisibility: 'hidden' }}
                 >
-                  <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 ease-out group-hover:opacity-100">
-                    <div className="absolute -inset-8 rounded-[40px] bg-gradient-to-r from-primary/30 via-white/15 to-cyan-400/30 blur-3xl" />
-                    <div className="absolute inset-0 rounded-[30px] bg-gradient-to-br from-primary/10 via-transparent to-cyan-400/10" />
-                    <div className="absolute inset-0 rounded-[30px] border border-white/30 opacity-80" />
-                  </div>
                   <button
                     type="button"
                     onClick={() => handleProjectClick(project)}
@@ -599,7 +543,7 @@ export default function RealisationsPage() {
                     }}
                     className="w-full text-left"
                   >
-                    <div className="relative h-64 w-full overflow-hidden">
+                    <div className="relative h-64 w-full overflow-hidden bg-black/20 will-change-transform" style={{ backfaceVisibility: 'hidden', transform: 'translate3d(0,0,0)' }}>
                       {project.video && project.id !== 8 ? (
                         <video
                           src={project.video}
@@ -611,17 +555,20 @@ export default function RealisationsPage() {
                           className="h-full w-full object-cover"
                         />
                       ) : (
-                        <img
-                          src={project.image || "/placeholder.jpg"}
-                          alt={project.title}
-                          className="absolute inset-0 h-full w-full object-cover"
-                          style={project.id === 8 ? { transform: "rotate(-90deg) scale(1.3)" } : undefined}
-                          loading="eager"
-                          decoding="sync"
-                        />
+                        <div className="relative h-full w-full">
+                          <Image
+                            src={project.image || "/placeholder.jpg"}
+                            alt={project.title}
+                            fill
+                            priority={true}
+                            className="object-cover"
+                            style={project.id === 8 ? { transform: "rotate(-90deg) scale(1.3)" } : undefined}
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          />
+                        </div>
                       )}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-                      <span className="absolute bottom-5 left-5 rounded-full border border-white/30 bg-gradient-to-br from-white/20 via-white/15 to-white/10 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.32em] text-white/90 backdrop-blur-xl shadow-[0_4px_16px_rgba(0,0,0,0.3)]">
+                      <span className="absolute bottom-5 left-5 rounded-full border border-white/30 bg-black/40 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.32em] text-white/90 shadow-[0_4px_16px_rgba(0,0,0,0.3)]">
                         {project.category}
                       </span>
                     </div>
@@ -693,7 +640,7 @@ export default function RealisationsPage() {
                     router.push(`/?skipIntro=true#rendez-vous`)
                   }
                 }}
-                className="group relative inline-flex items-center gap-3 rounded-full bg-gradient-to-br from-[#0073FF] via-[#0066E6] to-[#0052CC] px-12 py-5 text-sm font-bold uppercase tracking-[0.28em] text-white transition-all duration-300 hover:scale-105 hover:shadow-[0_12px_40px_rgba(0,115,255,0.5)] shadow-[0_8px_24px_rgba(0,115,255,0.4)] border border-white/20"
+                className="group relative inline-flex items-center gap-3 rounded-full bg-[#0073FF] px-12 py-5 text-sm font-bold uppercase tracking-[0.28em] text-white shadow-[0_8px_24px_rgba(0,115,255,0.4)] border border-white/20"
               >
                 <span className="absolute inset-0 rounded-full bg-gradient-to-r from-white/20 via-transparent to-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <span className="relative z-10">{t("realisationsPage.ctaButton")}</span>

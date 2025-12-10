@@ -69,7 +69,7 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
     stage === "hold" || stage === "transition" || stage === "finishing"
       ? "/Banque d_images/Backv2.mp4"
       : "/Banque d_images/back3.mp4"
-  
+
   const [videoLoaded, setVideoLoaded] = useState(false)
   const [videoError, setVideoError] = useState(false)
   const videoRef = useRef<HTMLVideoElement | null>(null)
@@ -330,10 +330,10 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
     if (video && backgroundVideo) {
       // Reset loaded state when video changes
       setVideoLoaded(false)
-      
+
       // Set source immediately (preload is already set in JSX to "metadata")
       video.src = backgroundVideo
-      
+
       // Single load call - browser will handle streaming
       video.load()
     }
@@ -390,9 +390,8 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
 
   return (
     <div
-      className={`fixed inset-0 z-[9999] overflow-hidden bg-black transition-opacity duration-700 ${
-        isFadingOut ? "pointer-events-none opacity-0" : "opacity-100"
-      }`}
+      className={`fixed inset-0 z-[9999] overflow-hidden bg-black transition-opacity duration-700 ${isFadingOut ? "pointer-events-none opacity-0" : "opacity-100"
+        }`}
     >
       {/* Background video - hidden on mobile, visible on desktop */}
       <video
@@ -413,7 +412,7 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
             video.play().catch(() => {
               // Retry after a short delay
               setTimeout(() => {
-                video.play().catch(() => {})
+                video.play().catch(() => { })
               }, 500)
             })
           }
@@ -564,17 +563,15 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
             </>
           )}
           <header
-            className={`flex items-center justify-start text-xs font-semibold uppercase tracking-[0.4em] text-white/65 ${
-              startAnimation ? "start-fade-element" : ""
-            }`}
+            className={`flex items-center justify-start text-xs font-semibold uppercase tracking-[0.4em] text-white/65 ${startAnimation ? "start-fade-element" : ""
+              }`}
           >
             <span>pixaura</span>
           </header>
 
           <main
-            className={`relative flex flex-1 flex-col items-center justify-center gap-10 text-center ${
-              startAnimation ? "start-main-anim" : ""
-            }`}
+            className={`relative flex flex-1 flex-col items-center justify-center gap-10 text-center ${startAnimation ? "start-main-anim" : ""
+              }`}
           >
             <p className="text-xs uppercase tracking-[0.6em] text-white/60">immerse the experience</p>
             <div className="flex flex-wrap items-center justify-center gap-6 text-[clamp(42px,8vw,82px)] font-black uppercase tracking-tight">
@@ -582,9 +579,8 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
               <button
                 onClick={handleStart}
                 disabled={startAnimation}
-                className={`group relative inline-flex h-32 w-32 items-center justify-center rounded-full border-2 border-white/70 bg-white/10 text-base font-semibold uppercase tracking-[0.4em] transition-all duration-300 hover:scale-[1.05] ${
-                  startAnimation ? "start-button-active" : ""
-                }`}
+                className={`group relative inline-flex h-32 w-32 items-center justify-center rounded-full border-2 border-white/70 bg-white/10 text-base font-semibold uppercase tracking-[0.4em] transition-all duration-300 hover:scale-[1.05] ${startAnimation ? "start-button-active" : ""
+                  }`}
               >
                 <span className="relative z-10">start</span>
                 <span className="absolute inset-[6px] rounded-full border border-white/25 bg-white/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
@@ -602,9 +598,8 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
           </main>
 
           <footer
-            className={`flex items-center justify-between text-[11px] uppercase tracking-[0.35em] text-white/55 ${
-              startAnimation ? "start-fade-element" : ""
-            }`}
+            className={`flex items-center justify-between text-[11px] uppercase tracking-[0.35em] text-white/55 ${startAnimation ? "start-fade-element" : ""
+              }`}
           >
             <span>scroll pour découvrir</span>
             <span>maintenir ensuite pour débloquer</span>

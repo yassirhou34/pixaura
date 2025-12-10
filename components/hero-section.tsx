@@ -149,9 +149,9 @@ export function HeroSection() {
                 </>
               )
             } else {
-              // English version: "creative" / "activations" / "high-" / "performance to" / "amplify impact."
+              // English version: "creative" / "activations" / "high" / "performance to" / "amplify impact."
               const creativeParts = highlightParts[1].split(" ")
-              const highPerfParts = highlightParts[0].split("-")
+              const highPerfParts = highlightParts[0].split(" ")
               return (
                 <>
                   <span className="block leading-tight">
@@ -160,7 +160,7 @@ export function HeroSection() {
                   <span className="block leading-tight -mt-2 sm:-mt-2 md:-mt-3">
                     <span className="hero-highlight">{creativeParts[1]}</span>
                   </span>
-                  <span className="block leading-tight -mt-2 sm:-mt-2 md:-mt-3">{highPerfParts[0]}-</span>
+                  <span className="block leading-tight -mt-2 sm:-mt-2 md:-mt-3">{highPerfParts[0]}</span>
                   <span className="block leading-tight -mt-2 sm:-mt-2 md:-mt-3">
                     {highPerfParts[1]} {endParts[0]}
                   </span>
