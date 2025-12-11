@@ -73,7 +73,16 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
   const [videoLoaded, setVideoLoaded] = useState(false)
   const [videoError, setVideoError] = useState(false)
   const videoRef = useRef<HTMLVideoElement | null>(null)
-  // Removed: preload video refs - no longer needed
+  const preloadVideoRef = useRef<HTMLVideoElement | null>(null)
+  const nextVideoRef = useRef<HTMLVideoElement | null>(null)
+  const [preloadVideoReady, setPreloadVideoReady] = useState(false)
+  const [preloadVideoBuffered, setPreloadVideoBuffered] = useState(false)
+  const preloadCheckIntervalRef = useRef<NodeJS.Timeout | null>(null)
+  const [nextVideoLoaded, setNextVideoLoaded] = useState(false)
+  const [showNextVideo, setShowNextVideo] = useState(false)
+  
+  // Track initial video loaded state to prevent flicker
+  const initialVideoLoadedRef = useRef(false)
 
   const overlayTone =
     stage === "hold" || stage === "finishing"
@@ -320,24 +329,281 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
     }
   }, [stage])
 
-  // Preload both videos immediately on mount for Vercel optimization
-  // REMOVED: Hidden video preloads - these were downloading full videos unnecessarily
-  // Videos will load naturally when needed
+  // ULTRA-AGGRESSIVE PRELOAD for Backv2.mp4 - CRITICAL for Vercel CDN performance
+  // This ensures the video is 100% ready before user can click START
+  useEffect(() => {
+    const preloadVideo = preloadVideoRef.current
+    if (!preloadVideo) return
 
-  // Load current video when it changes - optimized to prevent full download
+    let isReady = false
+
+    const markAsReady = () => {
+      if (!isReady) {
+        isReady = true
+        setPreloadVideoReady(true)
+        // Check if enough data is buffered for smooth playback
+        if (preloadVideo.readyState >= 3 || preloadVideo.buffered.length > 0) {
+          setPreloadVideoBuffered(true)
+        }
+      }
+    }
+
+    const handleCanPlay = () => {
+      markAsReady()
+    }
+
+    const handleCanPlayThrough = () => {
+      // Video can play through without stopping - BEST state for Vercel
+      markAsReady()
+      setPreloadVideoBuffered(true)
+    }
+
+    const handleLoadedData = () => {
+      markAsReady()
+      // Check buffered data
+      if (preloadVideo.buffered.length > 0 && preloadVideo.buffered.end(0) > 1) {
+        setPreloadVideoBuffered(true)
+      }
+    }
+
+    const handleProgress = () => {
+      // Aggressive check - mark ready as soon as we have ANY data buffered
+      if (preloadVideo.readyState >= 2) {
+        markAsReady()
+      }
+      // Check if we have at least 1 second buffered for smooth playback
+      if (preloadVideo.buffered.length > 0) {
+        const bufferedEnd = preloadVideo.buffered.end(preloadVideo.buffered.length - 1)
+        if (bufferedEnd >= 1 || preloadVideo.readyState >= 3) {
+          setPreloadVideoBuffered(true)
+        }
+      }
+    }
+
+    const handleLoadedMetadata = () => {
+      // Metadata loaded - start checking buffered progress
+      if (preloadVideo.readyState >= 1) {
+        markAsReady()
+      }
+    }
+
+    // Add all event listeners
+    preloadVideo.addEventListener('canplay', handleCanPlay, { passive: true })
+    preloadVideo.addEventListener('canplaythrough', handleCanPlayThrough, { passive: true })
+    preloadVideo.addEventListener('loadeddata', handleLoadedData, { passive: true })
+    preloadVideo.addEventListener('loadedmetadata', handleLoadedMetadata, { passive: true })
+    preloadVideo.addEventListener('progress', handleProgress, { passive: true })
+    preloadVideo.addEventListener('playing', markAsReady, { passive: true })
+
+    // ULTRA-AGGRESSIVE preload settings for Vercel CDN
+    preloadVideo.preload = "auto"
+    preloadVideo.src = "/Banque d_images/Backv2.mp4"
+    
+    // Force load immediately
+    preloadVideo.load()
+
+    // CRITICAL: Force buffering by playing and pausing immediately
+    // This triggers aggressive downloading on Vercel CDN
+    const forceBuffer = async () => {
+      try {
+        await preloadVideo.play()
+        // Let it buffer for a moment
+        await new Promise(resolve => setTimeout(resolve, 100))
+        preloadVideo.pause()
+        preloadVideo.currentTime = 0
+        markAsReady()
+      } catch (err) {
+        // Autoplay blocked - that's okay, browser will still buffer
+        markAsReady()
+      }
+    }
+    forceBuffer()
+
+    // AGGRESSIVE polling check for Vercel CDN (some events may not fire reliably)
+    const checkProgress = () => {
+      if (isReady) {
+        if (preloadCheckIntervalRef.current) {
+          clearInterval(preloadCheckIntervalRef.current)
+          preloadCheckIntervalRef.current = null
+        }
+        return
+      }
+
+      if (preloadVideo.readyState >= 2) {
+        markAsReady()
+      }
+
+      // Check buffered data
+      if (preloadVideo.buffered.length > 0) {
+        const bufferedEnd = preloadVideo.buffered.end(preloadVideo.buffered.length - 1)
+        if (bufferedEnd >= 0.5) { // At least 0.5 seconds buffered
+          setPreloadVideoBuffered(true)
+          markAsReady()
+        }
+      }
+    }
+
+    // Check every 100ms for first 5 seconds, then every 500ms
+    let checkCount = 0
+    preloadCheckIntervalRef.current = setInterval(() => {
+      checkProgress()
+      checkCount++
+      // After 5 seconds, reduce polling frequency
+      if (checkCount > 50 && preloadCheckIntervalRef.current) {
+        clearInterval(preloadCheckIntervalRef.current)
+        preloadCheckIntervalRef.current = setInterval(checkProgress, 500)
+      }
+      // Stop after 30 seconds total
+      if (checkCount > 300) {
+        if (preloadCheckIntervalRef.current) {
+          clearInterval(preloadCheckIntervalRef.current)
+          preloadCheckIntervalRef.current = null
+        }
+      }
+    }, 100)
+
+    return () => {
+      if (preloadCheckIntervalRef.current) {
+        clearInterval(preloadCheckIntervalRef.current)
+        preloadCheckIntervalRef.current = null
+      }
+      preloadVideo.removeEventListener('canplay', handleCanPlay)
+      preloadVideo.removeEventListener('canplaythrough', handleCanPlayThrough)
+      preloadVideo.removeEventListener('loadeddata', handleLoadedData)
+      preloadVideo.removeEventListener('loadedmetadata', handleLoadedMetadata)
+      preloadVideo.removeEventListener('progress', handleProgress)
+      preloadVideo.removeEventListener('playing', markAsReady)
+    }
+  }, [])
+
+  // PRELOAD NEXT VIDEO LAYER when approaching transition - START EARLY
+  useEffect(() => {
+    const nextVideo = nextVideoRef.current
+    if (!nextVideo) return
+
+    // Start preloading NEXT video as soon as we're on "start" stage
+    // This ensures it's ready BEFORE the transition happens
+    if (stage === "start" && preloadVideoReady && preloadVideoRef.current) {
+      const preloadVideo = preloadVideoRef.current
+      if (preloadVideo.readyState >= 2 || preloadVideoBuffered) {
+        nextVideo.src = "/Banque d_images/Backv2.mp4"
+        nextVideo.preload = "auto"
+        nextVideo.currentTime = 0
+        nextVideo.load()
+        setShowNextVideo(true)
+        // Show immediately when ANY data is available
+        const checkNext = () => {
+          if (nextVideo.readyState >= 1) {
+            // Show as soon as we have metadata - don't wait!
+            setNextVideoLoaded(true)
+          } else {
+            requestAnimationFrame(checkNext)
+          }
+        }
+        requestAnimationFrame(checkNext)
+      }
+    } else if (stage === "transition" || stage === "hold" || stage === "finishing") {
+      // Keep next video visible during transition stages
+      // It will fade out once main video is ready
+    } else {
+      // Clear next video only if we're going back
+      setShowNextVideo(false)
+      setNextVideoLoaded(false)
+    }
+  }, [stage, preloadVideoReady, preloadVideoBuffered])
+
+  // Load current video when it changes - ZERO BLACK SCREEN strategy
   useEffect(() => {
     const video = videoRef.current
-    if (video && backgroundVideo) {
-      // Reset loaded state when video changes
-      setVideoLoaded(false)
+    if (!video || !backgroundVideo) return
 
-      // Set source immediately (preload is already set in JSX to "metadata")
-      video.src = backgroundVideo
-
-      // Single load call - browser will handle streaming
-      video.load()
+    // CRITICAL: When switching to Backv2.mp4, use preloaded video INSTANTLY
+    if (backgroundVideo === "/Banque d_images/Backv2.mp4" && preloadVideoReady && preloadVideoRef.current) {
+      const preloadVideo = preloadVideoRef.current
+      
+      if (preloadVideo.readyState >= 2 || preloadVideoBuffered) {
+        // ABSOLUTELY CRITICAL: DO NOT reset videoLoaded - keep current video visible!
+        // The next video layer is already showing, so we maintain continuity
+        
+        // ABSOLUTE PRIORITY: Keep current video visible, use preloaded video directly
+        // If next video layer exists and is ready, keep it visible
+        if (showNextVideo && nextVideoLoaded) {
+          // Next video is already visible - keep it visible!
+          // Just prepare main video in background without changing visibility
+          video.src = backgroundVideo
+          video.preload = "auto"
+          video.currentTime = 0
+          video.load()
+          
+          // Once main video is ready, switch seamlessly
+          const switchToMain = () => {
+            if (video.readyState >= 2) {
+              setVideoLoaded(true)
+              setVideoError(false)
+              video.play().catch(() => {
+                setTimeout(() => video.play().catch(() => {}), 50)
+              })
+              // Fade out next layer smoothly
+              setTimeout(() => {
+                setShowNextVideo(false)
+              }, 100)
+            } else if (video.readyState >= 1) {
+              // Even with just metadata, show it to prevent black
+              setVideoLoaded(true)
+              setVideoError(false)
+              video.play().catch(() => {})
+              setTimeout(() => setShowNextVideo(false), 150)
+            } else {
+              requestAnimationFrame(switchToMain)
+            }
+          }
+          requestAnimationFrame(switchToMain)
+          return
+        }
+        
+        // CRITICAL: If preloaded video is ready, show it IMMEDIATELY
+        // Don't wait, don't reset - use it NOW
+        video.src = backgroundVideo
+        video.preload = "auto"
+        video.currentTime = 0
+        video.load()
+        
+        // Show video IMMEDIATELY - even before readyState check
+        // This prevents any black screen
+        setVideoLoaded(true)
+        setVideoError(false)
+        
+        // Then ensure it plays
+        const ensurePlaying = () => {
+          if (video.readyState >= 2) {
+            video.play().catch(() => {
+              setTimeout(() => video.play().catch(() => {}), 50)
+            })
+          } else if (video.readyState >= 1) {
+            video.play().catch(() => {})
+          } else {
+            requestAnimationFrame(ensurePlaying)
+          }
+        }
+        requestAnimationFrame(ensurePlaying)
+        return
+      }
     }
-  }, [backgroundVideo])
+
+    // Only reset for back3.mp4 (initial video) - this is safe
+    // BUT: If we're coming from a stage where Backv2 was showing, keep it visible
+    if (backgroundVideo === "/Banque d_images/back3.mp4" && stage === "loading") {
+      // Only reset on initial load
+      setVideoLoaded(false)
+      setShowNextVideo(false)
+    }
+    // For Backv2.mp4 or other stages, NEVER reset - maintain continuity
+
+    // Aggressive preloading
+    video.src = backgroundVideo
+    video.preload = "auto"
+    video.load()
+  }, [backgroundVideo, preloadVideoReady, preloadVideoBuffered, showNextVideo, nextVideoLoaded])
 
   useEffect(() => {
     if (stage === "hold") return
@@ -393,16 +659,56 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
       className={`fixed inset-0 z-[9999] overflow-hidden bg-black transition-opacity duration-700 ${isFadingOut ? "pointer-events-none opacity-0" : "opacity-100"
         }`}
     >
+      {/* PRELOAD VIDEO - Hidden, aggressively preloads Backv2.mp4 for INSTANT transition on Vercel */}
+      <video
+        ref={preloadVideoRef}
+        className="hidden"
+        preload="auto"
+        muted
+        playsInline
+        src="/Banque d_images/Backv2.mp4"
+      />
+      {/* NEXT VIDEO LAYER - Preloads and shows Backv2.mp4 BEFORE transition to prevent black screen */}
+      {showNextVideo && (
+        <video
+          ref={nextVideoRef}
+          className="hidden md:block absolute inset-0 h-full w-full object-cover z-[1]"
+          autoPlay={true}
+          loop={true}
+          muted={true}
+          playsInline={true}
+          preload="auto"
+          style={{
+            opacity: nextVideoLoaded ? 1 : 0,
+            transition: 'opacity 0.05s ease-in-out',
+          }}
+          onLoadedData={() => {
+            setNextVideoLoaded(true)
+          }}
+          onCanPlay={() => {
+            setNextVideoLoaded(true)
+          }}
+          onProgress={() => {
+            const video = nextVideoRef.current
+            if (video && video.readyState >= 1) {
+              setNextVideoLoaded(true)
+            }
+          }}
+        >
+          <source src="/Banque d_images/Backv2.mp4" type="video/mp4" />
+        </video>
+      )}
+      
       {/* Background video - hidden on mobile, visible on desktop */}
+      {/* REMOVED key prop - it was causing React to recreate element and reset state */}
       <video
         ref={videoRef}
-        key={backgroundVideo}
         className="hidden md:block absolute inset-0 h-full w-full object-cover"
         autoPlay={true}
         loop={true}
         muted={true}
         playsInline={true}
-        preload="metadata"
+        preload="auto"
         onLoadedMetadata={(e) => {
           // Start playing as soon as metadata is loaded (faster on Vercel)
           const video = e.currentTarget
@@ -428,7 +734,14 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
         onProgress={() => {
           // Show video as soon as we have some data for Vercel
           const video = videoRef.current
-          if (video && video.readyState >= 2) {
+          if (video && video.readyState >= 1) {
+            // readyState >= 1 (HAVE_METADATA) means we can start showing it
+            // readyState >= 2 (HAVE_CURRENT_DATA) means we can play current frame
+            setVideoLoaded(true)
+            setVideoError(false)
+          }
+          // Additional check: if we have buffered data, definitely show
+          if (video && video.buffered.length > 0 && video.buffered.end(0) > 0) {
             setVideoLoaded(true)
             setVideoError(false)
           }
@@ -456,14 +769,15 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
           // Don't reset loaded state on load start to prevent flickering
         }}
         style={{
-          opacity: videoLoaded ? 1 : 0,
-          transition: 'opacity 0.3s ease-in-out',
+          opacity: videoLoaded || (showNextVideo && nextVideoLoaded) ? 1 : 0,
+          transition: 'opacity 0.05s ease-in-out',
         }}
       >
         <source src={backgroundVideo} type="video/mp4" />
       </video>
-      {/* Fallback black background while video loads */}
-      {!videoLoaded && !videoError && (
+      {/* Fallback black background - NEVER show if ANY video is loading/loaded */}
+      {/* This ensures zero black screen - if ANY video exists (even loading), don't show black */}
+      {!videoLoaded && !videoError && !showNextVideo && !nextVideoLoaded && (
         <div className="hidden md:block absolute inset-0 bg-black" />
       )}
       {/* Background image - visible only on mobile */}
