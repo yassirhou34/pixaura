@@ -656,7 +656,7 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
 
   return (
     <div
-      className={`fixed inset-0 z-[9999] overflow-hidden bg-black transition-opacity duration-700 ${isFadingOut ? "pointer-events-none opacity-0" : "opacity-100"
+      className={`fixed inset-0 z-[9999] overflow-hidden bg-transparent transition-opacity duration-700 ${isFadingOut ? "pointer-events-none opacity-0" : "opacity-100"
         }`}
     >
       {/* PRELOAD VIDEO - Hidden, aggressively preloads Backv2.mp4 for INSTANT transition on Vercel */}
@@ -778,7 +778,7 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
       {/* Fallback black background - NEVER show if ANY video is loading/loaded */}
       {/* This ensures zero black screen - if ANY video exists (even loading), don't show black */}
       {!videoLoaded && !videoError && !showNextVideo && !nextVideoLoaded && (
-        <div className="hidden md:block absolute inset-0 bg-black" />
+        <div className="hidden md:block absolute inset-0 bg-transparent" />
       )}
       {/* Background image - visible only on mobile */}
       <img

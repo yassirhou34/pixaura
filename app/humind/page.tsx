@@ -90,8 +90,6 @@ export default function HumindPage() {
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
   }, [])
 
-  // REMOVED: Aggressive preloads - let images load on demand to save bandwidth
-
   // Filtrer les épisodes
   const filteredEpisodes = useMemo(() => {
     if (activeFilter === t("humindPage.categoryAll")) {
@@ -383,7 +381,6 @@ export default function HumindPage() {
                         width: '100%',
                         height: '100%',
                       }}
-                      loading="lazy"
                       onError={(e) => {
                         // Fallback si l'image ne charge pas
                         const target = e.target as HTMLImageElement
