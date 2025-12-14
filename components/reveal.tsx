@@ -26,27 +26,48 @@ export function Reveal({
     const element = ref.current
     if (!element) return
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setVisible(true)
-            if (once) {
-              observer.unobserve(entry.target)
-            }
-          } else if (!once) {
-            setVisible(false)
+    let observer: IntersectionObserver | null = null
+    
+    try {
+      observer = new IntersectionObserver(
+        (entries) => {
+          try {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                setVisible(true)
+                if (once && observer) {
+                  observer.unobserve(entry.target)
+                }
+              } else if (!once) {
+                setVisible(false)
+              }
+            })
+          } catch (error) {
+            console.warn('IntersectionObserver callback error:', error)
           }
-        })
-      },
-      {
-        threshold: 0.2,
-        rootMargin: "0px",
-      }
-    )
+        },
+        {
+          threshold: 0.2,
+          rootMargin: "0px",
+        }
+      )
 
-    observer.observe(element)
-    return () => observer.disconnect()
+      observer.observe(element)
+    } catch (error) {
+      console.warn('IntersectionObserver setup error:', error)
+      // Fallback: show immediately if observer fails
+      setVisible(true)
+    }
+    
+    return () => {
+      try {
+        if (observer) {
+          observer.disconnect()
+        }
+      } catch (error) {
+        // Silent cleanup error
+      }
+    }
   }, [once])
 
   const Tag = Component as any

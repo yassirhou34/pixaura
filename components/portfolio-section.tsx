@@ -7,6 +7,103 @@ import { ArrowRight, ArrowUpRight } from "lucide-react"
 import { Reveal } from "@/components/reveal"
 import { useTranslation } from "@/contexts/translation-context"
 
+// Optimized mobile video component with lazy loading and smooth playback
+function MobileVideo({ src, index }: { src: string; index: number }) {
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const [shouldLoad, setShouldLoad] = useState(index < 2) // Load first 2 immediately
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (shouldLoad || !containerRef.current) return
+
+    // Use IntersectionObserver to load when visible
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setShouldLoad(true)
+            observer.disconnect()
+          }
+        })
+      },
+      { rootMargin: '100px' } // Start loading 100px before visible
+    )
+
+    observer.observe(containerRef.current)
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [shouldLoad])
+
+  useEffect(() => {
+    if (!shouldLoad || !videoRef.current) return
+
+    const video = videoRef.current
+    
+    // Optimized play handler - only try once to avoid blocking
+    const handleCanPlay = () => {
+      if (video && video.paused) {
+        const playPromise = video.play()
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {
+            // Silent fail - video will show black background
+          })
+        }
+      }
+    }
+
+    const handleLoadedMetadata = () => {
+      // Start playing as soon as metadata is available
+      if (video.readyState >= 1 && video.paused) {
+        video.play().catch(() => {
+          // Retry once after short delay
+          setTimeout(() => {
+            if (video.paused) {
+              video.play().catch(() => {})
+            }
+          }, 200)
+        })
+      }
+    }
+
+    video.addEventListener('canplay', handleCanPlay, { once: true, passive: true })
+    video.addEventListener('loadedmetadata', handleLoadedMetadata, { once: true, passive: true })
+
+    return () => {
+      video.removeEventListener('canplay', handleCanPlay)
+      video.removeEventListener('loadedmetadata', handleLoadedMetadata)
+    }
+  }, [shouldLoad])
+
+  return (
+    <div ref={containerRef} style={{ width: '100%', height: '100%', backgroundColor: '#000000' }}>
+      {shouldLoad && (
+        <video
+          ref={videoRef}
+          src={src}
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          autoPlay
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            backgroundColor: '#000000'
+          }}
+          onError={(e) => {
+            // Silent error handling - show black background
+            console.warn('Mobile video error:', src)
+            e.currentTarget.style.opacity = '0'
+          }}
+        />
+      )}
+    </div>
+  )
+}
+
 export function PortfolioSection() {
   const { t } = useTranslation()
   
@@ -104,21 +201,36 @@ export function PortfolioSection() {
           <video
             ref={videoRef}
             key={`video-${activeProject.id}`}
-            poster={activeProject.poster}
             muted
             loop
+            autoPlay
             playsInline
-            preload={(activeProject.id === latestProjects[0]?.id || 
-                     activeProject.id === latestProjects[1]?.id || 
-                     activeProject.id === latestProjects[2]?.id) ? "auto" : "none"}
+            preload="auto"
             style={{
               opacity: 1,
               willChange: 'auto',
-              pointerEvents: 'none'
+              pointerEvents: 'none',
+              backgroundColor: '#000000'
             }}
             onError={(e) => {
               // Silent error handling for Vercel
               console.warn('Video load error:', activeProject.video)
+            }}
+            onLoadedData={(e) => {
+              // Play immediately when data is loaded
+              const video = e.currentTarget
+              if (video.readyState >= 2) {
+                video.play().catch(() => {
+                  // Silent fail
+                })
+              }
+            }}
+            onCanPlay={(e) => {
+              // Play as soon as video can play
+              const video = e.currentTarget
+              video.play().catch(() => {
+                // Silent fail
+              })
             }}
           />
         ) : (
@@ -250,22 +362,44 @@ export function PortfolioSection() {
     if (!listRef.current) return
     
     let timeoutId: NodeJS.Timeout
+    let rafId: number | null = null
+    
     const observer = new ResizeObserver(() => {
-      // Debounce resize updates
+      // Debounce resize updates with error handling
       clearTimeout(timeoutId)
       timeoutId = setTimeout(() => {
-        requestAnimationFrame(() => {
-          updatePreviewPosition(activeId)
-          if (isDesktop) {
-            setStageHeight(listRef.current?.getBoundingClientRect().height)
+        if (rafId) cancelAnimationFrame(rafId)
+        rafId = requestAnimationFrame(() => {
+          try {
+            if (listRef.current) {
+              updatePreviewPosition(activeId)
+              if (isDesktop) {
+                setStageHeight(listRef.current.getBoundingClientRect().height)
+              }
+            }
+          } catch (error) {
+            // Silent error handling - prevent crashes
+            console.warn('ResizeObserver callback error:', error)
           }
         })
       }, 50)
     })
-    observer.observe(listRef.current)
+    
+    try {
+      observer.observe(listRef.current)
+    } catch (error) {
+      // Fallback if ResizeObserver fails
+      console.warn('ResizeObserver setup failed:', error)
+    }
+    
     return () => {
       clearTimeout(timeoutId)
-      observer.disconnect()
+      if (rafId) cancelAnimationFrame(rafId)
+      try {
+        observer.disconnect()
+      } catch (error) {
+        // Silent cleanup error
+      }
     }
   }, [activeId, isDesktop])
 
@@ -349,17 +483,29 @@ export function PortfolioSection() {
 
     const handleError = () => {
       // Retry loading on error (common on Vercel CDN)
-      if (isMounted && video && retryCount < maxRetries) {
-        retryCount++
-        setTimeout(() => {
-          if (isMounted && video) {
-            video.src = activeProject.video
-            video.load()
+      try {
+        if (isMounted && video && retryCount < maxRetries) {
+          retryCount++
+          setTimeout(() => {
+            try {
+              if (isMounted && video) {
+                video.src = activeProject.video
+                video.load()
+              }
+            } catch (err) {
+              console.warn('Video retry error:', err)
+            }
+          }, 1000 * retryCount)
+        } else if (isMounted && video) {
+          // Just pause on final error - show poster
+          try {
+            video.pause()
+          } catch (err) {
+            // Silent error
           }
-        }, 1000 * retryCount)
-      } else if (isMounted && video) {
-        // Just pause on final error - show poster
-        video.pause()
+        }
+      } catch (err) {
+        console.warn('Video error handler error:', err)
       }
     }
 
@@ -369,9 +515,9 @@ export function PortfolioSection() {
     videoLoadTimeoutRef.current = setTimeout(() => {
       if (!isMounted || !video) return
 
-      // FORCE AUTO PRELOAD FOR FIRST 3 CARDS ON VERCEL
+      // FORCE AUTO PRELOAD FOR ALL VIDEOS ON VERCEL
       video.src = activeProject.video
-      video.preload = isFirstThreeCards ? 'auto' : 'metadata'
+      video.preload = 'auto'
       
       // Simple event listeners
       video.addEventListener('canplay', handleCanPlay, { once: true, passive: true })
@@ -412,11 +558,16 @@ export function PortfolioSection() {
         videoLoadTimeoutRef.current = null
       }
       if (video) {
-        video.removeEventListener('canplay', handleCanPlay)
-        video.removeEventListener('error', handleError)
-        video.pause()
-        video.removeAttribute('src')
-        video.load()
+        try {
+          video.removeEventListener('canplay', handleCanPlay)
+          video.removeEventListener('error', handleError)
+          video.pause()
+          video.removeAttribute('src')
+          video.load()
+        } catch (err) {
+          // Silent cleanup error
+          console.warn('Video cleanup error:', err)
+        }
       }
     }
   }, [activeProject?.video, activeId, latestProjects])
@@ -498,14 +649,9 @@ export function PortfolioSection() {
                         <div className="latest-card-thumb">
                           <div className="latest-card-thumb-media">
                             {project.video ? (
-                              <video
+                              <MobileVideo
                                 src={project.video}
-                                poster={project.poster}
-                                muted
-                                loop
-                                autoPlay
-                                playsInline
-                                preload="auto"
+                                index={index}
                               />
                             ) : (
                               <Image

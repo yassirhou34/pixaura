@@ -14,20 +14,26 @@ interface TranslationContextType {
 const TranslationContext = createContext<TranslationContextType | undefined>(undefined)
 
 export const TranslationProvider = ({ children }: { children: ReactNode }) => {
-  const [language, setLanguageState] = useState<Language>('fr')
-
-  useEffect(() => {
+  // Read language SYNCHRONOUSLY on initialization to prevent French flash
+  // Note: We initialize with the value from localStorage if available to avoid flash,
+  // but we use suppressHydrationWarning on root to allow this mismatch.
+  const getInitialLanguage = (): Language => {
+    if (typeof window === 'undefined') return 'en' // Default to English for SSR
     const storedLang = localStorage.getItem('language') as Language
     if (storedLang && (storedLang === 'fr' || storedLang === 'en')) {
+      return storedLang
+    }
+    // Default to English to prevent French flash
+    return 'en'
+  }
+
+  const [language, setLanguageState] = useState<Language>(getInitialLanguage)
+
+  // Ensure localStorage is in sync on mount (double check)
+  useEffect(() => {
+    const storedLang = localStorage.getItem('language') as Language
+    if (storedLang && (storedLang !== language)) {
       setLanguageState(storedLang)
-    } else {
-      // Detect browser language if no stored language
-      const browserLang = navigator.language.split('-')[0]
-      if (browserLang === 'fr') {
-        setLanguageState('fr')
-      } else {
-        setLanguageState('en') // Default to English if not French
-      }
     }
   }, [])
 
@@ -39,7 +45,7 @@ export const TranslationProvider = ({ children }: { children: ReactNode }) => {
   const t = (key: string): string => {
     const keys = key.split('.')
     let value: any = translations[language]
-    
+
     for (const k of keys) {
       value = value?.[k]
       if (value === undefined) {
@@ -51,7 +57,7 @@ export const TranslationProvider = ({ children }: { children: ReactNode }) => {
         break
       }
     }
-    
+
     return typeof value === 'string' ? value : key
   }
 

@@ -68,16 +68,24 @@ export default function Home() {
     const skipIntroParam = urlParams.get('skipIntro')
     const hash = window.location.hash.substring(1) // Remove the # symbol
 
-    if (skipIntroParam === 'true') {
+    // Check if we should skip intro based on sessionStorage (when returning from realisations/humind)
+    const skipIntroOnReturn = sessionStorage.getItem('skipIntroOnReturn') === 'true'
+    if (skipIntroOnReturn) {
+      sessionStorage.removeItem('skipIntroOnReturn')
+    }
+
+    if (skipIntroParam === 'true' || skipIntroOnReturn) {
       // Skip intro immediately - before any paint happens
       setIntroComplete(true)
 
       // Remove the parameter from URL without reload
-      urlParams.delete('skipIntro')
-      const newUrl = urlParams.toString()
-        ? `${window.location.pathname}?${urlParams.toString()}${hash ? `#${hash}` : ''}`
-        : `${window.location.pathname}${hash ? `#${hash}` : ''}`
-      window.history.replaceState({}, '', newUrl)
+      if (skipIntroParam === 'true') {
+        urlParams.delete('skipIntro')
+        const newUrl = urlParams.toString()
+          ? `${window.location.pathname}?${urlParams.toString()}${hash ? `#${hash}` : ''}`
+          : `${window.location.pathname}${hash ? `#${hash}` : ''}`
+        window.history.replaceState({}, '', newUrl)
+      }
 
       // Don't scroll here - let useEffect handle it after content renders
       // Just ensure we're at top initially

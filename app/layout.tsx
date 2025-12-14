@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { Geist, Space_Grotesk } from "next/font/google"
 import "./globals.css"
 import { TranslationProvider } from "@/contexts/translation-context"
+import { ErrorBoundary } from "@/components/error-boundary"
 
 const geist = Geist({ subsets: ["latin"] })
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-heading" })
@@ -30,6 +31,19 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
+                // FORCE LANGUAGE: Read and preserve language IMMEDIATELY before React loads
+                // This prevents French flash when navigating to Humind/Portfolio
+                if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+                  const storedLang = localStorage.getItem('language');
+                  if (storedLang && (storedLang === 'fr' || storedLang === 'en')) {
+                    // Language is already set, ensure it's preserved
+                    localStorage.setItem('language', storedLang);
+                  } else {
+                    // No language set, default to English to prevent French flash
+                    localStorage.setItem('language', 'en');
+                  }
+                }
+                
                 // Set black background immediately to prevent white flash on Vercel SSR
                 if (typeof document !== 'undefined') {
                   document.documentElement.style.backgroundColor = '#000000';
@@ -41,6 +55,84 @@ export default function RootLayout({
                     document.documentElement.classList.add('skip-intro-active');
                   }
                 } catch (e) {}
+                
+                // CRITICAL: Global error handler to prevent page reloads on mobile
+                if (typeof window !== 'undefined') {
+                  const isMobile = window.innerWidth < 1024;
+                  
+                  // Prevent page reload on JavaScript errors
+                  window.addEventListener('error', function(e) {
+                    if (isMobile) {
+                      // Log error but prevent default reload behavior
+                      console.error('Error caught:', e.error || e.message);
+                      
+                      // Prevent reload for non-critical errors
+                      if (e.error) {
+                        const errorMsg = e.error.message || String(e.error);
+                        const isCritical = errorMsg.includes('ChunkLoadError') || 
+                                          errorMsg.includes('Loading chunk') ||
+                                          errorMsg.includes('Failed to fetch');
+                        
+                        if (!isCritical) {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          return false;
+                        }
+                      }
+                    }
+                  }, true);
+                  
+                  // Prevent crashes from unhandled promise rejections
+                  window.addEventListener('unhandledrejection', function(e) {
+                    if (isMobile) {
+                      console.error('Unhandled rejection:', e.reason);
+                      // Prevent default crash behavior for non-critical rejections
+                      if (e.reason && typeof e.reason === 'object') {
+                        const reasonMsg = e.reason.message || String(e.reason);
+                        const isCritical = reasonMsg.includes('ChunkLoadError') || 
+                                          reasonMsg.includes('Loading chunk');
+                        
+                        if (!isCritical) {
+                          e.preventDefault();
+                        }
+                      } else {
+                        e.preventDefault();
+                      }
+                    }
+                  });
+                  
+                  // Protect against ResizeObserver errors (common on mobile)
+                  const originalResizeObserver = window.ResizeObserver;
+                  if (originalResizeObserver) {
+                    window.ResizeObserver = function(callback) {
+                      const safeCallback = function(entries, observer) {
+                        try {
+                          callback(entries, observer);
+                        } catch (error) {
+                          console.warn('ResizeObserver error caught:', error);
+                        }
+                      };
+                      return new originalResizeObserver(safeCallback);
+                    };
+                    window.ResizeObserver.prototype = originalResizeObserver.prototype;
+                  }
+                  
+                  // Protect against IntersectionObserver errors
+                  const originalIntersectionObserver = window.IntersectionObserver;
+                  if (originalIntersectionObserver) {
+                    window.IntersectionObserver = function(callback, options) {
+                      const safeCallback = function(entries, observer) {
+                        try {
+                          callback(entries, observer);
+                        } catch (error) {
+                          console.warn('IntersectionObserver error caught:', error);
+                        }
+                      };
+                      return new originalIntersectionObserver(safeCallback, options);
+                    };
+                    window.IntersectionObserver.prototype = originalIntersectionObserver.prototype;
+                  }
+                }
               })();
             `,
           }}
@@ -62,9 +154,11 @@ export default function RootLayout({
       <body
         className={`${geist.className} ${spaceGrotesk.variable} antialiased bg-transparent text-foreground`}
       >
-        <TranslationProvider>
-          {children}
-        </TranslationProvider>
+        <ErrorBoundary>
+          <TranslationProvider>
+            {children}
+          </TranslationProvider>
+        </ErrorBoundary>
       </body>
     </html>
   )

@@ -48,7 +48,7 @@ export function ProjectModal({ open, onOpenChange, project }: ProjectModalProps)
 
   const handleNext = useCallback(() => {
     if (galleryLength === 0) return
-    
+
     // Pause current video if any
     if (lightboxVideoRef.current) {
       lightboxVideoRef.current.pause()
@@ -66,7 +66,7 @@ export function ProjectModal({ open, onOpenChange, project }: ProjectModalProps)
 
   const handlePrevious = useCallback(() => {
     if (galleryLength === 0) return
-    
+
     // Pause current video if any
     if (lightboxVideoRef.current) {
       lightboxVideoRef.current.pause()
@@ -120,11 +120,11 @@ export function ProjectModal({ open, onOpenChange, project }: ProjectModalProps)
 
     if (isCurrentVideo && lightboxVideoRef.current) {
       const video = lightboxVideoRef.current
-      
+
       // Reset video quickly
       video.pause()
       video.currentTime = 0
-      
+
       // Fast load - use loadedmetadata instead of canplay for faster response
       const handleLoadedMetadata = () => {
         setMediaLoaded(true)
@@ -168,7 +168,7 @@ export function ProjectModal({ open, onOpenChange, project }: ProjectModalProps)
               {project.title}
             </DialogTitle>
           </VisuallyHidden.Root>
-          
+
           <DialogHeader className="space-y-4">
             {/* Project Image */}
             <div className="relative w-full h-64 md:h-72 overflow-hidden rounded-[28px]">
@@ -178,9 +178,10 @@ export function ProjectModal({ open, onOpenChange, project }: ProjectModalProps)
                 fill
                 className="object-cover brightness-110 saturate-110"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+                priority
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-              
+
               {/* Badges */}
               <div className="absolute top-3 left-3 flex gap-2">
                 {(() => {
@@ -189,9 +190,9 @@ export function ProjectModal({ open, onOpenChange, project }: ProjectModalProps)
                   const hasImage = project.gallery?.some((item: string) => item.endsWith('.jpg') || item.endsWith('.png') || item.endsWith('.jpeg')) || project.image
                   const videoCount = project.gallery?.filter((item: string) => item.endsWith('.mp4')).length || 0
                   const imageCount = project.gallery?.filter((item: string) => !item.endsWith('.mp4')).length || 0
-                  
+
                   let badgeText = project.category
-                  
+
                   // Logique intelligente pour déterminer le badge le plus significatif
                   if (videoCount > imageCount && videoCount > 0) {
                     badgeText = t("projectModal.productionVideo")
@@ -216,7 +217,7 @@ export function ProjectModal({ open, onOpenChange, project }: ProjectModalProps)
                   } else if (project.title.toLowerCase().includes("halloween") || project.title.toLowerCase().includes("shooting") || project.title.toLowerCase().includes("tournage")) {
                     badgeText = t("projectModal.creativeShooting")
                   }
-                  
+
                   return (
                     <span className="rounded-full border border-white/25 bg-white/12 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.32em] text-white/80 backdrop-blur-sm">
                       {badgeText}
@@ -227,10 +228,10 @@ export function ProjectModal({ open, onOpenChange, project }: ProjectModalProps)
                   {project.sector}
                 </span>
               </div>
-              
+
               {/* Title - Visual only */}
               <div className="absolute bottom-3 left-3 right-3">
-                <h2 className="text-2xl md:text-3xl font-black text-white mb-1 drop-shadow-xl" style={{ 
+                <h2 className="text-2xl md:text-3xl font-black text-white mb-1 drop-shadow-xl" style={{
                   fontFamily: 'Montserrat, sans-serif',
                   letterSpacing: '-0.02em',
                 }}>
@@ -242,7 +243,7 @@ export function ProjectModal({ open, onOpenChange, project }: ProjectModalProps)
             {/* Content Sections */}
             <div className="space-y-5 pt-5 px-5 pb-5">
               {/* Objectif */}
-              <div className="rounded-[24px] border border-white/15 bg-white/8 p-6 shadow-lg shadow-black/40 backdrop-blur-xl">
+              <div className="rounded-[24px] border border-white/15 bg-white/5 p-6 shadow-lg shadow-black/40">
                 <h3 className="text-lg font-semibold uppercase tracking-[0.25em] text-white/80 mb-3">
                   {t("projectModal.objective")}
                 </h3>
@@ -252,7 +253,7 @@ export function ProjectModal({ open, onOpenChange, project }: ProjectModalProps)
               </div>
 
               {/* Idée créative */}
-              <div className="rounded-[24px] border border-white/15 bg-white/8 p-6 shadow-lg shadow-black/40 backdrop-blur-xl">
+              <div className="rounded-[24px] border border-white/15 bg-white/5 p-6 shadow-lg shadow-black/40">
                 <h3 className="text-lg font-semibold uppercase tracking-[0.25em] text-white/80 mb-3">
                   {t("projectModal.creativeIdea")}
                 </h3>
@@ -262,7 +263,7 @@ export function ProjectModal({ open, onOpenChange, project }: ProjectModalProps)
               </div>
 
               {/* Dispositif */}
-              <div className="rounded-[24px] border border-white/15 bg-white/8 p-6 shadow-lg shadow-black/40 backdrop-blur-xl">
+              <div className="rounded-[24px] border border-white/15 bg-white/5 p-6 shadow-lg shadow-black/40">
                 <h3 className="text-lg font-semibold uppercase tracking-[0.25em] text-white/80 mb-3">
                   {t("projectModal.device")}
                 </h3>
@@ -272,7 +273,7 @@ export function ProjectModal({ open, onOpenChange, project }: ProjectModalProps)
               </div>
 
               {/* Résultats */}
-              <div className="rounded-[24px] border border-white/15 bg-white/8 p-6 shadow-lg shadow-black/40 backdrop-blur-xl">
+              <div className="rounded-[24px] border border-white/15 bg-white/5 p-6 shadow-lg shadow-black/40">
                 <h3 className="text-lg font-semibold uppercase tracking-[0.25em] text-white/80 mb-3">
                   {t("projectModal.results")}
                 </h3>
@@ -282,8 +283,9 @@ export function ProjectModal({ open, onOpenChange, project }: ProjectModalProps)
               </div>
 
               {/* Galerie visuelle - Design Ultra Innovant avec Séparation Radicale */}
-               {galleryImages.length > 0 && (
-                <div className="relative space-y-6 rounded-[24px] border border-white/15 bg-white/8 p-6 shadow-lg shadow-black/35 backdrop-blur-xl">
+              {galleryImages.length > 0 && (
+                <div className="relative space-y-6 rounded-[24px] border border-white/15 bg-white/5 p-6 shadow-lg shadow-black/35">
+
                   <div className="relative z-10 flex items-center gap-3">
                     <span className="inline-flex h-2 w-2 rounded-full bg-primary/70" />
                     <h3 className="text-lg font-semibold uppercase tracking-[0.25em] text-white/85">
@@ -291,10 +293,10 @@ export function ProjectModal({ open, onOpenChange, project }: ProjectModalProps)
                     </h3>
                     <div className="h-px flex-1 bg-white/12" />
                   </div>
- 
-                   {/* Section VIDÉOS - Hidden on mobile, visible on desktop */}
-                   {videos.length > 0 && (
-                     <div className="relative z-10 space-y-4 hidden md:block">
+
+                  {/* Section VIDÉOS - Hidden on mobile, visible on desktop */}
+                  {videos.length > 0 && (
+                    <div className="relative z-10 space-y-4 hidden md:block">
                       <div className="flex items-center gap-3">
                         <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/12 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.3em] text-white/75 backdrop-blur-sm">
                           <Video className="h-4 w-4 text-white/80" />
@@ -307,69 +309,69 @@ export function ProjectModal({ open, onOpenChange, project }: ProjectModalProps)
                       </div>
 
                       <div className="grid gap-4">
-                         {videos.map((media, videoIndex) => {
-                           const globalIndex = galleryImages.indexOf(media)
-                           const displayNumber = videoIndex + 1
-                           return (
-                             <div
-                               key={`video-${globalIndex}`}
-                               className="group relative h-48 md:h-56 overflow-hidden rounded-[22px] border border-white/18 bg-white/6 shadow-md shadow-black/30 transition hover:border-white/35 hover:bg-white/12"
-                               onClick={() => openLightbox(globalIndex)}
-                               onKeyDown={(e) => {
-                                 if (e.key === "Enter" || e.key === " ") {
-                                   e.preventDefault()
-                                   openLightbox(globalIndex)
-                                 }
-                               }}
-                               role="button"
-                               tabIndex={0}
-                               aria-label={`${t("projectModal.viewVideo")} ${videoIndex + 1}`}
-                             >
-                               <video
-                                 ref={(el) => {
-                                   if (el) {
-                                     galleryVideoRefs.current.set(globalIndex, el)
-                                   } else {
-                                     galleryVideoRefs.current.delete(globalIndex)
-                                   }
-                                 }}
-                                 src={media}
-                                 className="h-full w-full object-cover brightness-110 saturate-120"
-                                 muted
-                                 loop
-                                 playsInline
-                                 preload="metadata"
-                                 onMouseEnter={(e) => {
-                                   const video = e.currentTarget
-                                   video.play().catch(() => {})
-                                 }}
-                                 onMouseLeave={(e) => {
-                                   const video = e.currentTarget
-                                   video.pause()
-                                   video.currentTime = 0
-                                 }}
-                               />
-                               <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-                               <div className="absolute inset-0 bg-white/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                               <span className="absolute top-3 left-3 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/12 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.3em] text-white/85 backdrop-blur-sm">
-                                 <Video className="h-4 w-4" />
-                                 {t("projectModal.video")}
-                               </span>
-                               <span className="absolute top-3 right-3 inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/35 bg-white/15 text-xs font-semibold text-white/90 backdrop-blur-sm">
-                                 {displayNumber}
-                               </span>
-                               <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                                 <div className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-white/35 bg-white/15 text-white backdrop-blur-sm shadow-md">
-                                   <Play className="h-8 w-8" />
-                                 </div>
-                               </div>
-                             </div>
-                           )
-                         })}
-                       </div>
+                        {videos.map((media, videoIndex) => {
+                          const globalIndex = galleryImages.indexOf(media)
+                          const displayNumber = videoIndex + 1
+                          return (
+                            <div
+                              key={`video-${globalIndex}`}
+                              className="group relative h-48 md:h-56 overflow-hidden rounded-[22px] border border-white/18 bg-white/6 shadow-md shadow-black/30 transition hover:border-white/35 hover:bg-white/12"
+                              onClick={() => openLightbox(globalIndex)}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter" || e.key === " ") {
+                                  e.preventDefault()
+                                  openLightbox(globalIndex)
+                                }
+                              }}
+                              role="button"
+                              tabIndex={0}
+                              aria-label={`${t("projectModal.viewVideo")} ${videoIndex + 1}`}
+                            >
+                              <video
+                                ref={(el) => {
+                                  if (el) {
+                                    galleryVideoRefs.current.set(globalIndex, el)
+                                  } else {
+                                    galleryVideoRefs.current.delete(globalIndex)
+                                  }
+                                }}
+                                src={media}
+                                className="h-full w-full object-cover brightness-110 saturate-120"
+                                muted
+                                loop
+                                playsInline
+                                preload="auto"
+                                onMouseEnter={(e) => {
+                                  const video = e.currentTarget
+                                  video.play().catch(() => { })
+                                }}
+                                onMouseLeave={(e) => {
+                                  const video = e.currentTarget
+                                  video.pause()
+                                  video.currentTime = 0
+                                }}
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                              <div className="absolute inset-0 bg-white/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                              <span className="absolute top-3 left-3 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/12 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.3em] text-white/85 backdrop-blur-sm">
+                                <Video className="h-4 w-4" />
+                                {t("projectModal.video")}
+                              </span>
+                              <span className="absolute top-3 right-3 inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/35 bg-white/15 text-xs font-semibold text-white/90 backdrop-blur-sm">
+                                {displayNumber}
+                              </span>
+                              <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                                <div className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-white/35 bg-white/15 text-white backdrop-blur-sm shadow-md">
+                                  <Play className="h-8 w-8" />
+                                </div>
+                              </div>
+                            </div>
+                          )
+                        })}
+                      </div>
                     </div>
                   )}
- 
+
                   {/* Section PHOTOS - Hidden on mobile, visible on desktop */}
                   {photos.length > 0 && (
                     <div className="relative z-10 space-y-4 hidden md:block">
@@ -409,7 +411,7 @@ export function ProjectModal({ open, onOpenChange, project }: ProjectModalProps)
                                 fill
                                 className="object-cover"
                                 sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
-                                loading="lazy"
+                                priority={true}
                               />
                               <span className="absolute -top-2 -right-2 flex h-8 w-8 items-center justify-center rounded-full border border-white/25 bg-white/20 text-[11px] font-semibold text-white shadow-[0_8px_20px_rgba(0,0,0,0.35)] backdrop-blur-sm">
                                 {displayNumber}
@@ -428,7 +430,7 @@ export function ProjectModal({ open, onOpenChange, project }: ProjectModalProps)
                       <div className="relative overflow-hidden rounded-2xl border border-white/15 bg-gradient-to-br from-white/8 via-white/5 to-white/3 p-4 backdrop-blur-xl">
                         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-cyan-400/5" />
                         <div className="absolute top-0 right-0 h-32 w-32 rounded-full bg-primary/10 blur-2xl" />
-                        
+
                         <div className="relative z-10 space-y-3">
                           {/* Compact Header */}
                           <div className="flex items-center">
@@ -481,7 +483,7 @@ export function ProjectModal({ open, onOpenChange, project }: ProjectModalProps)
                           {/* Compact Project Essence */}
                           <div className="rounded-lg border border-white/10 bg-white/5 p-3 backdrop-blur-sm">
                             <div className={`text-[11px] font-medium text-white/85 leading-snug ${showFullText ? '' : 'line-clamp-1'}`}>
-                              {showFullText 
+                              {showFullText
                                 ? (project.objective || project.creativeIdea || 'Creative project execution')
                                 : (project.objective?.split('.')[0]?.substring(0, 80) || project.creativeIdea?.split('.')[0]?.substring(0, 80) || 'Creative project execution')
                               }
@@ -490,7 +492,7 @@ export function ProjectModal({ open, onOpenChange, project }: ProjectModalProps)
                               <>
                                 <div className="h-px bg-white/10 my-2" />
                                 <div className={`text-[10px] text-white/65 leading-snug ${showFullText ? '' : 'line-clamp-1'}`}>
-                                  {showFullText 
+                                  {showFullText
                                     ? project.results
                                     : project.results.split('.')[0]?.substring(0, 80)
                                   }
@@ -578,7 +580,7 @@ export function ProjectModal({ open, onOpenChange, project }: ProjectModalProps)
                   <div className="h-4 w-4 rounded-full border border-white/40 border-t-white/80 animate-spin" />
                 </div>
               )}
-              
+
               <div className="w-full h-full" style={{ opacity: mediaLoaded ? 1 : 0, transition: 'opacity 0.15s' }}>
                 {isCurrentVideo ? (
                   <video
@@ -588,7 +590,7 @@ export function ProjectModal({ open, onOpenChange, project }: ProjectModalProps)
                     controls
                     loop
                     playsInline
-                    preload="metadata"
+                    preload="auto"
                     onLoadedData={() => setMediaLoaded(true)}
                     onCanPlay={() => setMediaLoaded(true)}
                     onError={() => setMediaLoaded(true)}
@@ -600,7 +602,9 @@ export function ProjectModal({ open, onOpenChange, project }: ProjectModalProps)
                     fill
                     className="object-contain"
                     sizes="90vw"
-                    loading="lazy"
+                    loading={undefined}
+                    priority
+
                     onLoad={() => setMediaLoaded(true)}
                     onError={() => setMediaLoaded(true)}
                   />

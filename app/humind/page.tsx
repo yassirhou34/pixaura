@@ -324,16 +324,16 @@ export default function HumindPage() {
                     >
                       {/* Main button - clean and minimal */}
                       <div className={`relative z-10 flex items-center gap-2 px-5 py-2.5 rounded-full border transition-all duration-300 ${isActive
-                          ? "border-white/20 bg-white/10 text-white backdrop-blur-sm"
-                          : "border-white/8 bg-white/5 text-white/60 hover:border-white/15 hover:bg-white/8 hover:text-white/90"
+                        ? "border-white/20 bg-white/10 text-white backdrop-blur-sm"
+                        : "border-white/8 bg-white/5 text-white/60 hover:border-white/15 hover:bg-white/8 hover:text-white/90"
                         }`}>
                         <span className="relative z-10 font-medium">{category}</span>
 
                         {/* Minimal badge */}
                         {count > 0 && (
                           <span className={`relative z-10 text-[10px] px-2 py-0.5 rounded-full font-semibold transition-all duration-300 ${isActive
-                              ? "bg-white/15 text-white"
-                              : "bg-white/8 text-white/50 group-hover:bg-white/12 group-hover:text-white/70"
+                            ? "bg-white/15 text-white"
+                            : "bg-white/8 text-white/50 group-hover:bg-white/12 group-hover:text-white/70"
                             }`}>
                             {count}
                           </span>
