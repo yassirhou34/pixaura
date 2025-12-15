@@ -62,6 +62,16 @@ const offers = [
         t("services.strategyDeliverable3"),
     ],
   },
+  {
+      tag: t("services.digitalTag"),
+      title: t("services.digitalTitle"),
+      description: t("services.digitalDesc"),
+    deliverables: [
+        t("services.digitalDeliverable1"),
+        t("services.digitalDeliverable2"),
+        t("services.digitalDeliverable3"),
+    ],
+  },
 ]
   return (
     <section id="services" className="relative px-4 sm:px-6 pb-16 sm:pb-20 md:pb-28 pt-12 sm:pt-16">
@@ -173,7 +183,7 @@ const offers = [
               <Reveal
                 key={offer.title}
                 delay={index * 120}
-                className={`group relative overflow-hidden rounded-[24px] sm:rounded-[32px] md:rounded-[38px] border border-white/12 bg-white/[0.06] p-6 sm:p-8 md:p-10 text-white backdrop-blur-2xl transition-all duration-500 hover:-translate-y-1 hover:border-white/30 hover:bg-white/[0.12] flex flex-col ${index === 4 ? 'md:col-span-2 md:max-w-2xl md:mx-auto' : ''} ${isExpanded ? 'md:h-full' : 'md:h-full'}`}
+                className={`group relative overflow-hidden rounded-[24px] sm:rounded-[32px] md:rounded-[38px] border border-white/12 bg-white/[0.06] p-6 sm:p-8 md:p-10 text-white backdrop-blur-2xl transition-all duration-500 hover:-translate-y-1 hover:border-white/30 hover:bg-white/[0.12] flex flex-col ${isExpanded ? 'md:h-full' : 'md:h-full'}`}
               >
                 <div className="pointer-events-none absolute -inset-x-16 top-[-40%] h-[420px] rounded-full bg-[radial-gradient(circle,_rgba(0,115,255,0.36)_0%,_transparent_65%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent" />
