@@ -4,7 +4,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
-    unoptimized: true,
+    // IMPORTANT: keep Next/Image optimization ON so thumbnails/lightbox don't load original huge assets
   },
   // Optimize for Vercel deployment
   experimental: {

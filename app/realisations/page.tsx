@@ -78,26 +78,6 @@ const projects = [
     results: "Différenciation dans un secteur ultra-concurrentiel, renforcement de l'image de marque BSK Immobilier, création de contenu authentique engageant.",
   },
   {
-    id: 4,
-    title: "Castles Rally 2025 — Remerciements",
-    category: "Film / Vidéo",
-    formats: ["Film / Vidéo", "Photo", "Social"],
-    sector: "Automobile",
-    image: "/Banque d_images/Copie de DSC04796.jpg",
-    video: null,
-    shortDescription: "Un grand MERCI à tous nos participants, à nos partenaires et à vous, le public, venu en nombre sur les routes pour faire vibrer cette édition 2025 !",
-    gallery: [
-      "/Banque d_images/Copie de DSC04796.jpg",
-      "/Banque d_images/Copie de DSC04758.jpg",
-      "/Banque d_images/Copie de DSC04678.jpg",
-      "/Banque d_images/rally1.mp4",
-    ],
-    objective: "Documenter et promouvoir l'événement Castles Rally 2025, remercier les participants et partenaires, capturer l'énergie et la passion de l'événement pour renforcer la communauté automobile.",
-    creativeIdea: "Capturer l'énergie et la passion de l'événement, mettre en valeur les supercars, les sourires et l'enthousiasme du public. Ambiance événementielle vibrante qui reflète la magie du Castles Rally.",
-    device: "Production complète événementiel avec photos et vidéos de l'événement, couverture complète du rally, production Pixaura_IT en collaboration avec les partenaires du Castles Rally 2025.",
-    results: "Promotion de l'événement, engagement de la communauté automobile, renforcement de la visibilité du Castles Rally 2025.",
-  },
-  {
     id: 5,
     title: "Castles Rally 2025 — Première Boucle",
     category: "Film / Vidéo",
@@ -134,25 +114,6 @@ const projects = [
     creativeIdea: "Inspiration directe du cépage roi de Vouvray : le Chenin. Les lames de bois, toutes de la même taille, rappellent la régularité et la rigueur du travail du viticulteur. Le thème de la barrique s'invite dans la matière et la teinte, en écho à l'élevage traditionnel. Les niches dorées soulignent la pureté et la noblesse du Chenin.",
     device: "Aménagement sur-mesure avec lames de bois, niches dorées, production Pixaura_IT en collaboration avec les artisans locaux.",
     results: "Valorisation de l'histoire et de l'âme du vin, création d'un espace unique et premium, renforcement de l'identité de marque.",
-  },
-  {
-    id: 7,
-    title: "Stradale Events/Humind — Interview Exclusive",
-    category: "Film / Vidéo",
-    formats: ["Film / Vidéo", "Social"],
-    sector: "Automobile",
-    image: "/Banque d_images/Copie de M7_03194.jpg",
-    video: null,
-    shortDescription: "Interview exclusive sur notre chaîne YouTube avec Stradale Events – l'agence événementielle automobile dédiée aux supercars.",
-    gallery: [
-      "/Banque d_images/Copie de M7_03194.jpg",
-      "/Banque d_images/Copie de M7_03225.jpg",
-      "/Banque d_images/pod1.mp4",
-    ],
-    objective: "Créer une interview exclusive avec Stradale Events, agence événementielle automobile dédiée aux supercars, partager leur vision et leur passion pour l'automobile d'exception.",
-    creativeIdea: "Interview exclusive premium, mise en valeur de la vision et de la passion de Stradale Events pour l'automobile d'exception, production professionnelle et engageante.",
-    device: "Interview filmée avec mise en valeur de l'expertise et de la passion de Stradale Events, production Pixaura_IT, workflow interne, montage et étalonnage en interne.",
-    results: "Promotion de Stradale Events, engagement de la communauté automobile, renforcement de la visibilité de l'agence.",
   },
   {
     id: 8,
@@ -574,7 +535,11 @@ export default function RealisationsPage() {
                     </div>
 
                     <div className="flex flex-col gap-5 px-8 py-8 text-white">
-                      <h3 className="text-xl font-bold leading-tight md:text-2xl text-white/95 group-hover:text-white transition-colors duration-300">
+                      <h3 className={`text-xl font-bold leading-tight md:text-2xl text-white/95 group-hover:text-white transition-colors duration-300 ${
+                        project.id === 2 ? 'mb-3' : 
+                        project.id === 5 || project.id === 8 ? 'mb-5' : 
+                        ''
+                      }`}>
                         {project.title}
                       </h3>
                       <div className="flex items-center gap-4 text-xs uppercase tracking-[0.28em] text-white/60">
@@ -583,7 +548,7 @@ export default function RealisationsPage() {
                           <span className="text-white/70">{project.category}</span>
                         </span>
                         <span className="h-px flex-1 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
-                        <span className="inline-flex items-center gap-2 text-white/80 transition-all duration-300 group-hover:text-white group-hover:gap-3">
+                        <span className="inline-flex items-center gap-2 text-white/80 transition-all duration-300 group-hover:text-white group-hover:gap-3 whitespace-nowrap">
                           {t("realisationsPage.viewProject")}
                           <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
                         </span>
@@ -605,16 +570,20 @@ export default function RealisationsPage() {
               </span>
 
               {/* Enhanced Text */}
-              <p className="text-xl font-bold md:text-2xl leading-relaxed text-white/95">
-                {t("realisationsPage.ctaText1")}{' '}
-                <span className="relative inline-block">
-                  <span className="absolute inset-0 bg-gradient-to-r from-primary/40 via-cyan-400/40 to-primary/40 blur-xl opacity-50" />
-                  <span className="relative bg-gradient-to-r from-white via-primary/90 to-white bg-clip-text text-transparent">
-                    {t("realisationsPage.ctaText2")}
+              <div className="text-xl font-bold md:text-2xl leading-relaxed text-white/95">
+                <span>
+                  {t("realisationsPage.ctaText1")}{' '}
+                  <span className="relative inline-block">
+                    <span className="absolute inset-0 bg-gradient-to-r from-primary/40 via-cyan-400/40 to-primary/40 blur-xl opacity-50" />
+                    <span className="relative bg-gradient-to-r from-white via-primary/90 to-white bg-clip-text text-transparent">
+                      {t("realisationsPage.ctaText2")}
+                    </span>
                   </span>
+                  {' ?'}
                 </span>
-                {' '}{t("realisationsPage.ctaText3")}
-              </p>
+                <br />
+                <span>{t("realisationsPage.ctaText3")}</span>
+              </div>
 
               {/* Premium Button */}
               <Link

@@ -3,13 +3,14 @@
 import Link from "next/link"
 import Image from "next/image"
 import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, usePathname } from "next/navigation"
 import { useTranslation } from "@/contexts/translation-context"
 import { Globe, Sparkles } from "lucide-react"
 
 export function Navbar() {
   const { t, language, setLanguage } = useTranslation()
   const router = useRouter()
+  const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
   const [hoveredItem, setHoveredItem] = useState<string | null>(null)
   const [scrolled, setScrolled] = useState(false)
@@ -30,6 +31,25 @@ export function Navbar() {
       router.prefetch('/?skipIntro=true')
     }
   }, [router])
+
+  // AGGRESSIVE PRELOAD: Preload Humind video when navbar mounts (if not on Humind page)
+  useEffect(() => {
+    if (pathname !== '/humind') {
+      const preloadVideo = document.createElement('video')
+      preloadVideo.src = '/Banque d_images/noir.mp4'
+      preloadVideo.preload = 'auto'
+      preloadVideo.muted = true
+      preloadVideo.playsInline = true
+      preloadVideo.load()
+      
+      // Store in sessionStorage to indicate video is preloaded
+      sessionStorage.setItem('humindVideoPreloaded', 'true')
+      
+      return () => {
+        // Cleanup
+      }
+    }
+  }, [pathname])
 
   // Helper function to handle simple navigation transitions - NO OVERLAY, just smooth navigation
   const handleNavigationTransition = (targetUrl: string, shouldSetNavFromSpecialPage: boolean = false) => {
@@ -59,6 +79,10 @@ export function Navbar() {
     { label: t("nav.humind"), href: "/humind" },
     { label: t("nav.contact"), href: "/#contact" },
   ]
+
+  const isHumindPage = pathname === "/humind"
+  const logoSrc = isHumindPage ? "/Banque d_images/humind-white.png" : "/Banque d_images/PIXaura-soft white.png"
+  const logoAlt = isHumindPage ? "Humind Logo" : "Pixaura International Logo"
 
   return (
     <nav
@@ -103,11 +127,11 @@ export function Navbar() {
           }}
         >
           <Image
-            src="/Pixaura_it .png"
-            alt="Pixaura International Logo"
-            width={500}
-            height={150}
-            className="h-28 w-auto object-contain"
+            src={logoSrc}
+            alt={logoAlt}
+            width={180}
+            height={54}
+            className="h-10 w-auto object-contain mt-1"
             priority
           />
         </a>
@@ -147,6 +171,16 @@ export function Navbar() {
                 // FORCE 100% SKIP INTRO: Humind and Portfolio - Use router.push for smooth client-side transition
                 // This prevents the language reset bug caused by hard reload (window.location.href)
                 if (item.href === '/humind' || item.href === '/realisations') {
+                  // AGGRESSIVE PRELOAD: Ensure video is preloaded before navigation
+                  if (item.href === '/humind') {
+                    const preloadVideo = document.createElement('video')
+                    preloadVideo.src = '/Banque d_images/noir.mp4'
+                    preloadVideo.preload = 'auto'
+                    preloadVideo.muted = true
+                    preloadVideo.playsInline = true
+                    preloadVideo.load()
+                    sessionStorage.setItem('humindVideoPreloaded', 'true')
+                  }
                   // Use standard client-side navigation to preserve language state
                   router.push(item.href)
                   return
@@ -172,7 +206,19 @@ export function Navbar() {
                 onClick={handleClick}
                 className="group relative overflow-hidden rounded-xl px-5 py-2 text-sm font-bold text-white/95 transition-all duration-500"
                 style={{ animationDelay: `${index * 50}ms` }}
-                onMouseEnter={() => setHoveredItem(item.href)}
+                onMouseEnter={() => {
+                  setHoveredItem(item.href)
+                  // AGGRESSIVE PRELOAD: Preload Humind video on hover
+                  if (item.href === '/humind') {
+                    const preloadVideo = document.createElement('video')
+                    preloadVideo.src = '/Banque d_images/noir.mp4'
+                    preloadVideo.preload = 'auto'
+                    preloadVideo.muted = true
+                    preloadVideo.playsInline = true
+                    preloadVideo.load()
+                    sessionStorage.setItem('humindVideoPreloaded', 'true')
+                  }
+                }}
                 onMouseLeave={() => setHoveredItem(null)}
               >
                 <div
@@ -405,6 +451,16 @@ export function Navbar() {
                 // FORCE 100% SKIP INTRO: Humind and Portfolio - Use router.push for smooth client-side transition
                 // This prevents the language reset bug caused by hard reload (window.location.href)
                 if (item.href === '/humind' || item.href === '/realisations') {
+                  // AGGRESSIVE PRELOAD: Ensure video is preloaded before navigation
+                  if (item.href === '/humind') {
+                    const preloadVideo = document.createElement('video')
+                    preloadVideo.src = '/Banque d_images/noir.mp4'
+                    preloadVideo.preload = 'auto'
+                    preloadVideo.muted = true
+                    preloadVideo.playsInline = true
+                    preloadVideo.load()
+                    sessionStorage.setItem('humindVideoPreloaded', 'true')
+                  }
                   // Use standard client-side navigation to preserve language state
                   router.push(item.href)
                   return

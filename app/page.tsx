@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
 
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
@@ -20,6 +20,9 @@ import { ImmersiveIntro } from "@/components/immersive-intro"
 export default function Home() {
   // Always start with false to avoid hydration mismatch
   const [introComplete, setIntroComplete] = useState(false)
+  const backgroundVideoRef = useRef<HTMLVideoElement>(null)
+  const [desktopVideoReady, setDesktopVideoReady] = useState(false)
+  const [showDesktopVideo, setShowDesktopVideo] = useState(false)
 
   // Preload hero section images immediately - before first render
   useLayoutEffect(() => {
@@ -100,6 +103,61 @@ export default function Home() {
     setIntroComplete(true)
   }, [])
 
+  // Desktop background: show image first, then fade to video (only after intro + video ready)
+  useEffect(() => {
+    const video = backgroundVideoRef.current
+    if (!video) return
+
+    // Ensure video properties
+    video.muted = true
+    video.loop = true
+    video.playsInline = true
+
+    // Mark ready when it can play
+    const handleCanPlay = () => {
+      setDesktopVideoReady(true)
+    }
+    video.addEventListener('canplay', handleCanPlay)
+
+    // Start loading early (but keep it hidden until we decide to show it)
+    try {
+      video.load()
+    } catch {}
+
+    return () => {
+      video.removeEventListener('canplay', handleCanPlay)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!introComplete || !desktopVideoReady) return
+    setShowDesktopVideo(true)
+  }, [introComplete, desktopVideoReady])
+
+  useEffect(() => {
+    const video = backgroundVideoRef.current
+    if (!video) return
+    if (!showDesktopVideo) return
+
+    // Force play when we actually reveal the video (handle autoplay restrictions)
+    const playVideo = async () => {
+      try {
+        await video.play()
+      } catch (error) {
+        // Autoplay was prevented, try again after user interaction
+        const handleUserInteraction = () => {
+          video.play().catch(() => {})
+          document.removeEventListener('click', handleUserInteraction)
+          document.removeEventListener('touchstart', handleUserInteraction)
+        }
+        document.addEventListener('click', handleUserInteraction)
+        document.addEventListener('touchstart', handleUserInteraction)
+      }
+    }
+
+    playVideo()
+  }, [showDesktopVideo])
+
   // Handle scroll to section after content is rendered
   useEffect(() => {
     if (introComplete) {
@@ -170,19 +228,38 @@ export default function Home() {
   return (
     <main className="relative min-h-screen overflow-hidden bg-transparent">
       <div className="pointer-events-none fixed inset-0 -z-10">
-        {/* Background image - visible on desktop */}
+        {/* Desktop placeholder image (shown first) */}
         <img
           src="/Banque d_images/ippppp1.png"
           alt="Background"
-          className="hidden md:block h-full w-full object-cover"
+          className="hidden md:block absolute inset-0 h-full w-full object-cover transition-opacity duration-700"
           style={{
-            opacity: 1,
+            opacity: showDesktopVideo ? 0 : 1,
+            visibility: 'visible',
+            objectFit: 'cover',
+            width: '100%',
+            height: '100%',
+          }}
+        />
+
+        {/* Background video - visible on desktop only */}
+        <video
+          ref={backgroundVideoRef}
+          loop
+          muted
+          playsInline
+          preload="auto"
+          className="hidden md:block absolute inset-0 h-full w-full object-cover transition-opacity duration-700"
+          style={{
+            opacity: showDesktopVideo ? 1 : 0,
             visibility: 'visible',
             objectFit: 'cover',
             width: '100%',
             height: '100%'
           }}
-        />
+        >
+          <source src="/Banque d_images/Copie de BACKGROUND WEB DESKTOP.mp4" type="video/mp4" />
+        </video>
         {/* Background image - visible only on mobile */}
         <img
           src="/Banque d_images/backnoiree.png"

@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { ChevronDown, ChevronUp } from "lucide-react"
+import { ChevronDown, ChevronUp, TrendingUp, Target, Palette, DollarSign } from "lucide-react"
 import { Reveal } from "@/components/reveal"
 import { useTranslation } from "@/contexts/translation-context"
 
@@ -163,6 +163,110 @@ const offers = [
             </div>
           </Reveal>
         </div>
+
+        {/* Section Bénéfices Clients - Design Innovant Moderne */}
+        <Reveal delay={400} className="relative z-10 mt-16 sm:mt-20">
+          <div className="mb-12 text-center">
+            <span className="inline-flex w-fit items-center gap-3 rounded-full border border-white/20 bg-white/10 px-6 py-2 text-sm font-semibold uppercase tracking-[0.5em] text-white shadow-[0_0_35px_rgba(89,129,255,0.25)] backdrop-blur-md">
+              {t("services.benefitsBadge")}
+            </span>
+            <h2 className="mt-6 text-3xl sm:text-4xl md:text-5xl font-black leading-tight text-white">
+              {t("services.benefitsTitle")}
+            </h2>
+            <p className="mt-4 text-base text-white/70 md:text-lg max-w-2xl mx-auto">
+              {t("services.benefitsSubtitle")}
+            </p>
+          </div>
+
+          {/* Grid des bénéfices - Design Moderne avec Images Mises en Valeur */}
+          <div className="grid gap-8 md:grid-cols-2 md:auto-rows-fr">
+            {[
+              {
+                icon: Target,
+                label: t("services.benefit1Label"),
+                title: t("services.benefit1Title"),
+                description: t("services.benefit1Desc"),
+                image: "/Banque d_images/art1.jpg",
+                delay: 100,
+                imagePosition: "left"
+              },
+              {
+                icon: TrendingUp,
+                label: t("services.benefit2Label"),
+                title: t("services.benefit2Title"),
+                description: t("services.benefit2Desc"),
+                image: "/Banque d_images/Copie de M7_00487.jpg",
+                delay: 200,
+                imagePosition: "right"
+              },
+              {
+                icon: Palette,
+                label: t("services.benefit3Label"),
+                title: t("services.benefit3Title"),
+                description: t("services.benefit3Desc"),
+                image: "/Banque d_images/art2.jpg",
+                delay: 300,
+                imagePosition: "left"
+              },
+              {
+                icon: DollarSign,
+                label: t("services.benefit4Label"),
+                title: t("services.benefit4Title"),
+                description: t("services.benefit4Desc"),
+                image: "/Banque d_images/Copie de DSC04796.jpg",
+                delay: 400,
+                imagePosition: "right"
+              }
+            ].map((benefit, index) => (
+              <Reveal key={index} delay={benefit.delay} className="h-full">
+                <div className={`group relative h-full overflow-hidden rounded-2xl sm:rounded-3xl border border-white/15 bg-black/40 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.4)] transition-all duration-700 hover:border-white/25 hover:shadow-[0_30px_80px_rgba(0,0,0,0.5)] ${
+                  benefit.imagePosition === 'left' ? 'md:flex-row' : 'md:flex-row-reverse'
+                } flex flex-col`}>
+                  {/* Image Section - Large et Visible */}
+                  <div className="relative w-full md:w-[45%] h-64 md:h-full overflow-hidden">
+                    <Image
+                      src={benefit.image}
+                      alt={benefit.title}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
+                      sizes="(max-width: 768px) 100vw, 45vw"
+                    />
+                    {/* Gradient overlay léger - juste pour la lisibilité du label */}
+                    <div 
+                      className={`absolute inset-0 ${
+                        benefit.imagePosition === 'left' 
+                          ? 'bg-gradient-to-r from-black/60 via-transparent to-transparent' 
+                          : 'bg-gradient-to-l from-black/60 via-transparent to-transparent'
+                      }`}
+                    />
+                    
+                    {/* Label Badge sur l'image */}
+                    <div className={`absolute top-4 ${benefit.imagePosition === 'left' ? 'left-4' : 'right-4'} z-10`}>
+                      <div className="relative">
+                        <div className="absolute inset-0 rounded-full border-2 border-white/30 animate-ping" style={{ animationDuration: '2s' }} />
+                        <div className="relative rounded-full border border-white/40 bg-white/10 backdrop-blur-md px-4 py-2">
+                          <span className="text-xs font-bold uppercase tracking-[0.4em] text-white">{benefit.label}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Content Section - align titles consistently at the top */}
+                  <div className="relative w-full md:w-[55%] p-8 md:p-10 flex flex-col justify-start bg-gradient-to-br from-white/5 via-white/3 to-transparent">
+                    <div className="space-y-4">
+                      <h3 className="text-2xl md:text-3xl font-bold leading-tight text-white">
+                        {benefit.title}
+                      </h3>
+                      <p className="text-base text-white/75 leading-relaxed group-hover:text-white/85 transition-colors duration-500">
+                        {benefit.description}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </Reveal>
 
         <div className="grid gap-10 md:grid-cols-2 md:items-start">
           {offers.map((offer, index) => {

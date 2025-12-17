@@ -8,6 +8,15 @@ export function HomeVideoCarousel() {
   const { t } = useTranslation()
 
   const slides = useMemo(() => [
+    // Slide 2 becomes first
+    {
+      id: 2,
+      title: t("portfolio.carouselSlide2Title"),
+      description: t("portfolio.carouselSlide2Description"),
+      video: "/Banque d_images/rally1.mp4",
+      tags: [t("portfolio.carouselSlide2Tag1"), t("portfolio.carouselSlide2Tag2"), t("portfolio.carouselSlide2Tag3")],
+    },
+    // Slide 1 becomes second
     {
       id: 1,
       title: t("portfolio.carouselSlide1Title"),
@@ -16,25 +25,11 @@ export function HomeVideoCarousel() {
       tags: [t("portfolio.carouselSlide1Tag1"), t("portfolio.carouselSlide1Tag2"), t("portfolio.carouselSlide1Tag3")],
     },
     {
-      id: 2,
-      title: t("portfolio.carouselSlide2Title"),
-      description: t("portfolio.carouselSlide2Description"),
-      video: "/Banque d_images/rally1.mp4",
-      tags: [t("portfolio.carouselSlide2Tag1"), t("portfolio.carouselSlide2Tag2"), t("portfolio.carouselSlide2Tag3")],
-    },
-    {
       id: 3,
       title: t("portfolio.carouselSlide3Title"),
       description: t("portfolio.carouselSlide3Description"),
       video: "/Banque d_images/halowen.mp4",
       tags: [t("portfolio.carouselSlide3Tag1"), t("portfolio.carouselSlide3Tag2"), t("portfolio.carouselSlide3Tag3")],
-    },
-    {
-      id: 4,
-      title: t("portfolio.carouselSlide4Title"),
-      description: t("portfolio.carouselSlide4Description"),
-      video: "/Banque d_images/rally2.mp4",
-      tags: [t("portfolio.carouselSlide4Tag1"), t("portfolio.carouselSlide4Tag2"), t("portfolio.carouselSlide4Tag3")],
     },
     {
       id: 5,
@@ -584,23 +579,6 @@ export function HomeVideoCarousel() {
                     <Volume2 className="h-6 w-6 text-white transition-all duration-300 group-hover/btn:scale-125 group-hover/btn:text-cyan-300" />
                   )}
                 </button>
-              </div>
-
-              {/* Counter */}
-              <div
-                className={`absolute top-6 right-6 z-30 flex items-center gap-2 rounded-full bg-gradient-to-br from-black/80 via-black/70 to-black/80 backdrop-blur-2xl border-2 border-white/30 px-5 py-2.5 shadow-[0_0_30px_rgba(0,0,0,0.6),0_0_60px_rgba(34,211,238,0.2)] transition-all duration-[2000ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${isVisible
-                    ? 'opacity-100 translate-y-0 scale-100'
-                    : 'opacity-0 -translate-x-10 scale-90'
-                  }`}
-                style={{ transitionDelay: isVisible ? '100ms' : '0ms' }}
-              >
-                <span className="text-sm font-light text-white" style={{ textShadow: '0 0 15px rgba(34,211,238,0.4)' }}>
-                  {String(currentIndex + 1).padStart(2, "0")}
-                </span>
-                <span className="text-white/50">/</span>
-                <span className="text-sm font-light text-white/70" style={{ textShadow: '0 0 10px rgba(34,211,238,0.2)' }}>
-                  {String(slides.length).padStart(2, "0")}
-                </span>
               </div>
 
               <div className="absolute inset-0 rounded-3xl ring-2 ring-white/15 ring-inset" />

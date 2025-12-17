@@ -37,6 +37,12 @@ export const TranslationProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [])
 
+  // Keep <html lang="..."> in sync so hyphenation/justification behave correctly in FR/EN
+  useEffect(() => {
+    if (typeof document === 'undefined') return
+    document.documentElement.lang = language
+  }, [language])
+
   const setLanguage = (lang: Language) => {
     setLanguageState(lang)
     localStorage.setItem('language', lang)

@@ -8,6 +8,10 @@ import { ArrowRight, Check, ChevronRight, Calendar } from "lucide-react"
 
 type FormData = {
   besoin: string
+  nom: string
+  prenom: string
+  telephone: string
+  email: string
   budget: string
   delai: string
   secteur: string
@@ -19,13 +23,17 @@ export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false)
   const [formData, setFormData] = useState<FormData>({
     besoin: "",
+    nom: "",
+    prenom: "",
+    telephone: "",
+    email: "",
     budget: "",
     delai: "",
     secteur: "",
     privacy: false,
   })
 
-  const totalSteps = 4
+  const totalSteps = 5
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target
@@ -61,6 +69,10 @@ export default function ContactPage() {
         setSubmitted(true)
         setFormData({
           besoin: "",
+          nom: "",
+          prenom: "",
+          telephone: "",
+          email: "",
           budget: "",
           delai: "",
           secteur: "",
@@ -77,10 +89,16 @@ export default function ContactPage() {
       case 1:
         return formData.besoin.trim().length > 0
       case 2:
-        return formData.budget !== ""
+        return formData.nom.trim().length > 0 && 
+               formData.prenom.trim().length > 0 && 
+               formData.telephone.trim().length > 0 && 
+               formData.email.trim().length > 0 &&
+               /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
       case 3:
-        return formData.delai !== ""
+        return formData.budget !== ""
       case 4:
+        return formData.delai !== ""
+      case 5:
         return formData.secteur !== "" && formData.privacy
       default:
         return false
@@ -187,8 +205,77 @@ export default function ContactPage() {
                   </div>
                 )}
 
-                {/* Step 2: Budget */}
+                {/* Step 2: Informations personnelles */}
                 {currentStep === 2 && (
+                  <div className="space-y-6 animate-fadeIn">
+                    <h2 className="text-2xl font-bold text-white mb-6" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+                      Vos coordonnées
+                    </h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-300 mb-2" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+                          Nom *
+                        </label>
+                        <input
+                          type="text"
+                          name="nom"
+                          value={formData.nom}
+                          onChange={handleChange}
+                          required
+                          className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all text-white placeholder-gray-500"
+                          placeholder="Votre nom"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-300 mb-2" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+                          Prénom *
+                        </label>
+                        <input
+                          type="text"
+                          name="prenom"
+                          value={formData.prenom}
+                          onChange={handleChange}
+                          required
+                          className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all text-white placeholder-gray-500"
+                          placeholder="Votre prénom"
+                        />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-300 mb-2" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+                          Téléphone *
+                        </label>
+                        <input
+                          type="tel"
+                          name="telephone"
+                          value={formData.telephone}
+                          onChange={handleChange}
+                          required
+                          className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all text-white placeholder-gray-500"
+                          placeholder="06 12 34 56 78"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-300 mb-2" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+                          Email *
+                        </label>
+                        <input
+                          type="email"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleChange}
+                          required
+                          className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all text-white placeholder-gray-500"
+                          placeholder="votre@email.com"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Step 3: Budget */}
+                {currentStep === 3 && (
                   <div className="space-y-6 animate-fadeIn">
                     <h2 className="text-2xl font-bold text-white mb-6" style={{ fontFamily: 'Montserrat, sans-serif' }}>
                       Budget estimé
@@ -215,8 +302,8 @@ export default function ContactPage() {
                   </div>
                 )}
 
-                {/* Step 3: Délai */}
-                {currentStep === 3 && (
+                {/* Step 4: Délai */}
+                {currentStep === 4 && (
                   <div className="space-y-6 animate-fadeIn">
                     <h2 className="text-2xl font-bold text-white mb-6" style={{ fontFamily: 'Montserrat, sans-serif' }}>
                       Délai souhaité
@@ -243,8 +330,8 @@ export default function ContactPage() {
                   </div>
                 )}
 
-                {/* Step 4: Secteur */}
-                {currentStep === 4 && (
+                {/* Step 5: Secteur */}
+                {currentStep === 5 && (
                   <div className="space-y-6 animate-fadeIn">
                     <h2 className="text-2xl font-bold text-white mb-6" style={{ fontFamily: 'Montserrat, sans-serif' }}>
                       Secteur d'activité
@@ -271,41 +358,45 @@ export default function ContactPage() {
                         <option value="other" style={{ backgroundColor: '#1a1a1a', color: '#ffffff' }}>Autre</option>
                       </select>
                     </div>
-                    <div className="flex items-start gap-3 pt-4">
+                    <div className="flex items-center gap-3 pt-4">
                       <input
                         type="checkbox"
                         name="privacy"
                         checked={formData.privacy}
                         onChange={handleChange}
                         required
-                        className="mt-1 w-5 h-5 rounded border-white/20 bg-white/5 text-cyan-400 focus:ring-2 focus:ring-cyan-400/20"
+                        className="w-5 h-5 rounded border-white/20 bg-white/5 text-cyan-400 focus:ring-2 focus:ring-cyan-400/20 flex-shrink-0"
                       />
                       <label className="text-sm text-gray-300" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-                        En envoyant ce formulaire, vous acceptez notre politique de confidentialité. *
+                        En envoyant ce formulaire, vous acceptez notre{" "}
+                        <Link href="/politique-de-confidentialite" className="text-cyan-400 hover:text-cyan-300 underline transition-colors">
+                          politique de confidentialité
+                        </Link>
+                        . *
                       </label>
                     </div>
                   </div>
                 )}
 
                 {/* Navigation Buttons */}
-                <div className="flex items-center justify-between mt-10 pt-6 border-t border-white/10">
+                <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 md:gap-0 mt-10 pt-6 border-t border-white/10">
                   {currentStep > 1 && (
                     <button
                       type="button"
                       onClick={handleBack}
-                      className="px-6 py-3 border border-white/20 text-white rounded-lg hover:border-cyan-400 hover:bg-cyan-400/10 transition-all duration-300"
+                      className="w-full md:w-auto px-6 py-3 border border-white/20 text-white rounded-lg hover:border-cyan-400 hover:bg-cyan-400/10 transition-all duration-300 text-center"
                       style={{ fontFamily: 'Montserrat, sans-serif' }}
                     >
                       Précédent
                     </button>
                   )}
-                  <div className="flex-1" />
+                  <div className="hidden md:block flex-1" />
                   {currentStep < totalSteps ? (
                     <button
                       type="button"
                       onClick={handleNext}
                       disabled={!isStepValid()}
-                      className="px-8 py-3 bg-gradient-to-r from-cyan-400 to-purple-500 text-white font-semibold rounded-lg hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                      className="w-full md:w-auto px-6 py-3 bg-gradient-to-r from-cyan-400 to-purple-500 text-white font-semibold rounded-lg hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                       style={{ fontFamily: 'Montserrat, sans-serif' }}
                     >
                       Suivant
@@ -315,7 +406,7 @@ export default function ContactPage() {
                     <button
                       type="submit"
                       disabled={!isStepValid()}
-                      className="px-8 py-3 bg-gradient-to-r from-cyan-400 to-purple-500 text-white font-semibold rounded-lg hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                      className="w-full md:w-auto px-6 py-3 bg-gradient-to-r from-cyan-400 to-purple-500 text-white font-semibold rounded-lg hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                       style={{ fontFamily: 'Montserrat, sans-serif' }}
                     >
                       Envoyer ma demande
@@ -336,22 +427,17 @@ export default function ContactPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-500/3 to-transparent opacity-30" />
         
         <div className="relative z-10 max-w-4xl mx-auto">
-          <div className="text-center mb-12">
+          <div className="text-center mb-8">
             <Calendar className="w-16 h-16 text-cyan-400 mx-auto mb-6" />
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-6" style={{ fontFamily: 'Montserrat, sans-serif' }}>
               Prendre rendez-vous
             </h2>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+            <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-6" style={{ fontFamily: 'Montserrat, sans-serif' }}>
               Réservez un appel avec un expert Pixaura pour discuter de votre projet.
             </p>
-          </div>
-
-          {/* Calendar Placeholder */}
-          <div className="bg-black/50 backdrop-blur-sm border border-white/10 rounded-2xl p-8 md:p-12 shadow-2xl">
-            <div className="text-center py-20">
-              <p className="text-gray-400 mb-6" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-                Calendrier de rendez-vous
-              </p>
+            
+            {/* Button without container */}
+            <div className="text-center">
               <a 
                 href="mailto:contact@pixaura.eu?subject=Demande de rendez-vous"
                 className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-cyan-400 to-purple-500 text-white font-semibold rounded-lg hover:scale-105 transition-all duration-300"

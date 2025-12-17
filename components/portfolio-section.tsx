@@ -136,15 +136,6 @@ export function PortfolioSection() {
       poster: "/Banque d_images/Copie de M7_00487.jpg",
     },
     {
-      id: 4,
-      client: "Castles Rally",
-      title: t("portfolio.project4Title"),
-      category: t("portfolio.categoryFilmVideo"),
-      tags: [t("portfolio.categoryFilmVideo"), t("portfolio.categoryPhoto"), t("portfolio.tagSocial")],
-      video: "/Banque d_images/rally1.mp4",
-      poster: "/Banque d_images/Copie de DSC04796.jpg",
-    },
-    {
       id: 5,
       client: "Castles Rally",
       title: t("portfolio.project5Title"),
@@ -161,15 +152,6 @@ export function PortfolioSection() {
       tags: [t("portfolio.categoryPhoto"), t("portfolio.tagBranding"), t("portfolio.tagDesign")],
       video: null,
       poster: "/Banque d_images/Copie de M7_09197.jpg",
-    },
-    {
-      id: 7,
-      client: "Stradale Events",
-      title: t("portfolio.project7Title"),
-      category: t("portfolio.categoryFilmVideo"),
-      tags: [t("portfolio.categoryFilmVideo"), t("portfolio.tagSocial"), t("portfolio.tagPodcast")],
-      video: "/Banque d_images/pod1.mp4",
-      poster: "/Banque d_images/Copie de M7_03194.jpg",
     },
     {
       id: 8,
@@ -253,7 +235,7 @@ export function PortfolioSection() {
           <span className="divider" />
           <span>{activeProject?.category}</span>
         </div>
-        <h3>{activeProject?.title}</h3>
+        <h3 className="text-center">{activeProject?.title}</h3>
         <Link
           href="/realisations"
           className="latest-preview-link"
@@ -633,7 +615,7 @@ export function PortfolioSection() {
                     >
                       <div className="latest-card-left">
                         <span className="latest-client">{project.client}</span>
-                        <span className="latest-title">{project.title}</span>
+                        <span className="latest-title text-center">{project.title}</span>
                       </div>
                       <div className="latest-card-right">
                         <span className="latest-category">{project.category}</span>

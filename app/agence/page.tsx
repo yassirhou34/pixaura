@@ -296,17 +296,17 @@ export default function AgencePage() {
 
               {/* Innovative Split-Screen Design with Overlapping Cards */}
               <div className="relative max-w-6xl mx-auto">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-0 items-center">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-0 items-stretch">
                   {teamMembers.map((member, index) => (
                     <div
                       key={index}
-                      className={`group relative ${index === 0 ? 'lg:pr-3 lg:z-10' : 'lg:pl-3 lg:-ml-8 lg:z-0'}`}
+                      className={`group relative h-full ${index === 0 ? 'lg:pr-3 lg:z-10' : 'lg:pl-3 lg:-ml-8 lg:z-0'}`}
                       style={{
                         animation: `fadeInUp 0.8s ease-out ${index * 0.2}s both`,
                       }}
                     >
                       {/* Mobile: THE ULTIMATE PREMIUM VERSION - BEST CREATION */}
-                      <div className="lg:hidden group relative overflow-hidden rounded-[32px] sm:rounded-[40px] border border-white/25 bg-gradient-to-br from-white/10 via-white/8 to-white/6 p-8 sm:p-12 text-white backdrop-blur-3xl transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-white/40 hover:bg-gradient-to-br hover:from-white/12 hover:via-white/10 hover:to-white/8 hover:shadow-[0_20px_60px_rgba(0,115,255,0.4),0_0_0_1px_rgba(255,255,255,0.1)] hover:-translate-y-1 shadow-[0_12px_40px_rgba(0,0,0,0.5),0_4px_16px_rgba(0,0,0,0.3)]">
+                      <div className="lg:hidden group relative overflow-hidden rounded-[32px] sm:rounded-[40px] border border-white/25 bg-gradient-to-br from-white/10 via-white/8 to-white/6 p-8 sm:p-12 text-white backdrop-blur-3xl transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-white/40 hover:bg-gradient-to-br hover:from-white/12 hover:via-white/10 hover:to-white/8 hover:shadow-[0_20px_60px_rgba(0,115,255,0.4),0_0_0_1px_rgba(255,255,255,0.1)] hover:-translate-y-1 shadow-[0_12px_40px_rgba(0,0,0,0.5),0_4px_16px_rgba(0,0,0,0.3)] h-full">
                         {/* Ultimate Multi-Layer Glow Effects - Always Visible */}
                         <div className="pointer-events-none absolute -inset-6 opacity-30 group-hover:opacity-60 transition-opacity duration-700">
                           <div className="absolute inset-0 rounded-[40px] bg-gradient-to-r from-cyan-400/25 via-purple-500/25 to-cyan-400/25 blur-3xl animate-pulse" style={{ animationDuration: '3s' }} />
@@ -365,7 +365,7 @@ export default function AgencePage() {
                           </h3>
                           
                           {/* Ultimate Premium Role - Beautiful Gradient */}
-                          <p className="max-w-2xl text-sm sm:text-base font-extrabold uppercase tracking-[0.25em] leading-tight bg-gradient-to-r from-purple-400 via-purple-300 via-cyan-300 to-cyan-400 bg-clip-text text-transparent drop-shadow-[0_3px_15px_rgba(168,85,247,0.5),0_0_30px_rgba(56,189,248,0.3)]" style={{
+                          <p className="max-w-2xl min-h-[3.5rem] sm:min-h-[3.75rem] text-sm sm:text-base font-extrabold uppercase tracking-[0.25em] leading-tight bg-gradient-to-r from-purple-400 via-purple-300 via-cyan-300 to-cyan-400 bg-clip-text text-transparent drop-shadow-[0_3px_15px_rgba(168,85,247,0.5),0_0_30px_rgba(56,189,248,0.3)]" style={{
                             backgroundSize: '200% 200%',
                             animation: 'gradientShift 4s ease infinite',
                           }}>
@@ -373,7 +373,7 @@ export default function AgencePage() {
                           </p>
                           
                           {/* Ultimate Premium Description - Perfect Readability */}
-                          <p className="max-w-2xl text-base sm:text-lg md:text-xl text-white leading-relaxed font-semibold" style={{ 
+                          <p className="max-w-2xl min-h-[7rem] sm:min-h-[7.5rem] text-base sm:text-lg md:text-xl text-white leading-relaxed font-semibold" style={{ 
                             fontFamily: 'Montserrat, sans-serif',
                             textShadow: '0 2px 12px rgba(0,0,0,0.5), 0 4px 24px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.7)',
                             lineHeight: '1.8',
@@ -386,7 +386,7 @@ export default function AgencePage() {
                           <div className="max-w-2xl pt-6 border-t-2 border-white/35 relative">
                             <div className="absolute top-0 left-0 w-24 h-1 bg-gradient-to-r from-cyan-400/80 via-purple-500/80 to-cyan-400/80 blur-md opacity-70 group-hover:opacity-100 transition-opacity duration-500" />
                             <div className="absolute top-0 left-0 w-32 h-px bg-gradient-to-r from-cyan-400/60 via-purple-500/60 to-transparent blur-sm" />
-                            <p className="text-base sm:text-lg md:text-xl text-white leading-relaxed font-medium pt-6" style={{ 
+                            <p className="min-h-[7rem] sm:min-h-[7.5rem] text-base sm:text-lg md:text-xl text-white leading-relaxed font-medium pt-6" style={{ 
                               fontFamily: 'Montserrat, sans-serif',
                               textShadow: '0 2px 12px rgba(0,0,0,0.5), 0 4px 24px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.7)',
                               lineHeight: '1.85',
@@ -413,7 +413,7 @@ export default function AgencePage() {
                         <div className="absolute -inset-2 bg-gradient-to-r from-white/10 via-white/15 to-white/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-40 transition-opacity duration-700" />
                         
                         {/* Main Card - Desktop: Split Layout */}
-                        <div className="relative bg-gradient-to-br from-black/90 via-slate-900/85 to-black/90 backdrop-blur-2xl rounded-2xl overflow-hidden border border-white/15 group-hover:border-purple-400/50 transition-all duration-700 group-hover:shadow-2xl group-hover:shadow-purple-500/30 group-hover:-translate-y-1">
+                        <div className="relative bg-gradient-to-br from-black/90 via-slate-900/85 to-black/90 backdrop-blur-2xl rounded-2xl overflow-hidden border border-white/15 group-hover:border-purple-400/50 transition-all duration-700 group-hover:shadow-2xl group-hover:shadow-purple-500/30 group-hover:-translate-y-1 h-full">
                           {/* Animated Background Gradient */}
                           <div className="absolute inset-0 bg-gradient-to-br from-purple-400/6 via-purple-500/6 to-purple-400/6 opacity-0 group-hover:opacity-100 transition-opacity duration-700" style={{
                             backgroundSize: '200% 200%',
@@ -436,7 +436,7 @@ export default function AgencePage() {
                             </div>
                             
                             {/* Content Container - Desktop: Side Panel */}
-                            <div className={`relative w-full lg:w-3/5 p-6 sm:p-8 lg:p-8 flex flex-col justify-center ${index === 0 ? 'lg:order-2' : 'lg:order-1'} z-10`}>
+                            <div className={`relative w-full lg:w-3/5 p-6 sm:p-8 lg:p-8 flex flex-col justify-start ${index === 0 ? 'lg:order-2' : 'lg:order-1'} z-10`}>
                               {/* Name - Desktop Only */}
                               <div className="mb-3">
                                 <h3 className="text-2xl md:text-3xl font-black text-white mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:via-purple-500 group-hover:to-purple-400 transition-all duration-700" style={{ 
@@ -449,17 +449,17 @@ export default function AgencePage() {
                               </div>
                               
                               {/* Role */}
-                              <p className="text-purple-400 text-sm md:text-base font-semibold mb-3" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+                              <p className="min-h-[3rem] text-purple-400 text-sm md:text-base font-semibold mb-3 leading-snug" style={{ fontFamily: 'Montserrat, sans-serif' }}>
                                 {member.role}
                               </p>
                               
                               {/* Description */}
-                              <p className="text-gray-300 text-sm md:text-base leading-relaxed mb-3" style={{ fontFamily: 'Montserrat, sans-serif', textAlign: 'justify' }}>
+                              <p className="min-h-[5.25rem] text-gray-300 text-sm md:text-base leading-relaxed mb-3" style={{ fontFamily: 'Montserrat, sans-serif', textAlign: 'justify' }}>
                                 {member.description}
                               </p>
                               
                               {/* Vision */}
-                              <p className="text-gray-400 text-sm leading-relaxed italic" style={{ fontFamily: 'Montserrat, sans-serif', textAlign: 'justify' }}>
+                              <p className="min-h-[5.25rem] text-gray-400 text-sm leading-relaxed italic" style={{ fontFamily: 'Montserrat, sans-serif', textAlign: 'justify' }}>
                                 {member.vision}
                               </p>
                               
@@ -688,7 +688,7 @@ export default function AgencePage() {
                       <div className="absolute -inset-4 bg-gradient-to-r from-cyan-400/15 via-purple-500/15 to-cyan-400/15 rounded-3xl blur-3xl opacity-0 group-hover:opacity-40 transition-opacity duration-700" />
                       
                       {/* Main Card - Premium Royal */}
-                      <div className="relative bg-gradient-to-br from-black/85 via-slate-900/80 to-black/85 backdrop-blur-2xl rounded-2xl p-10 border border-white/15 group-hover:border-white/30 transition-all duration-700 group-hover:shadow-xl group-hover:shadow-white/15 group-hover:-translate-y-2">
+                      <div className="relative bg-gradient-to-br from-black/85 via-slate-900/80 to-black/85 backdrop-blur-2xl rounded-2xl p-9 border border-white/15 group-hover:border-white/30 transition-all duration-700 group-hover:shadow-xl group-hover:shadow-white/15 group-hover:-translate-y-2 flex flex-col h-full min-w-0">
                         {/* Subtle Animated Background Gradient */}
                         <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/5 via-purple-500/5 to-cyan-400/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-2xl" style={{
                           backgroundSize: '200% 200%',
@@ -696,36 +696,40 @@ export default function AgencePage() {
                         }} />
                         
                         {/* Icon Container - Premium Royal */}
-                        <div className="relative mb-8 flex items-center justify-center z-10">
-                          <div className="relative w-24 h-24 flex items-center justify-center">
+                        <div className="relative mb-6 flex items-center justify-center z-10 flex-shrink-0">
+                          <div className="relative w-20 h-20 flex items-center justify-center">
                             {/* Icon Glow Background */}
                             <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/20 via-purple-500/20 to-cyan-400/20 rounded-full blur-xl opacity-0 group-hover:opacity-60 transition-opacity duration-700" />
                             <div className="absolute inset-0 bg-gradient-to-r from-white/10 via-white/15 to-white/10 rounded-full blur-lg opacity-0 group-hover:opacity-40 transition-opacity duration-700" />
                             
                             {/* Icon with Premium Animation */}
-                            <IconComponent className="w-14 h-14 text-white group-hover:text-cyan-400 transition-all duration-700 group-hover:scale-110 group-hover:drop-shadow-[0_0_20px_rgba(34,211,238,0.6)]" style={{ 
+                            <IconComponent className="w-12 h-12 text-white group-hover:text-cyan-400 transition-all duration-700 group-hover:scale-110 group-hover:drop-shadow-[0_0_20px_rgba(34,211,238,0.6)]" style={{ 
                               filter: 'drop-shadow(0 0 8px rgba(255, 255, 255, 0.15))',
                               transition: 'all 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
                             }} />
                           </div>
                         </div>
                         
-                        {/* Title - Premium Royal Typography */}
-                        <h3 className="text-2xl font-black text-white text-center mb-4 relative z-10 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-cyan-400 group-hover:via-purple-500 group-hover:to-cyan-400 transition-all duration-700" style={{ 
-                          fontFamily: 'Montserrat, sans-serif',
-                          textShadow: '0 0 15px rgba(255, 255, 255, 0.15), 0 0 30px rgba(168, 85, 247, 0.1)',
-                          letterSpacing: '-0.02em',
-                        }}>
-                          {commitment.title}
-                        </h3>
+                        {/* Title - Premium Royal Typography - Fixed Height */}
+                        <div className="relative mb-4 flex-shrink-0 min-h-[60px] flex items-center justify-center px-2">
+                          <h3 className="text-xl font-black text-white text-center whitespace-nowrap relative z-10 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-cyan-400 group-hover:via-purple-500 group-hover:to-cyan-400 transition-all duration-700" style={{ 
+                            fontFamily: 'Montserrat, sans-serif',
+                            textShadow: '0 0 15px rgba(255, 255, 255, 0.15), 0 0 30px rgba(168, 85, 247, 0.1)',
+                            letterSpacing: '-0.02em',
+                          }}>
+                            {commitment.title}
+                          </h3>
+                        </div>
                         
-                        {/* Description - Premium Typography */}
-                        <p className="text-gray-300 text-center text-base leading-relaxed relative z-10 group-hover:text-white transition-colors duration-700" style={{ 
-                          fontFamily: 'Montserrat, sans-serif',
-                          textShadow: '0 0 8px rgba(255, 255, 255, 0.1)',
-                        }}>
-                          {commitment.description}
-                        </p>
+                        {/* Description - Premium Typography - Fixed Position */}
+                        <div className="relative flex-1 flex items-start justify-center mt-auto px-2">
+                          <p className="text-gray-300 text-center text-base leading-relaxed relative z-10 group-hover:text-white transition-colors duration-700" style={{ 
+                            fontFamily: 'Montserrat, sans-serif',
+                            textShadow: '0 0 8px rgba(255, 255, 255, 0.1)',
+                          }}>
+                            {commitment.description}
+                          </p>
+                        </div>
                         
                         {/* Subtle Bottom Accent Line */}
                         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-cyan-400 via-purple-500 to-cyan-400 rounded-full group-hover:w-20 transition-all duration-700 opacity-0 group-hover:opacity-100" />

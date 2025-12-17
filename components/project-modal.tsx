@@ -247,7 +247,7 @@ export function ProjectModal({ open, onOpenChange, project }: ProjectModalProps)
                 <h3 className="text-lg font-semibold uppercase tracking-[0.25em] text-white/80 mb-3">
                   {t("projectModal.objective")}
                 </h3>
-                <p className="text-sm text-white/70 leading-relaxed">
+                <p className="text-sm text-white/70 leading-relaxed text-justify hyphens-auto">
                   {project.objective}
                 </p>
               </div>
@@ -257,7 +257,7 @@ export function ProjectModal({ open, onOpenChange, project }: ProjectModalProps)
                 <h3 className="text-lg font-semibold uppercase tracking-[0.25em] text-white/80 mb-3">
                   {t("projectModal.creativeIdea")}
                 </h3>
-                <p className="text-sm text-white/70 leading-relaxed">
+                <p className="text-sm text-white/70 leading-relaxed text-justify hyphens-auto">
                   {project.creativeIdea}
                 </p>
               </div>
@@ -267,7 +267,7 @@ export function ProjectModal({ open, onOpenChange, project }: ProjectModalProps)
                 <h3 className="text-lg font-semibold uppercase tracking-[0.25em] text-white/80 mb-3">
                   {t("projectModal.device")}
                 </h3>
-                <p className="text-sm text-white/70 leading-relaxed">
+                <p className="text-sm text-white/70 leading-relaxed text-justify hyphens-auto">
                   {project.device}
                 </p>
               </div>
@@ -277,7 +277,7 @@ export function ProjectModal({ open, onOpenChange, project }: ProjectModalProps)
                 <h3 className="text-lg font-semibold uppercase tracking-[0.25em] text-white/80 mb-3">
                   {t("projectModal.results")}
                 </h3>
-                <p className="text-sm text-white/70 leading-relaxed">
+                <p className="text-sm text-white/70 leading-relaxed text-justify hyphens-auto">
                   {project.results}
                 </p>
               </div>
@@ -409,9 +409,17 @@ export function ProjectModal({ open, onOpenChange, project }: ProjectModalProps)
                                 src={media}
                                 alt={`${project.title} - Photo ${photoIndex + 1}`}
                                 fill
-                                className="object-cover"
-                                sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
-                                priority={true}
+                                className="object-cover opacity-0 transition-opacity duration-300"
+                                // Thumbnail sizes (modal max width is limited): keep requests small
+                                sizes="(min-width: 1024px) 200px, (min-width: 768px) 25vw, 45vw"
+                                quality={60}
+                                // Progressive loading: only first thumbnails are eager; rest lazy
+                                priority={photoIndex === 0}
+                                loading={photoIndex < 4 ? "eager" : "lazy"}
+                                fetchPriority={photoIndex === 0 ? "high" : "low"}
+                                onLoadingComplete={(img) => {
+                                  img.style.opacity = "1"
+                                }}
                               />
                               <span className="absolute -top-2 -right-2 flex h-8 w-8 items-center justify-center rounded-full border border-white/25 bg-white/20 text-[11px] font-semibold text-white shadow-[0_8px_20px_rgba(0,0,0,0.35)] backdrop-blur-sm">
                                 {displayNumber}
@@ -541,17 +549,6 @@ export function ProjectModal({ open, onOpenChange, project }: ProjectModalProps)
           role="dialog"
           aria-label={t("projectModal.visualGallery")}
         >
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              setLightboxOpen(false)
-            }}
-            className="absolute top-4 right-4 z-20 p-2 bg-black/60 hover:bg-black/80 rounded-full border border-white/20"
-            aria-label={t("projectModal.closeGallery")}
-          >
-            <X className="w-5 h-5 text-white" />
-          </button>
-
           <div className="relative max-w-7xl max-h-[90vh] w-full h-full flex items-center justify-center">
             {/* Previous Button */}
             {galleryImages.length > 1 && (
@@ -602,7 +599,7 @@ export function ProjectModal({ open, onOpenChange, project }: ProjectModalProps)
                     fill
                     className="object-contain"
                     sizes="90vw"
-                    loading={undefined}
+                    quality={85}
                     priority
 
                     onLoad={() => setMediaLoaded(true)}

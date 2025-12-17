@@ -1,9 +1,10 @@
 "use client"
 
-import { useState, useMemo, useEffect } from "react"
+import { useState, useMemo, useEffect, useRef } from "react"
+import Image from "next/image"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
-import { Play, ArrowRight, Sparkles, Heart, Zap, Users, Globe, Film, Mic, BarChart3, Lightbulb, Target, Rocket, Video } from "lucide-react"
+import { Play, ArrowRight, Sparkles, Heart, Zap, Users, Globe, Film, Mic, BarChart3, Lightbulb, Target, Rocket } from "lucide-react"
 import { useTranslation } from "@/contexts/translation-context"
 
 // Structure de données pour les épisodes
@@ -79,6 +80,11 @@ export default function HumindPage() {
   const episodes = getEpisodes(t)
   const [activeFilter, setActiveFilter] = useState<string>(t("humindPage.categoryAll"))
   const [clickedFilter, setClickedFilter] = useState<string | null>(null)
+  const [showStradaleVideo, setShowStradaleVideo] = useState(false)
+  const stradaleVideoRef = useRef<HTMLVideoElement | null>(null)
+  const [videoLoaded, setVideoLoaded] = useState(false)
+  const videoRef = useRef<HTMLVideoElement | null>(null)
+  const preloadVideoRef = useRef<HTMLVideoElement | null>(null)
 
   // Réinitialiser le filtre quand la langue change
   useEffect(() => {
@@ -89,6 +95,79 @@ export default function HumindPage() {
     // Scroll to top immediately without animation - instant navigation
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
   }, [])
+
+  // AGGRESSIVE PRELOAD - Preload video in hidden element before main video
+  useEffect(() => {
+    const preloadVideo = document.createElement('video')
+    preloadVideo.src = '/Banque d_images/noir.mp4'
+    preloadVideo.preload = 'auto'
+    preloadVideo.muted = true
+    preloadVideo.playsInline = true
+    preloadVideo.load()
+    preloadVideoRef.current = preloadVideo
+
+    return () => {
+      if (preloadVideoRef.current) {
+        preloadVideoRef.current = null
+      }
+    }
+  }, [])
+
+  // Force video to load immediately on mount and show it right away
+  useEffect(() => {
+    const video = videoRef.current
+    if (video) {
+      // Show video IMMEDIATELY - don't wait for load
+      setVideoLoaded(true)
+      
+      // Check if video was preloaded from navbar
+      const wasPreloaded = sessionStorage.getItem('humindVideoPreloaded') === 'true'
+      
+      // Set video source and force immediate load
+      video.src = '/Banque d_images/noir.mp4'
+      video.preload = 'auto'
+      
+      // If preloaded, video should be ready faster
+      if (wasPreloaded) {
+        // Video was preloaded, try to play immediately
+        video.load()
+        // Try to play immediately - multiple attempts
+        const tryPlay = () => {
+          if (video.readyState >= 1) {
+            video.play().catch(() => {
+              setTimeout(() => {
+                video.play().catch(() => {})
+              }, 10)
+            })
+          } else {
+            setTimeout(tryPlay, 5)
+          }
+        }
+        tryPlay()
+      } else {
+        // Normal load
+        video.load()
+        const tryPlay = () => {
+          if (video.readyState >= 1) {
+            video.play().catch(() => {
+              setTimeout(() => {
+                video.play().catch(() => {})
+              }, 10)
+            })
+          } else {
+            setTimeout(tryPlay, 10)
+          }
+        }
+        tryPlay()
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    if (showStradaleVideo && stradaleVideoRef.current) {
+      stradaleVideoRef.current.play().catch(() => { })
+    }
+  }, [showStradaleVideo])
 
   // Filtrer les épisodes
   const filteredEpisodes = useMemo(() => {
@@ -143,14 +222,24 @@ export default function HumindPage() {
 
       {/* Video background - hidden on mobile, visible on desktop */}
       <div className="pointer-events-none fixed inset-0 -z-10">
+        {/* HIDDEN PRELOAD VIDEO - Aggressively preloads before main video */}
         <video
+          ref={preloadVideoRef}
+          className="hidden"
+          preload="auto"
+          muted
+          playsInline
+          src="/Banque d_images/noir.mp4"
+        />
+        <video
+          ref={videoRef}
           key="humind-bg"
           className="hidden md:block h-full w-full object-cover"
           autoPlay
           loop
           muted
           playsInline
-          preload="metadata"
+          preload="auto"
           style={{
             opacity: 1,
             visibility: 'visible',
@@ -159,22 +248,31 @@ export default function HumindPage() {
             height: '100%'
           }}
           onLoadedMetadata={(e) => {
-            // Start playing as soon as metadata is loaded (faster on Vercel)
+            // Video metadata loaded - ensure it plays
             const video = e.currentTarget
+            setVideoLoaded(true)
             if (video.readyState >= 1) {
               video.play().catch(() => {
-                // Retry after a short delay
                 setTimeout(() => {
                   video.play().catch(() => { })
-                }, 500)
+                }, 10)
               })
             }
           }}
           onLoadedData={() => {
-            // Video loaded successfully
+            // Video data loaded
+            setVideoLoaded(true)
           }}
           onCanPlay={() => {
             // Video can play
+            setVideoLoaded(true)
+          }}
+          onProgress={(e) => {
+            // Show video as soon as we have some data
+            const video = e.currentTarget
+            if (video.readyState >= 1) {
+              setVideoLoaded(true)
+            }
           }}
           onError={(e) => {
             // Retry loading on error (common on Vercel CDN)
@@ -192,13 +290,17 @@ export default function HumindPage() {
             retryLoad()
           }}
           onLoadStart={() => {
-            // Video loading started
+            // Video loading started - show immediately
+            setVideoLoaded(true)
+            // Try to play immediately on load start
+            const video = videoRef.current
+            if (video && video.readyState >= 1) {
+              video.play().catch(() => {})
+            }
           }}
         >
           <source src="/Banque d_images/noir.mp4" type="video/mp4" />
         </video>
-        {/* Fallback black background while video loads */}
-        <div className="hidden md:block absolute inset-0 bg-black" style={{ zIndex: -1 }} />
         {/* Background image - visible only on mobile */}
         <img
           src="/Banque d_images/backnoiree.png"
@@ -221,19 +323,6 @@ export default function HumindPage() {
             <div className="grid lg:grid-cols-12 gap-16 items-start text-white">
               {/* Left Column - Ultra Premium Header */}
               <div className="lg:col-span-5 flex flex-col gap-8">
-                <div className="relative">
-                  <div className="relative inline-block">
-                    <div className="absolute -inset-8 bg-gradient-to-br from-blue-500/40 via-cyan-500/40 to-purple-500/40 rounded-full blur-3xl opacity-60 animate-pulse" />
-                    <div className="absolute -inset-4 bg-gradient-to-br from-blue-500/30 via-cyan-500/30 to-transparent rounded-full blur-2xl opacity-40" />
-                    <div className="relative p-6 rounded-3xl bg-gradient-to-br from-white/15 via-white/8 to-white/5 backdrop-blur-2xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.1)]">
-                      <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-50" />
-                      <div className="relative">
-                        <div className="absolute inset-0 bg-gradient-to-br from-blue-400 via-cyan-400 to-purple-400 rounded-2xl blur-xl opacity-30" />
-                        <Video className="w-8 h-8 text-white relative z-10 drop-shadow-[0_0_20px_rgba(59,130,246,0.6)]" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
                 <div className="space-y-4">
                   <div className="flex items-center gap-3">
                     <div className="h-px w-12 bg-gradient-to-r from-blue-400/60 to-transparent" />
@@ -268,24 +357,144 @@ export default function HumindPage() {
           </div>
         </section>
 
+        {/* Signature Highlight - Stradale x Humind */}
+        <section className="relative mx-auto w-full max-w-7xl px-6 pb-24 pt-4 md:px-12">
+          <div className="grid lg:grid-cols-12 gap-10 items-stretch text-white">
+            {/* Visual Card */}
+            <div className="lg:col-span-7">
+              <div className="group relative h-full min-h-[320px] overflow-hidden rounded-[32px] border border-white/15 bg-black/40 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.6)]">
+                {showStradaleVideo ? (
+                  <>
+                    {/* Full-card video */}
+                    <video
+                      ref={stradaleVideoRef}
+                      id="stradale-video-player"
+                      src="/Banque d_images/pod1.mp4"
+                      controls
+                      playsInline
+                      className="absolute inset-0 h-full w-full object-cover"
+                      poster="/Banque d_images/Copie de M7_03194.jpg"
+                    />
+
+                    {/* Back button over video - top-left, styled like white pill CTA */}
+                    <div className="absolute left-5 top-5 z-10 flex items-center justify-start">
+                      <button
+                        type="button"
+                        onClick={() => setShowStradaleVideo(false)}
+                        className="group/button inline-flex items-center justify-center gap-1.5 rounded-full bg-white/90 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-black shadow-[0_6px_18px_rgba(15,23,42,0.6)] hover:bg-white transition-colors duration-300"
+                      >
+                        <ArrowRight className="h-3 w-3 rotate-180" />
+                        <span className="relative z-10">{t("humindPage.stradaleBackToText")}</span>
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {/* Background image */}
+                    <div className="absolute inset-0">
+                      <Image
+                        src="/Banque d_images/Copie de M7_03194.jpg"
+                        alt="Stradale Events x Humind"
+                        fill
+                        priority
+                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-tr from-black/85 via-black/40 to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/40" />
+                    </div>
+
+                    {/* Content overlay */}
+                    <div className="relative z-10 flex h-full flex-col justify-between p-8 md:p-10 gap-8">
+                      <div className="flex flex-col gap-4">
+                        <span className="inline-flex w-fit items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.5em] text-white/80 backdrop-blur-md">
+                          Humind
+                          <span className="h-1 w-1 rounded-full bg-white/70 shadow-[0_0_8px_rgba(255,255,255,0.6)]" />
+                          Stradale
+                        </span>
+                        <h2 className="text-2xl md:text-3xl lg:text-4xl font-black leading-tight">
+                          <span className="block bg-gradient-to-r from-white via-blue-100 to-cyan-100 bg-clip-text text-transparent">
+                            {t("humindPage.stradaleTitle1")}
+                          </span>
+                          <span className="mt-1 block text-sm md:text-base font-medium text-white/70">
+                            {t("humindPage.stradaleTitle2")}
+                          </span>
+                        </h2>
+                      </div>
+
+                      <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+                        <p className="max-w-xl text-sm md:text-base text-white/75 leading-relaxed">
+                          {t("humindPage.stradaleDescription")}
+                        </p>
+
+                        <button
+                          type="button"
+                          onClick={() => setShowStradaleVideo(true)}
+                          className="group/button inline-flex items-center justify-center gap-2 rounded-full bg-white/90 px-6 py-3 text-[11px] font-bold uppercase tracking-[0.32em] text-black shadow-[0_10px_30px_rgba(15,23,42,0.7)] hover:bg-white transition-colors duration-300"
+                        >
+                          <span className="relative z-10">{t("humindPage.stradaleCta")}</span>
+                          <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover/button:translate-x-1" />
+                        </button>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+
+            {/* Concept Column */}
+            <div className="lg:col-span-5 flex flex-col gap-6 lg:pl-4">
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <div className="h-px w-10 bg-gradient-to-r from-blue-400/70 to-transparent" />
+                  <span className="text-[10px] font-bold uppercase tracking-[0.6em] text-white/30">
+                    Humind × Stradale
+                  </span>
+                </div>
+                <p className="text-sm md:text-base text-white/70 leading-relaxed">
+                  {t("humindPage.stradaleIntro")}
+                </p>
+              </div>
+
+              <div className="grid gap-4 md:gap-5">
+                <div className="group relative rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl transition-all duration-500 hover:border-white/25 hover:bg-white/10">
+                  <div className="mb-2 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.4em] text-white/45">
+                    <span className="h-1.5 w-1.5 rounded-full bg-blue-400 shadow-[0_0_10px_rgba(59,130,246,0.9)]" />
+                    <span>{t("humindPage.stradalePillar1Title")}</span>
+                  </div>
+                  <p className="text-sm text-white/75 leading-relaxed">
+                    {t("humindPage.stradalePillar1Desc")}
+                  </p>
+                </div>
+
+                <div className="group relative rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl transition-all duration-500 hover:border-white/25 hover:bg-white/10">
+                  <div className="mb-2 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.4em] text-white/45">
+                    <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.9)]" />
+                    <span>{t("humindPage.stradalePillar2Title")}</span>
+                  </div>
+                  <p className="text-sm text-white/75 leading-relaxed">
+                    {t("humindPage.stradalePillar2Desc")}
+                  </p>
+                </div>
+
+                <div className="group relative rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl transition-all duration-500 hover:border-white/25 hover:bg-white/10">
+                  <div className="mb-2 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.4em] text-white/45">
+                    <span className="h-1.5 w-1.5 rounded-full bg-indigo-400 shadow-[0_0_10px_rgba(129,140,248,0.9)]" />
+                    <span>{t("humindPage.stradalePillar3Title")}</span>
+                  </div>
+                  <p className="text-sm text-white/75 leading-relaxed">
+                    {t("humindPage.stradalePillar3Desc")}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Episodes Section - Section 02 */}
         <section className="relative mx-auto w-full max-w-7xl px-6 pb-24 pt-12 md:px-12">
           <div className="grid lg:grid-cols-12 gap-16 items-start text-white mb-12">
             {/* Left Column - Ultra Premium Header */}
             <div className="lg:col-span-5 flex flex-col gap-8">
-              <div className="relative">
-                <div className="relative inline-block">
-                  <div className="absolute -inset-8 bg-gradient-to-br from-purple-500/40 via-pink-500/40 to-rose-500/40 rounded-full blur-3xl opacity-60 animate-pulse" />
-                  <div className="absolute -inset-4 bg-gradient-to-br from-purple-500/30 via-pink-500/30 to-transparent rounded-full blur-2xl opacity-40" />
-                  <div className="relative p-6 rounded-3xl bg-gradient-to-br from-white/15 via-white/8 to-white/5 backdrop-blur-2xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.1)]">
-                    <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-50" />
-                    <div className="relative">
-                      <div className="absolute inset-0 bg-gradient-to-br from-purple-400 via-pink-400 to-rose-400 rounded-2xl blur-xl opacity-30" />
-                      <Film className="w-8 h-8 text-white relative z-10 drop-shadow-[0_0_20px_rgba(168,85,247,0.6)]" />
-                    </div>
-                  </div>
-                </div>
-              </div>
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
                   <div className="h-px w-12 bg-gradient-to-r from-purple-400/60 to-transparent" />
@@ -438,26 +647,6 @@ export default function HumindPage() {
           <div className="grid lg:grid-cols-12 gap-16 items-start text-white">
             {/* Left Column - Ultra Premium Header */}
             <div className="lg:col-span-4 flex flex-col gap-8">
-              <div className="relative">
-                {/* Multi-layer icon container */}
-                <div className="relative inline-block">
-                  {/* Outer glow layers */}
-                  <div className="absolute -inset-8 bg-gradient-to-br from-blue-500/40 via-purple-500/40 to-cyan-500/40 rounded-full blur-3xl opacity-60 animate-pulse" />
-                  <div className="absolute -inset-4 bg-gradient-to-br from-blue-500/30 via-purple-500/30 to-transparent rounded-full blur-2xl opacity-40" />
-
-                  {/* Main icon container with 3D effect */}
-                  <div className="relative p-6 rounded-3xl bg-gradient-to-br from-white/15 via-white/8 to-white/5 backdrop-blur-2xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.1)]">
-                    {/* Inner shine */}
-                    <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-50" />
-                    {/* Icon with gradient */}
-                    <div className="relative">
-                      <div className="absolute inset-0 bg-gradient-to-br from-blue-400 via-purple-400 to-cyan-400 rounded-2xl blur-xl opacity-30" />
-                      <Sparkles className="w-8 h-8 text-white relative z-10 drop-shadow-[0_0_20px_rgba(59,130,246,0.6)]" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
                   <div className="h-px w-12 bg-gradient-to-r from-blue-400/60 to-transparent" />
@@ -581,19 +770,6 @@ export default function HumindPage() {
           <div className="grid lg:grid-cols-12 gap-16 items-start text-white relative z-20">
             {/* Left Column - Ultra Premium Header */}
             <div className="lg:col-span-5 flex flex-col gap-8 relative z-20">
-              <div className="relative">
-                <div className="relative inline-block z-20">
-                  <div className="absolute -inset-8 bg-gradient-to-br from-purple-500/40 via-pink-500/40 to-rose-500/40 rounded-full blur-3xl opacity-60 animate-pulse" />
-                  <div className="absolute -inset-4 bg-gradient-to-br from-purple-500/30 via-pink-500/30 to-transparent rounded-full blur-2xl opacity-40" />
-                  <div className="relative p-6 rounded-3xl bg-gradient-to-br from-white/15 via-white/8 to-white/5 backdrop-blur-2xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.1)] z-20">
-                    <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-50" />
-                    <div className="relative">
-                      <div className="absolute inset-0 bg-gradient-to-br from-purple-400 via-pink-400 to-rose-400 rounded-2xl blur-xl opacity-30" />
-                      <Heart className="w-8 h-8 text-white relative z-10 drop-shadow-[0_0_20px_rgba(168,85,247,0.6)]" />
-                    </div>
-                  </div>
-                </div>
-              </div>
               <div className="space-y-4 relative z-20">
                 <div className="flex items-center gap-3">
                   <div className="h-px w-12 bg-gradient-to-r from-purple-400/60 to-transparent" />
@@ -675,19 +851,6 @@ export default function HumindPage() {
           <div className="grid lg:grid-cols-12 gap-16 items-start text-white">
             {/* Left Column - Ultra Premium Header */}
             <div className="lg:col-span-4 flex flex-col gap-8">
-              <div className="relative">
-                <div className="relative inline-block">
-                  <div className="absolute -inset-8 bg-gradient-to-br from-cyan-500/40 via-blue-500/40 to-indigo-500/40 rounded-full blur-3xl opacity-60 animate-pulse" />
-                  <div className="absolute -inset-4 bg-gradient-to-br from-cyan-500/30 via-blue-500/30 to-transparent rounded-full blur-2xl opacity-40" />
-                  <div className="relative p-6 rounded-3xl bg-gradient-to-br from-white/15 via-white/8 to-white/5 backdrop-blur-2xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.1)]">
-                    <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-50" />
-                    <div className="relative">
-                      <div className="absolute inset-0 bg-gradient-to-br from-cyan-400 via-blue-400 to-indigo-400 rounded-2xl blur-xl opacity-30" />
-                      <Target className="w-8 h-8 text-white relative z-10 drop-shadow-[0_0_20px_rgba(6,182,212,0.6)]" />
-                    </div>
-                  </div>
-                </div>
-              </div>
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
                   <div className="h-px w-12 bg-gradient-to-r from-cyan-400/60 to-transparent" />
@@ -803,19 +966,6 @@ export default function HumindPage() {
           <div className="grid lg:grid-cols-12 gap-16 items-start text-white">
             {/* Left Column - Ultra Premium Header */}
             <div className="lg:col-span-4 flex flex-col gap-8">
-              <div className="relative">
-                <div className="relative inline-block">
-                  <div className="absolute -inset-8 bg-gradient-to-br from-blue-500/40 via-indigo-500/40 to-purple-500/40 rounded-full blur-3xl opacity-60 animate-pulse" />
-                  <div className="absolute -inset-4 bg-gradient-to-br from-blue-500/30 via-indigo-500/30 to-transparent rounded-full blur-2xl opacity-40" />
-                  <div className="relative p-6 rounded-3xl bg-gradient-to-br from-white/15 via-white/8 to-white/5 backdrop-blur-2xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.1)]">
-                    <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-50" />
-                    <div className="relative">
-                      <div className="absolute inset-0 bg-gradient-to-br from-blue-400 via-indigo-400 to-purple-400 rounded-2xl blur-xl opacity-30" />
-                      <Rocket className="w-8 h-8 text-white relative z-10 drop-shadow-[0_0_20px_rgba(59,130,246,0.6)]" />
-                    </div>
-                  </div>
-                </div>
-              </div>
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
                   <div className="h-px w-12 bg-gradient-to-r from-blue-400/60 to-transparent" />
@@ -892,19 +1042,6 @@ export default function HumindPage() {
           <div className="grid lg:grid-cols-12 gap-16 items-start text-white">
             {/* Left Column - Ultra Premium Header */}
             <div className="lg:col-span-4 flex flex-col gap-8">
-              <div className="relative">
-                <div className="relative inline-block">
-                  <div className="absolute -inset-8 bg-gradient-to-br from-indigo-500/40 via-purple-500/40 to-pink-500/40 rounded-full blur-3xl opacity-60 animate-pulse" />
-                  <div className="absolute -inset-4 bg-gradient-to-br from-indigo-500/30 via-purple-500/30 to-transparent rounded-full blur-2xl opacity-40" />
-                  <div className="relative p-6 rounded-3xl bg-gradient-to-br from-white/15 via-white/8 to-white/5 backdrop-blur-2xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.1)]">
-                    <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-50" />
-                    <div className="relative">
-                      <div className="absolute inset-0 bg-gradient-to-br from-indigo-400 via-purple-400 to-pink-400 rounded-2xl blur-xl opacity-30" />
-                      <Lightbulb className="w-8 h-8 text-white relative z-10 drop-shadow-[0_0_20px_rgba(99,102,241,0.6)]" />
-                    </div>
-                  </div>
-                </div>
-              </div>
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
                   <div className="h-px w-12 bg-gradient-to-r from-indigo-400/60 to-transparent" />
@@ -977,19 +1114,6 @@ export default function HumindPage() {
           <div className="grid lg:grid-cols-12 gap-16 items-start text-white">
             {/* Left Column - Ultra Premium Header */}
             <div className="lg:col-span-4 flex flex-col gap-8">
-              <div className="relative">
-                <div className="relative inline-block">
-                  <div className="absolute -inset-8 bg-gradient-to-br from-pink-500/40 via-rose-500/40 to-red-500/40 rounded-full blur-3xl opacity-60 animate-pulse" />
-                  <div className="absolute -inset-4 bg-gradient-to-br from-pink-500/30 via-rose-500/30 to-transparent rounded-full blur-2xl opacity-40" />
-                  <div className="relative p-6 rounded-3xl bg-gradient-to-br from-white/15 via-white/8 to-white/5 backdrop-blur-2xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.1)]">
-                    <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-50" />
-                    <div className="relative">
-                      <div className="absolute inset-0 bg-gradient-to-br from-pink-400 via-rose-400 to-red-400 rounded-2xl blur-xl opacity-30" />
-                      <Heart className="w-8 h-8 text-white relative z-10 drop-shadow-[0_0_20px_rgba(236,72,153,0.6)]" />
-                    </div>
-                  </div>
-                </div>
-              </div>
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
                   <div className="h-px w-12 bg-gradient-to-r from-pink-400/60 to-transparent" />
@@ -1030,17 +1154,6 @@ export default function HumindPage() {
                       </div>
 
                       <div className="relative z-10 flex flex-col flex-1">
-                        {/* Premium icon */}
-                        <div className="mb-8">
-                          <div className="relative inline-block">
-                            <div className={`absolute -inset-3 bg-gradient-to-br ${item.gradient} rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700`} />
-                            <div className={`relative p-4 rounded-2xl bg-gradient-to-br ${item.gradient} backdrop-blur-xl border border-white/20 shadow-[0_8px_24px_rgba(0,0,0,0.3)] group-hover:shadow-[0_12px_40px_rgba(0,0,0,0.4)] transition-all duration-700 group-hover:scale-110 group-hover:rotate-3`}>
-                              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-50" />
-                              <Sparkles className={`w-6 h-6 text-white relative z-10 drop-shadow-[0_0_15px_rgba(255,255,255,0.8)] group-hover:rotate-12 transition-transform duration-700`} />
-                            </div>
-                          </div>
-                        </div>
-
                         <p className="text-2xl md:text-3xl font-black italic text-white leading-[1.3] mb-8 flex-1">
                           "{item.quote}"
                         </p>

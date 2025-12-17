@@ -1,11 +1,13 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Geist, Space_Grotesk } from "next/font/google"
+import { Montserrat, Space_Grotesk } from "next/font/google"
 import "./globals.css"
 import { TranslationProvider } from "@/contexts/translation-context"
 import { ErrorBoundary } from "@/components/error-boundary"
 
-const geist = Geist({ subsets: ["latin"] })
+// Primary premium font for the whole site (outside intros/loading)
+const montserrat = Montserrat({ subsets: ["latin"], variable: "--font-sans" })
+// Heading / display font used notably in immersive intros & big titles
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-heading" })
 
 export const metadata: Metadata = {
@@ -152,7 +154,7 @@ export default function RootLayout({
         <link rel="preload" href="/Banque d_images/backnoiree.png" as="image" />
       </head>
       <body
-        className={`${geist.className} ${spaceGrotesk.variable} antialiased bg-transparent text-foreground`}
+        className={`${montserrat.className} ${spaceGrotesk.variable} antialiased bg-transparent text-foreground`}
       >
         <ErrorBoundary>
           <TranslationProvider>

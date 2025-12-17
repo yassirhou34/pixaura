@@ -1,6 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import Image from "next/image"
 
 type Stage = "loading" | "start" | "transition" | "hold" | "finishing" | "hidden"
 
@@ -25,12 +26,6 @@ const LOADING_PHASES = [
     headline: "Calibration audiovisuelle globale",
     detail: "Orchestration lumière, audio 360° et FX immersifs",
     ticker: "Harmonisation des fréquences premium",
-  },
-  {
-    threshold: 85,
-    headline: "Activation des équipes mondiales",
-    detail: "Brief des talents et verrouillage des fuseaux horaires",
-    ticker: "Déploiement des cellules stratégiques",
   },
   {
     threshold: 100,
@@ -795,19 +790,10 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
           <div className="pointer-events-none absolute inset-x-0 top-[-14%] mx-auto h-[520px] w-[520px] rounded-full bg-[radial-gradient(circle,_rgba(68,109,255,0.28),_transparent_78%)] blur-[160px]" />
           <div className="pointer-events-none absolute inset-x-0 bottom-[-18%] mx-auto h-[540px] w-[540px] rounded-full bg-[radial-gradient(circle,_rgba(255,206,92,0.32),_transparent_80%)] blur-[190px]" />
 
-          <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.4em] sm:tracking-[0.52em] text-white/70">
-            <span className="flex items-center gap-2 sm:gap-3">
-              <span className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full border border-white/25 bg-white/10 text-[8px] sm:text-[9px] tracking-[0.4em] sm:tracking-[0.5em] text-white">
-                PL
-              </span>
-              <span className="text-[10px] sm:text-[11px] leading-tight">IMMERSION SEQUENCE</span>
-            </span>
+          <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.4em] sm:tracking-[0.52em] text-white/70">
             <div className="flex items-center gap-2 sm:gap-3 text-white/60">
               <span className="rounded-full border border-white/20 bg-white/5 px-3 py-1 sm:px-4 sm:py-1.5 text-[9px] sm:text-[10px] font-medium uppercase tracking-[0.35em] sm:tracking-[0.5em] text-white/80 whitespace-nowrap">
                 SYNC {progressFormatted}%
-              </span>
-              <span className="rounded-full border border-white/20 bg-white/5 px-3 py-1 sm:px-4 sm:py-1.5 text-[9px] sm:text-[10px] font-medium uppercase tracking-[0.35em] sm:tracking-[0.5em] whitespace-nowrap">
-                AURA LOCKED
               </span>
             </div>
           </header>
@@ -815,8 +801,7 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
           <main className="relative flex flex-1 flex-col items-center justify-center px-4">
             <div className="relative flex flex-col items-center gap-8 sm:gap-12">
               <div className="flex flex-col items-center gap-2 sm:gap-3 text-[10px] sm:text-xs uppercase tracking-[0.5em] sm:tracking-[0.62em] text-white/50 text-center">
-                <span className="leading-tight">IMMERSIVE LOADING SEQUENCE</span>
-                <span className="text-white/75 text-[11px] sm:text-xs leading-tight">PRÉPAREZ L&apos;ENTRÉE PIXAURA</span>
+                <span className="text-white/75 text-[11px] sm:text-xs leading-tight">SÉQUENCE DE CHARGEMENT IMMERSIVE</span>
               </div>
 
               <div className="relative flex items-center justify-center w-full max-w-[340px] aspect-square">
@@ -857,14 +842,6 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
               </div>
             </div>
           </main>
-
-          <footer className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between text-[9px] sm:text-[10px] uppercase tracking-[0.35em] sm:tracking-[0.48em] text-white/60">
-            <span className="flex items-center gap-2">
-              <span className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-[radial-gradient(circle,_rgba(111,217,255,0.95),_rgba(64,135,255,0.85))] shadow-[0_0_16px_rgba(96,180,255,0.95)] flex-shrink-0" />
-              <span className="leading-tight">SYSTÈMES SYNCHRONISÉS • {progressFormatted}%</span>
-            </span>
-            <span className="leading-tight">SOUND DESIGN ACTIVÉ • ÉCOUTE CONSEILLÉE</span>
-          </footer>
         </div>
       )}
 
@@ -880,14 +857,20 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
             className={`flex items-center justify-start text-xs font-semibold uppercase tracking-[0.4em] text-white/65 ${startAnimation ? "start-fade-element" : ""
               }`}
           >
-            <span>pixaura</span>
+            <Image
+              src="/Banque d_images/PIXaura-soft white.png"
+              alt="Pixaura logo"
+              width={120}
+              height={36}
+              className="h-8 w-auto object-contain"
+              priority
+            />
           </header>
 
           <main
             className={`relative flex flex-1 flex-col items-center justify-center gap-10 text-center ${startAnimation ? "start-main-anim" : ""
               }`}
           >
-            <p className="text-xs uppercase tracking-[0.6em] text-white/60">immerse the experience</p>
             <div className="flex flex-wrap items-center justify-center gap-6 text-[clamp(42px,8vw,82px)] font-black uppercase tracking-tight">
               <span>Immerse</span>
               <button
@@ -965,21 +948,32 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
 
       {(stage === "hold" || stage === "finishing") && (
         <div className="relative z-10 flex h-full w-full flex-col justify-between px-8 py-10 text-white md:px-16">
-          <header className="flex items-center justify-between text-xs font-semibold uppercase tracking-[0.4em] text-white/80">
+          <header className="flex items-center justify-start text-xs font-semibold uppercase tracking-[0.4em] text-white/80">
             <div className="flex items-center gap-2">
-              <span>Pixaura</span>
-            </div>
-            <div className="flex items-center gap-6">
-              <span className="text-white/45">experience • 02</span>
+              <Image
+                src="/Banque d_images/PIXaura-soft white.png"
+                alt="Pixaura logo"
+                width={120}
+                height={36}
+                className="h-8 w-auto object-contain"
+                priority
+              />
             </div>
           </header>
 
           <main className="flex flex-1 flex-col items-center justify-center gap-14">
             <div className="text-center">
               <p className="text-xs uppercase tracking-[0.6em] text-white/60">cliquez et maintenez pour entrer</p>
-              <h2 className="mt-6 text-[clamp(68px,12vw,140px)] font-black uppercase leading-none tracking-tight text-white drop-shadow-[0_0_30px_rgba(0,0,0,0.45)]">
-                Pixaura
-              </h2>
+              <div className="my-8 sm:my-10 md:my-12 flex items-center justify-center">
+                <Image
+                  src="/Banque d_images/PIXaura-soft white.png"
+                  alt="Pixaura logo"
+                  width={560}
+                  height={168}
+                  className="h-[clamp(68px,12vw,140px)] w-auto object-contain drop-shadow-[0_0_30px_rgba(0,0,0,0.45)]"
+                  priority
+                />
+              </div>
             </div>
 
             <button

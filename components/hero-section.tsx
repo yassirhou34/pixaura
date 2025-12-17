@@ -22,13 +22,6 @@ const heroProjects = [
     category: "Social • Event",
     image: "/Banque d_images/StageUfc.jpg",
   },
-  {
-    id: 3,
-    client: "Immobilier Signature",
-    title: "Résidences Lumière",
-    category: "Film • Branding",
-    image: "/Banque d_images/Copie de M7_01248.jpg",
-  },
 ]
 
 const DISPLAY_DURATION = 5200
@@ -48,7 +41,7 @@ const getNodeText = (node: ReactNode): string => {
 }
 
 export function HeroSection() {
-  const { t } = useTranslation()
+  const { t, language } = useTranslation()
   const [activeIndex, setActiveIndex] = useState(0)
   const [previousIndex, setPreviousIndex] = useState<number | null>(null)
   const [isAnimating, setIsAnimating] = useState(false)
@@ -57,7 +50,7 @@ export function HeroSection() {
     // Split headline1 for better spacing
     const headline1Parts = t("hero.headline1").split(" ")
     const headline1EndParts = t("hero.headline1End").split(" ")
-    const isEnglish = t("hero.headline1").includes("aura of")
+    const isEnglish = language === 'en'
 
     return [
       (
@@ -73,14 +66,19 @@ export function HeroSection() {
               <span className="block leading-tight -mt-2 sm:-mt-2 md:-mt-3">{headline1EndParts.slice(2).join(" ")}</span>
             </>
           ) : (
-            // French: "l'aura des" / "marques" / "ambitieuses sur" / "chaque continent."
+            // French (forced lines): "l'aura des" / "marques" / "ambitieuses" / "sur chaque" / "continent."
             <>
               <span className="block leading-tight">{headline1Parts.slice(0, 2).join(" ")}</span>
               <span className="block leading-tight -mt-1 sm:mt-0">{headline1Parts.slice(2).join(" ")}</span>
               <span className="block leading-tight -mt-1 sm:mt-0">
-                <span className="hero-highlight">{t("hero.headline1Highlight")}</span> {headline1EndParts[0]}
+                <span className="hero-highlight">{t("hero.headline1Highlight")}</span>
               </span>
-              <span className="block leading-tight -mt-1 sm:mt-0">{headline1EndParts.slice(1).join(" ")}</span>
+              <span className="block leading-tight -mt-1 sm:mt-0">
+                {headline1EndParts.slice(0, 2).join(" ")}
+              </span>
+              <span className="block leading-tight -mt-1 sm:mt-0">
+                {headline1EndParts.slice(2).join(" ")}
+              </span>
             </>
           )}
         </>
@@ -88,7 +86,7 @@ export function HeroSection() {
       (
         <>
           {(() => {
-            const isEnglish = t("hero.headline2Line1").includes("bold ideas")
+            const isEnglish = language === 'en'
 
             if (isEnglish) {
               // English: "bold ideas that make" / "radiate" / "every brand."
@@ -103,23 +101,31 @@ export function HeroSection() {
                 </>
               )
             } else {
-              // French: "des idées audacieuses qui" / "font rayonner chaque" / "marque."
+              // French (forced lines): "des idées" / "audacieuses" / "qui" / "font rayonner" / "chaque marque."
+              const line1Words = t("hero.headline2Line1").split(" ")
+              const line2Words = t("hero.headline2Line2").split(" ")
+              const line1 = line1Words.slice(0, 2).join(" ")
+              const line2 = line1Words[2] ?? ""
+              const line3 = line1Words[3] ?? "" // "qui"
+              const line4Prefix = line2Words[0] ?? "" // "font"
+              const line4Highlight = line2Words[1] ?? "" // "rayonner"
+              // Use non‑breaking spaces so the browser doesn't split the 3rd and 4th lines into extra lines
+              const line4 = `${line2Words[2] ?? ""}\u00A0${t("hero.headline2Line3")}`.trim() // "chaque marque."
+
               return (
                 <>
-                  <span className="block leading-tight">{t("hero.headline2Line1")}</span>
-                  <span className="block leading-tight -mt-1 sm:mt-0">
-                    {t("hero.headline2Line2").split(" ").map((word, index, array) =>
-                      word === "rayonner" ? (
-                        <span key={index}>
-                          <span className="hero-highlight">{word}</span>
-                          {index < array.length - 1 ? " " : ""}
-                        </span>
-                      ) : (
-                        <span key={index}>{word}{index < array.length - 1 ? " " : ""}</span>
-                      )
-                    )}
+                  <span className="block leading-tight">{line1}</span>
+                  <span className="block leading-tight -mt-1 sm:mt-0">{line2}</span>
+                  <span className="block leading-tight -mt-1 sm:mt-0">{line3}</span>
+                  <span className="block leading-tight -mt-1 sm:mt-0 whitespace-normal md:whitespace-nowrap">
+                    {line4Prefix}
+                    {"\u00A0"}
+                    <span className="hero-highlight">{line4Highlight}</span>
                   </span>
-                  <span className="block leading-tight -mt-1 sm:mt-0">{t("hero.headline2Line3")}</span>
+                  {/* Extra bottom margin just for this variant to better air the subtitle */}
+                  <span className="block leading-tight -mt-1 sm:mt-0 whitespace-normal md:whitespace-nowrap mb-8 sm:mb-10 md:mb-12">
+                    {line4}
+                  </span>
                 </>
               )
             }
@@ -145,7 +151,10 @@ export function HeroSection() {
                     <span className="hero-highlight">{highlightParts[1]}</span>
                   </span>
                   <span className="block leading-tight -mt-1 sm:mt-0">{endParts.slice(0, 2).join(" ")}</span>
-                  <span className="block leading-tight -mt-1 sm:mt-0">{endParts.slice(2).join(" ")}</span>
+                  {/* Extra bottom margin just for this variant to better air the subtitle */}
+                  <span className="block leading-tight -mt-1 sm:mt-0 mb-8 sm:mb-10 md:mb-12">
+                    {endParts.slice(2).join(" ")}
+                  </span>
                 </>
               )
             } else {
@@ -172,7 +181,7 @@ export function HeroSection() {
         </>
       ),
     ]
-  }, [t])
+  }, [t, language])
 
   const longestHeadlineIndex = useMemo(() => {
     let longest = 0
@@ -263,7 +272,9 @@ export function HeroSection() {
               </Reveal>
 
               <Reveal delay={240}>
-                <p className="max-w-2xl text-sm text-white/80 sm:text-base md:text-lg lg:text-xl relative z-10 leading-relaxed text-justify text-justify-smooth mt-6 sm:mt-6 md:mt-8 lg:mt-10">{t("hero.subheadline")}</p>
+                <p className="max-w-2xl text-sm text-white/80 sm:text-base md:text-lg lg:text-xl relative z-10 leading-relaxed text-justify text-justify-smooth mt-4 sm:mt-5 md:mt-6 lg:mt-8">
+                  {t("hero.subheadline")}
+                </p>
               </Reveal>
             </div>
 
@@ -311,7 +322,7 @@ export function HeroSection() {
                         </div>
 
                         <div className="flex flex-1 flex-col justify-between px-5 pt-5">
-                          <h3 className="text-base font-semibold leading-snug text-white sm:text-lg">{project.title}</h3>
+                          <h3 className="text-base font-semibold leading-snug text-white text-center sm:text-lg">{project.title}</h3>
                           <div className="mt-4 flex items-center gap-4 text-[10px] uppercase tracking-[0.28em] text-white/50 sm:text-xs">
                             <span className="h-px flex-1 bg-white/20" />
                             <Link href="/realisations" className="inline-flex items-center gap-2 text-white transition hover:text-white/70 active:scale-95">
@@ -360,7 +371,7 @@ export function HeroSection() {
                   </div>
 
                   <div className="flex flex-1 flex-col justify-between px-6 pt-5">
-                    <h3 className="text-base font-semibold leading-snug text-white">{project.title}</h3>
+                    <h3 className="text-base font-semibold leading-snug text-white text-center">{project.title}</h3>
                     <div className="mt-4 flex items-center gap-4 text-[10px] uppercase tracking-[0.28em] text-white/50">
                       <span className="h-px flex-1 bg-white/20" />
                       <Link href="/realisations" className="inline-flex items-center gap-2 text-white transition hover:text-white/70">

@@ -205,10 +205,10 @@ export function OffreSection() {
                         setIsModalOpen(true)
                       }
                     }}
-                    className="w-full text-left"
+                    className="w-full h-full flex flex-col text-left"
                   >
                     {/* Image Section - Enhanced Premium Style */}
-                    <div className="relative h-72 w-full overflow-hidden">
+                    <div className="relative h-72 w-full overflow-hidden flex-shrink-0">
                       <Image
                         src={detail.image}
                         alt={detail.title}
@@ -231,10 +231,10 @@ export function OffreSection() {
                     </div>
 
                     {/* Enhanced Content Section with Premium Typography */}
-                    <div className="flex flex-col gap-5 px-8 py-10 text-white flex-1">
-                      {/* Title with enhanced styling */}
-                      <div className="space-y-2 text-center">
-                        <h3 className="text-2xl font-black leading-tight tracking-tight md:text-3xl bg-gradient-to-r from-white via-white to-white/80 bg-clip-text text-transparent group-hover:from-white group-hover:via-white group-hover:to-white transition-all duration-500">
+                    <div className="flex flex-col gap-5 px-8 py-10 text-white flex-1 min-h-0">
+                      {/* Title with enhanced styling - Fixed height for alignment */}
+                      <div className="space-y-2 text-center flex-shrink-0 min-h-[120px] flex flex-col justify-start">
+                        <h3 className="text-xl font-black leading-tight tracking-tight md:text-2xl lg:text-3xl bg-gradient-to-r from-white via-white to-white/80 bg-clip-text text-transparent group-hover:from-white group-hover:via-white group-hover:to-white transition-all duration-500 md:whitespace-nowrap">
                           {detail.title}
                         </h3>
                         <p className="text-sm font-medium text-white/60 md:text-base leading-relaxed text-center">
@@ -242,8 +242,11 @@ export function OffreSection() {
                         </p>
                       </div>
                       
-                      {/* Enhanced CTA Section */}
-                      <div className="flex items-center gap-4 pt-2 border-t border-white/10">
+                      {/* Spacer to push CTA to bottom */}
+                      <div className="flex-1" />
+                      
+                      {/* Enhanced CTA Section - Positioned at bottom */}
+                      <div className="flex items-center gap-4 pt-2 border-t border-white/10 flex-shrink-0">
                         <span className="flex-1 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
                         <span className="inline-flex items-center gap-2.5 text-xs font-bold uppercase tracking-[0.3em] text-white/90 transition-all duration-300 group-hover:text-white group-hover:gap-3">
                           {t("offreHome.seeDetails")}

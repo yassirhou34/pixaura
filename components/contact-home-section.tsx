@@ -8,6 +8,10 @@ import { useTranslation } from "@/contexts/translation-context"
 
 type FormData = {
   besoin: string
+  nom: string
+  prenom: string
+  telephone: string
+  email: string
   budget: string
   delai: string
   secteur: string
@@ -20,13 +24,17 @@ export function ContactHomeSection() {
   const [submitted, setSubmitted] = useState(false)
   const [formData, setFormData] = useState<FormData>({
     besoin: "",
+    nom: "",
+    prenom: "",
+    telephone: "",
+    email: "",
     budget: "",
     delai: "",
     secteur: "",
     privacy: false,
   })
 
-  const totalSteps = 4
+  const totalSteps = 5
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target
@@ -62,6 +70,10 @@ export function ContactHomeSection() {
         setSubmitted(true)
         setFormData({
           besoin: "",
+          nom: "",
+          prenom: "",
+          telephone: "",
+          email: "",
           budget: "",
           delai: "",
           secteur: "",
@@ -78,10 +90,16 @@ export function ContactHomeSection() {
       case 1:
         return formData.besoin.trim().length > 0
       case 2:
-        return formData.budget !== ""
+        return formData.nom.trim().length > 0 && 
+               formData.prenom.trim().length > 0 && 
+               formData.telephone.trim().length > 0 && 
+               formData.email.trim().length > 0 &&
+               /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
       case 3:
-        return formData.delai !== ""
+        return formData.budget !== ""
       case 4:
+        return formData.delai !== ""
+      case 5:
         return formData.secteur !== "" && formData.privacy
       default:
         return false
@@ -198,11 +216,80 @@ export function ContactHomeSection() {
                     </div>
                   )}
 
-                  {/* Step 2: Budget */}
+                  {/* Step 2: Informations personnelles */}
                   {currentStep === 2 && (
                     <div className="space-y-6 animate-fadeIn">
                       <h3 className="text-2xl font-bold text-white mb-6">
                         {t("contactHome.step2")}
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-semibold text-white/80 mb-2">
+                            {t("contactHome.lastName")} *
+                          </label>
+                          <input
+                            type="text"
+                            name="nom"
+                            value={formData.nom}
+                            onChange={handleChange}
+                            required
+                            className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-300 text-white placeholder-white/40 backdrop-blur-sm hover:border-white/20"
+                            placeholder={t("contactHome.lastNamePlaceholder")}
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-semibold text-white/80 mb-2">
+                            {t("contactHome.firstName")} *
+                          </label>
+                          <input
+                            type="text"
+                            name="prenom"
+                            value={formData.prenom}
+                            onChange={handleChange}
+                            required
+                            className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-300 text-white placeholder-white/40 backdrop-blur-sm hover:border-white/20"
+                            placeholder={t("contactHome.firstNamePlaceholder")}
+                          />
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-semibold text-white/80 mb-2">
+                            {t("contactHome.phone")} *
+                          </label>
+                          <input
+                            type="tel"
+                            name="telephone"
+                            value={formData.telephone}
+                            onChange={handleChange}
+                            required
+                            className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-300 text-white placeholder-white/40 backdrop-blur-sm hover:border-white/20"
+                            placeholder={t("contactHome.phonePlaceholder")}
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-semibold text-white/80 mb-2">
+                            {t("contactHome.email")} *
+                          </label>
+                          <input
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            required
+                            className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-300 text-white placeholder-white/40 backdrop-blur-sm hover:border-white/20"
+                            placeholder={t("contactHome.emailPlaceholder")}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Step 3: Budget */}
+                  {currentStep === 3 && (
+                    <div className="space-y-6 animate-fadeIn">
+                      <h3 className="text-2xl font-bold text-white mb-6">
+                        {t("contactHome.step3")}
                       </h3>
                       <div>
                         <label className="block text-sm font-semibold text-white/80 mb-2">
@@ -225,11 +312,11 @@ export function ContactHomeSection() {
                     </div>
                   )}
 
-                  {/* Step 3: Délai */}
-                  {currentStep === 3 && (
+                  {/* Step 4: Délai */}
+                  {currentStep === 4 && (
                     <div className="space-y-6 animate-fadeIn">
                       <h3 className="text-2xl font-bold text-white mb-6">
-                        {t("contactHome.step3")}
+                        {t("contactHome.step4")}
                       </h3>
                       <div>
                         <label className="block text-sm font-semibold text-white/80 mb-2">
@@ -252,11 +339,11 @@ export function ContactHomeSection() {
                     </div>
                   )}
 
-                  {/* Step 4: Secteur */}
-                  {currentStep === 4 && (
+                  {/* Step 5: Secteur */}
+                  {currentStep === 5 && (
                     <div className="space-y-6 animate-fadeIn">
                       <h3 className="text-2xl font-bold text-white mb-6">
-                        {t("contactHome.step4")}
+                        {t("contactHome.step5")}
                       </h3>
                       <div>
                         <label className="block text-sm font-semibold text-white/80 mb-2">
@@ -279,41 +366,45 @@ export function ContactHomeSection() {
                           <option value="other" style={{ backgroundColor: '#1a1a1a', color: '#ffffff' }}>{t("contactHome.other")}</option>
                         </select>
                       </div>
-                      <div className="flex items-start gap-3 pt-4">
+                      <div className="flex items-center gap-3 pt-4">
                         <input
                           type="checkbox"
                           name="privacy"
                           checked={formData.privacy}
                           onChange={handleChange}
                           required
-                          className="mt-1 w-5 h-5 rounded border-white/20 bg-white/5 text-primary focus:ring-2 focus:ring-primary/20"
+                          className="w-5 h-5 rounded border-white/20 bg-white/5 text-primary focus:ring-2 focus:ring-primary/20 flex-shrink-0"
                         />
                         <label className="text-sm text-white/80">
-                          {t("contactHome.privacyAccept")}
+                          {t("contactHome.privacyAcceptBefore")}{" "}
+                          <Link href="/politique-de-confidentialite" className="text-primary hover:text-cyan-400 underline transition-colors">
+                            {t("contactHome.privacyPolicy")}
+                          </Link>
+                          {" "}{t("contactHome.privacyAcceptAfter")}
                         </label>
                       </div>
                     </div>
                   )}
 
                   {/* Navigation Buttons */}
-                  <div className="flex items-center justify-between mt-10 pt-6 border-t border-white/10">
+                  <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 md:gap-0 mt-10 pt-6 border-t border-white/10">
                     {currentStep > 1 && (
                       <button
                         type="button"
                         onClick={handleBack}
-                        className="px-6 py-3 border border-white/20 text-white rounded-full hover:border-primary hover:bg-primary/10 transition-all duration-300 backdrop-blur-sm hover:shadow-[0_0_15px_rgba(0,115,255,0.2)]"
+                        className="w-full md:w-auto px-6 py-3 border border-white/20 text-white rounded-full hover:border-primary hover:bg-primary/10 transition-all duration-300 backdrop-blur-sm hover:shadow-[0_0_15px_rgba(0,115,255,0.2)] text-center"
                         style={{ fontFamily: 'Montserrat, sans-serif' }}
                       >
                         {t("contactHome.previous")}
                       </button>
                     )}
-                    <div className="flex-1" />
+                    <div className="hidden md:block flex-1" />
                     {currentStep < totalSteps ? (
                       <button
                         type="button"
                         onClick={handleNext}
                         disabled={!isStepValid()}
-                        className="px-8 py-3 bg-gradient-to-r from-primary to-cyan-400 text-white font-bold rounded-full hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 shadow-[0_0_20px_rgba(0,115,255,0.3)] hover:shadow-[0_0_30px_rgba(0,115,255,0.5)]"
+                        className="w-full md:w-auto px-6 py-3 bg-gradient-to-r from-primary to-cyan-400 text-white font-bold rounded-full hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(0,115,255,0.3)] hover:shadow-[0_0_30px_rgba(0,115,255,0.5)]"
                         style={{ fontFamily: 'Montserrat, sans-serif' }}
                       >
                         {t("contactHome.next")}
@@ -323,7 +414,7 @@ export function ContactHomeSection() {
                       <button
                         type="submit"
                         disabled={!isStepValid()}
-                        className="px-8 py-3 bg-gradient-to-r from-primary to-cyan-400 text-white font-bold rounded-full hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 shadow-[0_0_20px_rgba(0,115,255,0.3)] hover:shadow-[0_0_30px_rgba(0,115,255,0.5)]"
+                        className="w-full md:w-auto px-6 py-3 bg-gradient-to-r from-primary to-cyan-400 text-white font-bold rounded-full hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(0,115,255,0.3)] hover:shadow-[0_0_30px_rgba(0,115,255,0.5)]"
                         style={{ fontFamily: 'Montserrat, sans-serif' }}
                       >
                         {t("contactHome.send")}
@@ -349,28 +440,21 @@ export function ContactHomeSection() {
         {/* Section 2: Prendre rendez-vous */}
         <Reveal>
           <div id="rendez-vous" className="text-center scroll-mt-24">
-            <div className="mb-12">
+            <div className="mb-8">
               <h2 className="text-4xl md:text-5xl font-black text-white mb-6" style={{ 
                 fontFamily: 'Montserrat, sans-serif',
                 letterSpacing: '-0.02em',
               }}>
                 {t("contactHome.appointmentTitle")}
               </h2>
-              <p className="text-xl text-white/70 max-w-2xl mx-auto" style={{ 
+              <p className="text-xl text-white/70 max-w-2xl mx-auto mb-6" style={{ 
                 fontFamily: 'Montserrat, sans-serif',
               }}>
                 {t("contactHome.appointmentDescription")}
               </p>
-            </div>
-
-            {/* Calendar Card */}
-            <div className="max-w-3xl mx-auto rounded-3xl border border-white/20 bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-xl p-8 md:p-12 shadow-[0_25px_80px_rgba(0,0,0,0.4)] relative overflow-hidden">
-              {/* Subtle background effects */}
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/3 via-cyan-400/3 to-transparent opacity-40" />
-              <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-              <div className="absolute bottom-0 left-0 w-96 h-96 bg-cyan-400/5 rounded-full blur-3xl" />
               
-              <div className="relative z-10 text-center py-12">
+              {/* Button without container */}
+              <div className="text-center">
                 <Link 
                   href="mailto:contact@pixaura.eu?subject=Demande de rendez-vous"
                   className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-primary to-cyan-400 text-white font-bold rounded-full hover:scale-105 transition-all duration-300 shadow-[0_0_20px_rgba(0,115,255,0.3)] hover:shadow-[0_0_30px_rgba(0,115,255,0.5)]"

@@ -8,7 +8,7 @@ import { Reveal } from "@/components/reveal"
 import { useTranslation } from "@/contexts/translation-context"
 
 export function AgenceHomeSection() {
-  const { t } = useTranslation()
+  const { t, language } = useTranslation()
   
   const values = [
     {
@@ -93,11 +93,11 @@ export function AgenceHomeSection() {
         </Reveal>
 
         {/* Values Cards - Style Réalisations Premium */}
-        <div className="mb-32 grid gap-8 md:grid-cols-3">
+        <div className={`mb-32 grid gap-8 md:grid-cols-3 ${language === 'en' ? 'md:items-stretch' : ''}`}>
           {values.map((value, index) => {
             return (
               <Reveal key={index} delay={index * 100}>
-                <div className="group relative overflow-hidden rounded-3xl border border-white/20 bg-white/8 text-white backdrop-blur-2xl transition duration-700 ease-out hover:-translate-y-3 hover:scale-[1.01] hover:border-white/30 hover:bg-white/12 hover:shadow-[0_45px_140px_rgba(0,0,0,0.55)]">
+                <div className={`group relative overflow-hidden rounded-3xl border border-white/20 bg-white/8 text-white backdrop-blur-2xl transition duration-700 ease-out hover:-translate-y-3 hover:scale-[1.01] hover:border-white/30 hover:bg-white/12 hover:shadow-[0_45px_140px_rgba(0,0,0,0.55)] ${language === 'en' ? 'md:h-full md:flex md:flex-col' : ''}`}>
                   {/* Premium Glow Effects - Style Réalisations */}
                   <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-700 ease-out group-hover:opacity-100">
                     <div className="absolute -inset-6 rounded-[40px] bg-gradient-to-r from-primary/20 via-white/10 to-cyan-400/20 blur-3xl animate-pulse" />
@@ -119,7 +119,7 @@ export function AgenceHomeSection() {
                   </div>
 
                   {/* Content Section - Centered */}
-                  <div className="flex flex-col gap-5 px-8 pt-8 pb-10 text-white text-center">
+                  <div className={`flex flex-col gap-5 px-8 pt-8 pb-10 text-white text-center ${language === 'en' ? 'md:flex-1' : ''}`}>
                     <h3 className="text-2xl font-bold leading-tight md:text-3xl text-white">
                       {value.title}
                     </h3>
@@ -158,11 +158,11 @@ export function AgenceHomeSection() {
         </Reveal>
 
         {/* Founders Cards - Mobile: Style NOS EXPERTISES, Desktop: Split Layout */}
-        <div className="mb-32 grid gap-10 md:grid-cols-2">
+        <div className="mb-32 grid gap-10 md:grid-cols-2 md:items-stretch">
           {founders.map((founder, index) => (
             <Reveal key={index} delay={index * 150}>
               {/* Mobile: THE ULTIMATE PREMIUM VERSION - BEST CREATION */}
-              <div className="md:hidden group relative overflow-hidden rounded-[32px] sm:rounded-[40px] border border-white/25 bg-gradient-to-br from-white/10 via-white/8 to-white/6 p-8 sm:p-12 text-white backdrop-blur-3xl transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-white/40 hover:bg-gradient-to-br hover:from-white/12 hover:via-white/10 hover:to-white/8 hover:shadow-[0_20px_60px_rgba(0,115,255,0.4),0_0_0_1px_rgba(255,255,255,0.1)] hover:-translate-y-1 shadow-[0_12px_40px_rgba(0,0,0,0.5),0_4px_16px_rgba(0,0,0,0.3)]">
+              <div className="md:hidden group relative overflow-hidden rounded-[32px] sm:rounded-[40px] border border-white/25 bg-gradient-to-br from-white/10 via-white/8 to-white/6 p-8 sm:p-12 text-white backdrop-blur-3xl transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-white/40 hover:bg-gradient-to-br hover:from-white/12 hover:via-white/10 hover:to-white/8 hover:shadow-[0_20px_60px_rgba(0,115,255,0.4),0_0_0_1px_rgba(255,255,255,0.1)] hover:-translate-y-1 shadow-[0_12px_40px_rgba(0,0,0,0.5),0_4px_16px_rgba(0,0,0,0.3)] h-full">
                 {/* Ultimate Multi-Layer Glow Effects - Always Visible */}
                 <div className="pointer-events-none absolute -inset-6 opacity-30 group-hover:opacity-60 transition-opacity duration-700">
                   <div className="absolute inset-0 rounded-[40px] bg-gradient-to-r from-cyan-400/25 via-purple-500/25 to-cyan-400/25 blur-3xl animate-pulse" style={{ animationDuration: '3s' }} />
@@ -211,7 +211,7 @@ export function AgenceHomeSection() {
                   </span>
                   
                   {/* Ultimate Premium Name - Extra Large & Beautiful */}
-                  <h3 className="max-w-2xl text-4xl sm:text-5xl md:text-6xl font-black leading-[1.02] text-white tracking-tight" style={{ 
+                  <h3 className="max-w-2xl min-h-[5.25rem] sm:min-h-[6.25rem] line-clamp-2 text-4xl sm:text-5xl md:text-6xl font-black leading-[1.02] text-white tracking-tight" style={{ 
                     fontFamily: 'Montserrat, sans-serif',
                     letterSpacing: '-0.03em',
                     textShadow: '0 3px 25px rgba(0,0,0,0.6), 0 6px 50px rgba(0,0,0,0.4), 0 0 80px rgba(0,0,0,0.3), 0 1px 3px rgba(0,0,0,0.8)',
@@ -221,7 +221,7 @@ export function AgenceHomeSection() {
                   </h3>
                   
                   {/* Ultimate Premium Role - Beautiful Gradient */}
-                  <p className="max-w-2xl text-sm sm:text-base font-extrabold uppercase tracking-[0.25em] leading-tight bg-gradient-to-r from-purple-400 via-purple-300 via-cyan-300 to-cyan-400 bg-clip-text text-transparent drop-shadow-[0_3px_15px_rgba(168,85,247,0.5),0_0_30px_rgba(56,189,248,0.3)]" style={{
+                  <p className="max-w-2xl min-h-[3.5rem] sm:min-h-[3.75rem] line-clamp-3 text-sm sm:text-base font-extrabold uppercase tracking-[0.25em] leading-tight bg-gradient-to-r from-purple-400 via-purple-300 via-cyan-300 to-cyan-400 bg-clip-text text-transparent drop-shadow-[0_3px_15px_rgba(168,85,247,0.5),0_0_30px_rgba(56,189,248,0.3)]" style={{
                     backgroundSize: '200% 200%',
                     animation: 'gradientShift 4s ease infinite',
                   }}>
@@ -229,7 +229,7 @@ export function AgenceHomeSection() {
                   </p>
                   
                   {/* Ultimate Premium Description - Perfect Readability */}
-                  <p className="max-w-2xl text-base sm:text-lg md:text-xl text-white leading-relaxed font-semibold" style={{ 
+                  <p className="max-w-2xl min-h-[7rem] sm:min-h-[7.5rem] line-clamp-4 text-base sm:text-lg md:text-xl text-white leading-relaxed font-semibold" style={{ 
                     fontFamily: 'Montserrat, sans-serif',
                     textShadow: '0 2px 12px rgba(0,0,0,0.5), 0 4px 24px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.7)',
                     lineHeight: '1.8',
@@ -241,7 +241,7 @@ export function AgenceHomeSection() {
                   <div className="max-w-2xl pt-6 border-t-2 border-white/35 relative">
                     <div className="absolute top-0 left-0 w-24 h-1 bg-gradient-to-r from-cyan-400/80 via-purple-500/80 to-cyan-400/80 blur-md opacity-70 group-hover:opacity-100 transition-opacity duration-500" />
                     <div className="absolute top-0 left-0 w-32 h-px bg-gradient-to-r from-cyan-400/60 via-purple-500/60 to-transparent blur-sm" />
-                    <p className="text-base sm:text-lg md:text-xl text-white leading-relaxed font-medium pt-6" style={{ 
+                    <p className="min-h-[7rem] sm:min-h-[7.5rem] line-clamp-4 text-base sm:text-lg md:text-xl text-white leading-relaxed font-medium pt-6" style={{ 
                       fontFamily: 'Montserrat, sans-serif',
                       textShadow: '0 2px 12px rgba(0,0,0,0.5), 0 4px 24px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.7)',
                       lineHeight: '1.85',
@@ -261,7 +261,7 @@ export function AgenceHomeSection() {
               </div>
 
               {/* Desktop: Original Split Layout */}
-              <div className="hidden md:block group relative overflow-hidden rounded-[32px] border border-white/25 bg-gradient-to-br from-white/12 via-white/8 to-white/5 text-white backdrop-blur-2xl transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-2 hover:scale-[1.01] hover:border-white/40 hover:bg-gradient-to-br hover:from-white/15 hover:via-white/10 hover:to-white/7 hover:shadow-[0_30px_100px_rgba(0,115,255,0.25),0_0_0_1px_rgba(255,255,255,0.1)]">
+              <div className="hidden md:block group relative overflow-hidden rounded-[32px] border border-white/25 bg-gradient-to-br from-white/12 via-white/8 to-white/5 text-white backdrop-blur-2xl transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-2 hover:scale-[1.01] hover:border-white/40 hover:bg-gradient-to-br hover:from-white/15 hover:via-white/10 hover:to-white/7 hover:shadow-[0_30px_100px_rgba(0,115,255,0.25),0_0_0_1px_rgba(255,255,255,0.1)] h-full">
                 {/* Premium Multi-Layer Glow Effects */}
                 <div className="pointer-events-none absolute -inset-8 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
                   <div className="absolute inset-0 rounded-[40px] bg-gradient-to-r from-primary/25 via-white/15 to-cyan-400/25 blur-3xl" />
@@ -302,14 +302,14 @@ export function AgenceHomeSection() {
                   </div>
                   
                   {/* Content Container - Right Side (58%) */}
-                  <div className="relative w-[58%] p-10 flex flex-col justify-center z-10">
+                  <div className="relative w-[58%] p-10 flex flex-col justify-start z-10">
                     {/* Enhanced Background for Better Text Contrast */}
                     <div className="absolute inset-0 bg-gradient-to-br from-black/40 via-black/30 to-black/40 rounded-r-[32px]" />
                     <div className="absolute inset-0 bg-gradient-to-br from-black/20 via-black/15 to-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-r-[32px]" />
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.02] to-transparent" />
                     
                     {/* Name - Ultra Large Bold with Premium Typography */}
-                    <h3 className="relative text-4xl lg:text-5xl font-black text-white leading-[1.1] mb-5 tracking-tight" style={{ 
+                    <h3 className="relative min-h-[5.25rem] line-clamp-2 text-4xl lg:text-5xl font-black text-white leading-[1.1] mb-5 tracking-tight" style={{ 
                       fontFamily: 'Montserrat, sans-serif',
                       letterSpacing: '-0.03em',
                       textShadow: '0 3px 25px rgba(0,0,0,0.5), 0 0 50px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.8)',
@@ -324,7 +324,7 @@ export function AgenceHomeSection() {
                     </div>
                     
                     {/* Role - Enhanced Readability */}
-                    <p className="relative text-white text-[13px] font-bold uppercase tracking-[0.4em] leading-tight mb-8" style={{ 
+                    <p className="relative min-h-[5.25rem] line-clamp-4 text-white text-[13px] font-bold uppercase tracking-[0.4em] leading-tight mb-8" style={{ 
                       fontFamily: 'Montserrat, sans-serif',
                       letterSpacing: '0.35em',
                       textShadow: '0 2px 15px rgba(0,0,0,0.5), 0 1px 3px rgba(0,0,0,0.7)',
@@ -333,7 +333,7 @@ export function AgenceHomeSection() {
                     </p>
                     
                     {/* Description - Ultra Clear & Readable */}
-                    <p className="relative text-white text-[16px] leading-[1.75] font-medium mb-8" style={{ 
+                    <p className="relative min-h-[7rem] line-clamp-4 text-white text-[16px] leading-[1.75] font-medium mb-8" style={{ 
                       fontFamily: 'Montserrat, sans-serif',
                       lineHeight: '1.75',
                       textShadow: '0 2px 20px rgba(0,0,0,0.6), 0 1px 4px rgba(0,0,0,0.8)',
@@ -343,7 +343,7 @@ export function AgenceHomeSection() {
                     
                     {/* Vision - Premium Separated Section */}
                     <div className="relative pt-6 border-t border-white/25">
-                      <p className="text-white text-[14px] leading-[1.8] font-normal" style={{ 
+                      <p className="min-h-[6.5rem] line-clamp-4 text-white text-[14px] leading-[1.8] font-normal" style={{ 
                         fontFamily: 'Montserrat, sans-serif',
                         lineHeight: '1.8',
                         textShadow: '0 2px 18px rgba(0,0,0,0.55), 0 1px 3px rgba(0,0,0,0.75)',
@@ -409,13 +409,23 @@ export function AgenceHomeSection() {
                   </div>
 
                   {/* Content Section - Centered */}
-                  <div className="flex flex-col gap-5 px-8 pt-8 pb-10 text-white text-center flex-1">
-                    <h3 className="text-2xl font-bold leading-tight md:text-3xl text-white">
-                      {commitment.title}
-                    </h3>
-                    <p className="text-base md:text-lg leading-relaxed text-white/90 font-medium">
-                      {commitment.description}
-                    </p>
+                  <div className="flex flex-col justify-between px-8 pt-8 pb-10 text-white text-center flex-1">
+                    {/* Title - Fixed Height */}
+                    <div className="flex-shrink-0 min-h-[60px] flex items-center justify-center mb-4 px-2">
+                      <h3 className="text-xl font-bold leading-tight text-white whitespace-nowrap" style={{ 
+                        fontFamily: 'Montserrat, sans-serif',
+                      }}>
+                        {commitment.title}
+                      </h3>
+                    </div>
+                    {/* Description - Fixed Position */}
+                    <div className="flex-1 flex items-start justify-center mt-auto px-2">
+                      <p className="text-base leading-relaxed text-white/90 font-medium" style={{ 
+                        fontFamily: 'Montserrat, sans-serif',
+                      }}>
+                        {commitment.description}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </Reveal>
