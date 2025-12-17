@@ -948,7 +948,7 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
 
       {(stage === "hold" || stage === "finishing") && (
         <div className="relative z-10 flex h-full w-full flex-col justify-between px-8 py-10 text-white md:px-16">
-          <header className="flex items-center justify-start text-xs font-semibold uppercase tracking-[0.4em] text-white/80">
+          <header className="flex items-center justify-start text-xs font-semibold uppercase tracking-[0.4em] text-white/80 mb-6 md:mb-0">
             <div className="flex items-center gap-2">
               <Image
                 src="/Banque d_images/PIXaura-soft white.png"

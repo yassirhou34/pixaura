@@ -412,10 +412,10 @@ export function Navbar() {
       </div>
 
       <div
-        className={`overflow-hidden border-t border-white/10 bg-black/80 backdrop-blur-xl transition-all duration-300 ease-out xl:hidden ${isOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
+        className={`border-t border-white/10 bg-black/80 backdrop-blur-xl transition-all duration-300 ease-out xl:hidden ${isOpen ? "max-h-dvh opacity-100 overflow-y-auto overscroll-contain" : "max-h-0 opacity-0 overflow-hidden"
           }`}
       >
-        <div className="flex flex-col gap-4 px-6 py-6 text-white">
+        <div className="flex flex-col gap-4 px-6 pt-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] text-white">
           {navItems.map((item) => {
             // Check if link points to a section on home page (starts with /#)
             const isHomeSection = item.href.startsWith("/#")

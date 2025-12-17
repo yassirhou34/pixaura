@@ -93,10 +93,10 @@ export function AgenceHomeSection() {
         </Reveal>
 
         {/* Values Cards - Style Réalisations Premium */}
-        <div className={`mb-32 grid gap-8 md:grid-cols-3 ${language === 'en' ? 'md:items-stretch' : ''}`}>
+        <div className={`mb-32 grid grid-cols-1 gap-8 md:grid-cols-3 ${language === 'en' ? 'md:items-stretch' : ''}`}>
           {values.map((value, index) => {
             return (
-              <Reveal key={index} delay={index * 100}>
+              <Reveal key={index} delay={index * 100} className="min-w-0">
                 <div className={`group relative overflow-hidden rounded-3xl border border-white/20 bg-white/8 text-white backdrop-blur-2xl transition duration-700 ease-out hover:-translate-y-3 hover:scale-[1.01] hover:border-white/30 hover:bg-white/12 hover:shadow-[0_45px_140px_rgba(0,0,0,0.55)] ${language === 'en' ? 'md:h-full md:flex md:flex-col' : ''}`}>
                   {/* Premium Glow Effects - Style Réalisations */}
                   <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-700 ease-out group-hover:opacity-100">
@@ -383,11 +383,11 @@ export function AgenceHomeSection() {
         </Reveal>
 
         {/* Commitments Cards - Style Réalisations Premium */}
-        <div className="grid gap-8 md:grid-cols-3 md:items-stretch">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3 md:items-stretch">
           {commitments.map((commitment, index) => {
             return (
-              <Reveal key={index} delay={index * 100}>
-                <div className="group relative overflow-hidden rounded-3xl border border-white/20 bg-white/8 text-white backdrop-blur-2xl transition duration-700 ease-out hover:-translate-y-3 hover:scale-[1.01] hover:border-white/30 hover:bg-white/12 hover:shadow-[0_45px_140px_rgba(0,0,0,0.55)] h-full flex flex-col">
+              <Reveal key={index} delay={index * 100} className="min-w-0">
+                <div className="group relative min-w-0 overflow-hidden rounded-3xl border border-white/20 bg-white/8 text-white backdrop-blur-2xl transition duration-700 ease-out hover:-translate-y-3 hover:scale-[1.01] hover:border-white/30 hover:bg-white/12 hover:shadow-[0_45px_140px_rgba(0,0,0,0.55)] h-full flex flex-col">
                   {/* Premium Glow Effects - Style Réalisations */}
                   <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-700 ease-out group-hover:opacity-100">
                     <div className="absolute -inset-6 rounded-[40px] bg-gradient-to-r from-primary/20 via-white/10 to-cyan-400/20 blur-3xl animate-pulse" />
@@ -412,7 +412,7 @@ export function AgenceHomeSection() {
                   <div className="flex flex-col justify-between px-8 pt-8 pb-10 text-white text-center flex-1">
                     {/* Title - Fixed Height */}
                     <div className="flex-shrink-0 min-h-[60px] flex items-center justify-center mb-4 px-2">
-                      <h3 className="text-xl font-bold leading-tight text-white whitespace-nowrap" style={{ 
+                      <h3 className="text-xl font-bold leading-tight text-white whitespace-normal md:whitespace-nowrap" style={{ 
                         fontFamily: 'Montserrat, sans-serif',
                       }}>
                         {commitment.title}
