@@ -33,7 +33,7 @@ export default function ContactPage() {
     privacy: false,
   })
 
-  const totalSteps = 5
+  const totalSteps = 4
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target
@@ -97,8 +97,6 @@ export default function ContactPage() {
       case 3:
         return formData.budget !== ""
       case 4:
-        return formData.delai !== ""
-      case 5:
         return formData.secteur !== "" && formData.privacy
       default:
         return false
@@ -302,36 +300,8 @@ export default function ContactPage() {
                   </div>
                 )}
 
-                {/* Step 4: Délai */}
+                {/* Step 4: Secteur */}
                 {currentStep === 4 && (
-                  <div className="space-y-6 animate-fadeIn">
-                    <h2 className="text-2xl font-bold text-white mb-6" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-                      Délai souhaité
-                    </h2>
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-300 mb-2" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-                        Délai souhaité *
-                      </label>
-                      <select
-                        name="delai"
-                        value={formData.delai}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all text-white"
-                        style={{ color: '#ffffff' }}
-                      >
-                        <option value="" style={{ backgroundColor: '#1a1a1a', color: '#ffffff' }}>Sélectionnez un délai</option>
-                        <option value="1-2weeks" style={{ backgroundColor: '#1a1a1a', color: '#ffffff' }}>1 à 2 semaines</option>
-                        <option value="3-4weeks" style={{ backgroundColor: '#1a1a1a', color: '#ffffff' }}>3 à 4 semaines</option>
-                        <option value="1-3months" style={{ backgroundColor: '#1a1a1a', color: '#ffffff' }}>1 à 3 mois</option>
-                        <option value="flexible" style={{ backgroundColor: '#1a1a1a', color: '#ffffff' }}>Flexible</option>
-                      </select>
-                    </div>
-                  </div>
-                )}
-
-                {/* Step 5: Secteur */}
-                {currentStep === 5 && (
                   <div className="space-y-6 animate-fadeIn">
                     <h2 className="text-2xl font-bold text-white mb-6" style={{ fontFamily: 'Montserrat, sans-serif' }}>
                       Secteur d'activité

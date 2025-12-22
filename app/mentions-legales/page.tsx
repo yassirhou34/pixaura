@@ -224,11 +224,6 @@ export default function MentionsLegalesPage() {
         <div className="mx-auto max-w-4xl">
           {/* Professional Hero Section */}
           <div className="mb-20 text-center">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs uppercase tracking-[0.2em] text-white/60 backdrop-blur-sm mb-8">
-              <Shield className="h-3 w-3" />
-              <span>{t("mentionsLegales.badge")}</span>
-            </div>
-            
             <h1 className="text-5xl sm:text-6xl md:text-7xl font-black text-white mb-6 tracking-tight">
               {t("mentionsLegales.title")}
             </h1>
@@ -237,16 +232,6 @@ export default function MentionsLegalesPage() {
               <div className="h-px w-16 bg-gradient-to-r from-transparent to-white/20" />
               <div className="w-1.5 h-1.5 rounded-full bg-cyan-400/60" />
               <div className="h-px w-16 bg-gradient-to-l from-transparent to-white/20" />
-            </div>
-            
-            <div className="flex justify-center">
-              <Image
-                src="/Banque d_images/PIXaura-soft white.png"
-                alt="Pixaura International"
-                width={280}
-                height={84}
-                className="h-12 sm:h-16 w-auto"
-              />
             </div>
           </div>
 
@@ -268,11 +253,6 @@ export default function MentionsLegalesPage() {
                           {section.title}
                         </h2>
                         <div className="h-0.5 w-16 bg-gradient-to-r from-cyan-400/70 to-transparent mt-2" />
-                      </div>
-                      <div className="flex-shrink-0">
-                        <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-gradient-to-br from-white/[0.15] to-white/[0.08] border border-white/25 flex items-center justify-center shadow-[0_4px_16px_rgba(0,0,0,0.2)]">
-                          <Icon className="h-6 w-6 sm:h-7 sm:w-7 text-cyan-400" />
-                        </div>
                       </div>
                     </div>
                   </div>

@@ -63,7 +63,7 @@ export function HeroSection() {
                 <span className="hero-highlight">{t("hero.headline1Highlight")}</span>
               </span>
               <span className="block leading-tight -mt-2 sm:-mt-2 md:-mt-3">{headline1EndParts[0]} {headline1EndParts[1]}</span>
-              <span className="block leading-tight -mt-2 sm:-mt-2 md:-mt-3">{headline1EndParts.slice(2).join(" ")}</span>
+              <span className="block leading-tight -mt-2 sm:-mt-2 md:-mt-3 mb-0">{headline1EndParts.slice(2).join(" ")}</span>
             </>
           ) : (
             // French (forced lines): "l'aura des" / "marques" / "ambitieuses" / "sur chaque" / "continent."
@@ -76,7 +76,7 @@ export function HeroSection() {
               <span className="block leading-tight -mt-1 sm:mt-0">
                 {headline1EndParts.slice(0, 2).join(" ")}
               </span>
-              <span className="block leading-tight -mt-1 sm:mt-0">
+              <span className="block leading-tight -mt-1 sm:mt-0 mb-0">
                 {headline1EndParts.slice(2).join(" ")}
               </span>
             </>
@@ -89,15 +89,18 @@ export function HeroSection() {
             const isEnglish = language === 'en'
 
             if (isEnglish) {
-              // English: "bold ideas that make" / "radiate" / "every brand."
+              // English: "Bold Ideas" / "That Make" / "Radiate" / "Every" / "Brand."
+              const line1Words = t("hero.headline2Line1").split(" ")
               const line2Words = t("hero.headline2Line2").split(" ")
               return (
                 <>
-                  <span className="block leading-tight">{t("hero.headline2Line1")} {line2Words.slice(0, -1).join(" ")}</span>
-                  <span className="block leading-tight -mt-2 sm:-mt-2 md:-mt-3">
-                    <span className="hero-highlight">{line2Words[line2Words.length - 1]}</span>
+                  <span className="block leading-tight">{line1Words[0]} {line1Words[1]}</span>
+                  <span className="block leading-tight -mt-2 sm:-mt-1 md:-mt-1">{line1Words[2]} {line2Words[0]}</span>
+                  <span className="block leading-tight -mt-2 sm:-mt-1 md:-mt-1">
+                    <span className="hero-highlight">{line2Words[1]}</span>
                   </span>
-                  <span className="block leading-tight -mt-2 sm:-mt-2 md:-mt-3">{t("hero.headline2Line3")}</span>
+                  <span className="block leading-tight -mt-2 sm:-mt-1 md:-mt-1">{line2Words[2]}</span>
+                  <span className="block leading-tight -mt-2 sm:-mt-1 md:-mt-1 mb-0">{t("hero.headline2Line3")}</span>
                 </>
               )
             } else {
@@ -122,8 +125,7 @@ export function HeroSection() {
                     {"\u00A0"}
                     <span className="hero-highlight">{line4Highlight}</span>
                   </span>
-                  {/* Extra bottom margin just for this variant to better air the subtitle */}
-                  <span className="block leading-tight -mt-1 sm:mt-0 whitespace-normal md:whitespace-nowrap mb-8 sm:mb-10 md:mb-12">
+                  <span className="block leading-tight -mt-1 sm:mt-0 whitespace-normal md:whitespace-nowrap mb-0">
                     {line4}
                   </span>
                 </>
@@ -151,29 +153,30 @@ export function HeroSection() {
                     <span className="hero-highlight">{highlightParts[1]}</span>
                   </span>
                   <span className="block leading-tight -mt-1 sm:mt-0">{endParts.slice(0, 2).join(" ")}</span>
-                  {/* Extra bottom margin just for this variant to better air the subtitle */}
-                  <span className="block leading-tight -mt-1 sm:mt-0 mb-8 sm:mb-10 md:mb-12">
+                  <span className="block leading-tight -mt-1 sm:mt-0 mb-0">
                     {endParts.slice(2).join(" ")}
                   </span>
                 </>
               )
             } else {
-              // English version: "creative" / "activations" / "high" / "performance to" / "amplify impact."
+              // English version: "Activations" / "Creative" / "To" / "Amplify" / "Impact."
               const creativeParts = highlightParts[1].split(" ")
-              const highPerfParts = highlightParts[0].split(" ")
+              const endPartsWords = endParts.join(" ").split(" ")
               return (
                 <>
                   <span className="block leading-tight">
-                    <span className="hero-highlight">{creativeParts[0]}</span>
-                  </span>
-                  <span className="block leading-tight -mt-2 sm:-mt-2 md:-mt-3">
                     <span className="hero-highlight">{creativeParts[1]}</span>
                   </span>
-                  <span className="block leading-tight -mt-2 sm:-mt-2 md:-mt-3">{highPerfParts[0]}</span>
-                  <span className="block leading-tight -mt-2 sm:-mt-2 md:-mt-3">
-                    {highPerfParts[1]} {endParts[0]}
+                  <span className="block leading-tight -mt-3 sm:-mt-2 md:-mt-2">
+                    <span className="hero-highlight">{creativeParts[0]}</span>
                   </span>
-                  <span className="block leading-tight -mt-2 sm:-mt-2 md:-mt-3">{endParts.slice(1).join(" ")}</span>
+                  <span className="block leading-tight -mt-3 sm:-mt-2 md:-mt-2">{endPartsWords[0]}</span>
+                  <span className="block leading-tight -mt-3 sm:-mt-2 md:-mt-2">
+                    {endPartsWords[1]}
+                  </span>
+                  <span className="block leading-tight -mt-3 sm:-mt-2 md:-mt-2" style={{ marginBottom: '-3.5rem' }}>
+                    {endPartsWords[2]}
+                  </span>
                 </>
               )
             }
@@ -250,9 +253,13 @@ export function HeroSection() {
                       {t("hero.reveal")}
                     </span>
                     <div
-                      className="hero-headline-container text-[28px] font-black leading-[1.1] tracking-tight text-white sm:text-[36px] sm:leading-[1.08] md:text-[56px] md:leading-[1.05] lg:text-[72px] lg:leading-[1.04] pb-0 sm:pb-0 md:pb-6 lg:pb-8"
+                      className="hero-headline-container text-[28px] font-black leading-[1.1] tracking-tight text-white sm:text-[36px] sm:leading-[1.08] md:text-[56px] md:leading-[1.05] lg:text-[72px] lg:leading-[1.04] pb-0"
                       aria-live="polite"
-                      style={placeholderHeight ? { minHeight: placeholderHeight } : undefined}
+                      style={{
+                        minHeight: placeholderHeight ? `${placeholderHeight}px` : 'auto',
+                        marginBottom: (activeIndex === 2 && language === 'en') ? '0.5rem' : '2rem',
+                        paddingBottom: 0
+                      }}
                     >
                       <div ref={placeholderRef} className="hero-headline hero-headline--ghost">
                         {headlineVariants[longestHeadlineIndex]}
@@ -272,7 +279,7 @@ export function HeroSection() {
               </Reveal>
 
               <Reveal delay={240}>
-                <p className="max-w-2xl text-sm text-white/80 sm:text-base md:text-lg lg:text-xl relative z-10 leading-relaxed text-justify text-justify-smooth mt-4 sm:mt-5 md:mt-6 lg:mt-8">
+                <p className="max-w-2xl text-sm text-white/80 sm:text-base md:text-lg lg:text-xl relative z-10 leading-relaxed text-justify text-justify-smooth mt-0">
                   {t("hero.subheadline")}
                 </p>
               </Reveal>
@@ -282,10 +289,10 @@ export function HeroSection() {
               <div className="flex flex-col gap-6 lg:gap-8">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-4">
                   <Link
-                    href="/realisations"
+                    href="/#contact"
                     className="group inline-flex items-center gap-3 rounded-full border border-white/25 px-9 py-4 text-sm font-semibold uppercase tracking-[0.32em] text-white transition-all duration-500 hover:border-white hover:bg-white/10"
                   >
-                    {t("hero.viewPortfolio")}
+                    {t("hero.contactUs")}
                     <Play className="h-4 w-4 transition-transform duration-500 group-hover:scale-110" />
                   </Link>
                 </div>
@@ -323,12 +330,8 @@ export function HeroSection() {
 
                         <div className="flex flex-1 flex-col justify-between px-5 pt-5">
                           <h3 className="text-base font-semibold leading-snug text-white text-center sm:text-lg">{project.title}</h3>
-                          <div className="mt-4 flex items-center gap-4 text-[10px] uppercase tracking-[0.28em] text-white/50 sm:text-xs">
-                            <span className="h-px flex-1 bg-white/20" />
-                            <Link href="/realisations" className="inline-flex items-center gap-2 text-white transition hover:text-white/70 active:scale-95">
-                              {t("hero.explore")}
-                              <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4" />
-                            </Link>
+                          <div className="mt-4">
+                            <span className="block h-px w-full bg-white/20" />
                           </div>
                         </div>
                       </Reveal>
@@ -372,12 +375,8 @@ export function HeroSection() {
 
                   <div className="flex flex-1 flex-col justify-between px-6 pt-5">
                     <h3 className="text-base font-semibold leading-snug text-white text-center">{project.title}</h3>
-                    <div className="mt-4 flex items-center gap-4 text-[10px] uppercase tracking-[0.28em] text-white/50">
-                      <span className="h-px flex-1 bg-white/20" />
-                      <Link href="/realisations" className="inline-flex items-center gap-2 text-white transition hover:text-white/70">
-                        Explorer
-                        <ArrowRight className="h-3 w-3" />
-                      </Link>
+                    <div className="mt-4">
+                      <span className="block h-px w-full bg-white/20" />
                     </div>
                   </div>
                 </Reveal>

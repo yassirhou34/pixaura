@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import Image from "next/image"
+import { useTranslation } from "@/contexts/translation-context"
 
 type Stage = "loading" | "start" | "transition" | "hold" | "finishing" | "hidden"
 
@@ -36,6 +37,7 @@ const LOADING_PHASES = [
 ]
 
 export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
+  const { t } = useTranslation()
   const [stage, setStage] = useState<Stage>("loading")
   const [loadingProgress, setLoadingProgress] = useState(0)
   const [holdProgress, setHoldProgress] = useState(0)
@@ -194,7 +196,7 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
       setLoadingProgress(next)
 
       if (next >= 100) {
-        setStage("start")
+        setStage("transition")
         return
       }
 
@@ -845,65 +847,6 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
         </div>
       )}
 
-      {stage === "start" && (
-        <div className="relative z-10 mx-auto flex h-full w-full max-w-5xl flex-col justify-between px-6 py-12 text-white md:px-10">
-          {startAnimation && (
-            <>
-              <div className="start-overlay" />
-              <div className="start-overlay start-overlay-delay" />
-            </>
-          )}
-          <header
-            className={`flex items-center justify-start text-xs font-semibold uppercase tracking-[0.4em] text-white/65 ${startAnimation ? "start-fade-element" : ""
-              }`}
-          >
-            <Image
-              src="/Banque d_images/PIXaura-soft white.png"
-              alt="Pixaura logo"
-              width={120}
-              height={36}
-              className="h-8 w-auto object-contain"
-              priority
-            />
-          </header>
-
-          <main
-            className={`relative flex flex-1 flex-col items-center justify-center gap-10 text-center ${startAnimation ? "start-main-anim" : ""
-              }`}
-          >
-            <div className="flex flex-wrap items-center justify-center gap-6 text-[clamp(42px,8vw,82px)] font-black uppercase tracking-tight">
-              <span>Immerse</span>
-              <button
-                onClick={handleStart}
-                disabled={startAnimation}
-                className={`group relative inline-flex h-32 w-32 items-center justify-center rounded-full border-2 border-white/70 bg-white/10 text-base font-semibold uppercase tracking-[0.4em] transition-all duration-300 hover:scale-[1.05] ${startAnimation ? "start-button-active" : ""
-                  }`}
-              >
-                <span className="relative z-10">start</span>
-                <span className="absolute inset-[6px] rounded-full border border-white/25 bg-white/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                <span
-                  className={`start-button-wave ${startAnimation ? "start-button-wave-active" : ""}`}
-                  aria-hidden="true"
-                />
-              </button>
-              <span>me in</span>
-              <span className="text-[clamp(42px,8vw,82px)]">→</span>
-            </div>
-            <p className="max-w-xl text-sm uppercase tracking-[0.35em] text-white/60">
-              Cliquez sur start pour activer l&apos;entrée immersive Pixaura.
-            </p>
-          </main>
-
-          <footer
-            className={`flex items-center justify-between text-[11px] uppercase tracking-[0.35em] text-white/55 ${startAnimation ? "start-fade-element" : ""
-              }`}
-          >
-            <span>scroll pour découvrir</span>
-            <span>maintenir ensuite pour débloquer</span>
-          </footer>
-        </div>
-      )}
-
       {stage === "transition" && (
         <div className="relative z-10 flex h-full w-full flex-col items-center justify-center gap-16 px-8 py-10 text-white md:px-16">
           <div className="flex flex-col items-center gap-4 text-center uppercase tracking-[0.5em] text-white/70">
@@ -964,7 +907,7 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
           <main className="flex flex-1 flex-col items-center justify-center gap-14">
             <div className="text-center">
               <p className="text-xs uppercase tracking-[0.6em] text-white/60">cliquez et maintenez pour entrer</p>
-              <div className="my-8 sm:my-10 md:my-12 flex items-center justify-center">
+              <div className="my-8 sm:my-10 md:my-12 flex flex-col items-center justify-center gap-4 sm:gap-5">
                 <Image
                   src="/Banque d_images/PIXaura-soft white.png"
                   alt="Pixaura logo"
@@ -973,6 +916,9 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
                   className="h-[clamp(68px,12vw,140px)] w-auto object-contain drop-shadow-[0_0_30px_rgba(0,0,0,0.45)]"
                   priority
                 />
+                <span className="text-[clamp(12px,2vw,17px)] font-normal uppercase tracking-[0.45em] text-white/70 mt-1 sm:mt-2">
+                  Agence de publicité française
+                </span>
               </div>
             </div>
 

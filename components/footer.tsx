@@ -204,90 +204,172 @@ export function Footer() {
                     <div className="h-px w-12 bg-gradient-to-r from-purple-400 to-transparent" />
                   </div>
                   
-                  {/* Premium Navigation Links */}
-                  <ul className="space-y-2.5">
-                    {[
-                      { label: t("footer.home"), href: "/" },
-                      { label: t("footer.services"), href: "#services" },
-                      { label: t("footer.realisations"), href: "/realisations" },
-                      { label: t("footer.caseStudies"), href: "/realisations" },
-                      { label: t("footer.offre"), href: "/#offre" },
-                      { label: t("footer.agence"), href: "/agence" },
-                      { label: t("footer.humind"), href: "/humind" },
-                      { label: t("footer.contact"), href: "/contact" },
-                    ].map(({ label, href }, index) => (
-                      <li key={label} style={{ animationDelay: `${index * 30}ms` }}>
-                        <Link 
-                          href={href}
-                          className="group/link relative block text-xs text-white/70 hover:text-white transition-all duration-400"
-                        >
-                          <div className="flex items-center gap-2">
-                            {/* Elegant Dot Indicator */}
-                            <div className="w-1 h-1 rounded-full bg-white/20 group-hover/link:bg-cyan-400 transition-all duration-400 group-hover/link:scale-150 group-hover/link:shadow-lg group-hover/link:shadow-cyan-400/50" />
-                            
-                            {/* Link Text with Smooth Animation */}
-                            <span className="relative flex-1 group-hover/link:translate-x-1 transition-transform duration-400">
-                              {label}
-                              {/* Elegant Underline */}
-                              <span className="absolute bottom-0 left-0 w-0 h-[0.5px] bg-gradient-to-r from-cyan-400 via-purple-400 to-transparent group-hover/link:w-full transition-all duration-500 ease-out" />
-                            </span>
-                          </div>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
+                  {/* Premium Navigation Links - Three columns on desktop */}
+                  <div className="flex flex-col md:flex-row md:gap-12 md:justify-center md:items-center">
+                    {/* Colonne 1: Accueil, Services */}
+                    <ul className="space-y-0 md:space-y-2.5">
+                      {[
+                        { label: t("footer.home"), href: "/" },
+                        { label: t("footer.services"), href: "#services" },
+                      ].map(({ label, href }, index) => (
+                        <li key={label} style={{ animationDelay: `${index * 30}ms` }}>
+                          <Link 
+                            href={href}
+                            className="group/link relative block text-xs text-white/70 hover:text-white transition-all duration-400"
+                          >
+                            <div className="flex items-center gap-2">
+                              {/* Elegant Dot Indicator */}
+                              <div className="w-1 h-1 rounded-full bg-white/20 group-hover/link:bg-cyan-400 transition-all duration-400 group-hover/link:scale-150 group-hover/link:shadow-lg group-hover/link:shadow-cyan-400/50" />
+                              
+                              {/* Link Text with Smooth Animation */}
+                              <span className="relative flex-1 group-hover/link:translate-x-1 transition-transform duration-400">
+                                {label}
+                                {/* Elegant Underline */}
+                                <span className="absolute bottom-0 left-0 w-0 h-[0.5px] bg-gradient-to-r from-cyan-400 via-purple-400 to-transparent group-hover/link:w-full transition-all duration-500 ease-out" />
+                              </span>
+                            </div>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+
+                    {/* Colonne 2: Offre, Agence */}
+                    <ul className="space-y-0 md:space-y-2.5">
+                      {[
+                        { label: t("footer.offre"), href: "/#offre" },
+                        { label: t("footer.agence"), href: "/#agence" },
+                      ].map(({ label, href }, index) => (
+                        <li key={label} style={{ animationDelay: `${(index + 2) * 30}ms` }}>
+                          <Link 
+                            href={href}
+                            className="group/link relative block text-xs text-white/70 hover:text-white transition-all duration-400"
+                          >
+                            <div className="flex items-center gap-2">
+                              {/* Elegant Dot Indicator */}
+                              <div className="w-1 h-1 rounded-full bg-white/20 group-hover/link:bg-cyan-400 transition-all duration-400 group-hover/link:scale-150 group-hover/link:shadow-lg group-hover/link:shadow-cyan-400/50" />
+                              
+                              {/* Link Text with Smooth Animation */}
+                              <span className="relative flex-1 group-hover/link:translate-x-1 transition-transform duration-400">
+                                {label}
+                                {/* Elegant Underline */}
+                                <span className="absolute bottom-0 left-0 w-0 h-[0.5px] bg-gradient-to-r from-cyan-400 via-purple-400 to-transparent group-hover/link:w-full transition-all duration-500 ease-out" />
+                              </span>
+                            </div>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+
+                    {/* Colonne 3: Humind, Contact */}
+                    <ul className="space-y-0 md:space-y-2.5">
+                      {[
+                        { label: t("footer.humind"), href: "/humind" },
+                        { label: t("footer.contact"), href: "/#contact" },
+                      ].map(({ label, href }, index) => (
+                        <li key={label} style={{ animationDelay: `${(index + 4) * 30}ms` }}>
+                          <Link 
+                            href={href}
+                            className="group/link relative block text-xs text-white/70 hover:text-white transition-all duration-400"
+                          >
+                            <div className="flex items-center gap-2">
+                              {/* Elegant Dot Indicator */}
+                              <div className="w-1 h-1 rounded-full bg-white/20 group-hover/link:bg-cyan-400 transition-all duration-400 group-hover/link:scale-150 group-hover/link:shadow-lg group-hover/link:shadow-cyan-400/50" />
+                              
+                              {/* Link Text with Smooth Animation */}
+                              <span className="relative flex-1 group-hover/link:translate-x-1 transition-transform duration-400">
+                                {label}
+                                {/* Elegant Underline */}
+                                <span className="absolute bottom-0 left-0 w-0 h-[0.5px] bg-gradient-to-r from-cyan-400 via-purple-400 to-transparent group-hover/link:w-full transition-all duration-500 ease-out" />
+                              </span>
+                            </div>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Desktop Contact & Navigation - Unchanged */}
+          {/* Desktop Contact & Navigation */}
           <div className="hidden md:grid md:grid-cols-2 gap-8">
             <div className="space-y-4">
               <p className="text-xs uppercase tracking-[0.35em] text-white/85 font-bold md:[text-shadow:0_2px_14px_rgba(0,0,0,0.75)]">{t("footer.contact")}</p>
               <ul className="space-y-3 text-sm text-white/85 md:[text-shadow:0_2px_14px_rgba(0,0,0,0.75)]">
-                <li className="group flex items-start gap-3 hover:text-white transition-colors">
+                <li className="group flex items-start gap-3 hover:text-white transition-colors h-[1.75rem]">
                   <Mail className="h-4 w-4 text-white/80 group-hover:text-cyan-300 transition-colors flex-shrink-0 mt-0.5" />
                   <a href="mailto:contact@pixaura.eu" className="break-all hover:text-cyan-400 transition-colors">contact@pixaura.eu</a>
                 </li>
-                <li className="group flex items-start gap-3 hover:text-white transition-colors">
+                <li className="group flex items-start gap-3 hover:text-white transition-colors h-[1.75rem]">
                   <Phone className="h-4 w-4 text-white/80 group-hover:text-cyan-300 transition-colors flex-shrink-0 mt-0.5" />
                   <a href="tel:+33677884469" className="hover:text-cyan-400 transition-colors">{language === 'en' ? '+33 6 77 88 44 69' : '06 77 88 44 69'}</a>
                 </li>
-                <li className="flex items-start gap-3 text-white/80">
+                <li className="flex items-start gap-3 text-white/80 h-[1.75rem]">
                   <MapPin className="h-4 w-4 flex-shrink-0 mt-0.5 text-white/80" />
                   <span>{t("footer.location")}</span>
                 </li>
-                <li className="flex items-start gap-3 text-white/80">
+                <li className="flex items-start gap-3 text-white/80 h-[1.75rem]">
                   <Clock className="h-4 w-4 flex-shrink-0 mt-0.5 text-white/80" />
                   <span>{t("footer.hours")}</span>
                 </li>
               </ul>
             </div>
 
-            <div className="space-y-4">
-              <p className="text-xs uppercase tracking-[0.35em] text-white/85 font-bold md:[text-shadow:0_2px_14px_rgba(0,0,0,0.75)]">{t("footer.navigation")}</p>
-              <ul className="space-y-2.5 text-sm text-white/85 md:[text-shadow:0_2px_14px_rgba(0,0,0,0.75)]">
-                {[
-                  { label: t("footer.home"), href: "/" },
-                  { label: t("footer.services"), href: "#services" },
-                  { label: t("footer.realisations"), href: "/realisations" },
-                  { label: t("footer.caseStudies"), href: "/realisations" },
-                  { label: t("footer.offre"), href: "/#offre" },
-                  { label: t("footer.agence"), href: "/agence" },
-                  { label: t("footer.humind"), href: "/humind" },
-                  { label: t("footer.contact"), href: "/contact" },
-                ].map(({ label, href }) => (
-                  <li key={label}>
-                    <Link className="group transition-all duration-300 hover:text-cyan-400 hover:translate-x-1 inline-block" href={href}>
-                      <span className="relative">
-                        {label}
-                        <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-cyan-400 transition-all duration-300 group-hover:w-full"></span>
-                      </span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+            <div className="space-y-4 md:ml-auto md:mr-8">
+              <p className="text-xs uppercase tracking-[0.35em] text-white/85 font-bold md:[text-shadow:0_2px_14px_rgba(0,0,0,0.75)] text-center">{t("footer.navigation")}</p>
+              <div className="flex gap-12 justify-center">
+                {/* Colonne 1: Accueil, Services */}
+                <ul className="space-y-3 text-sm text-white/85 md:[text-shadow:0_2px_14px_rgba(0,0,0,0.75)]">
+                  {[
+                    { label: t("footer.home"), href: "/" },
+                    { label: t("footer.services"), href: "#services" },
+                  ].map(({ label, href }) => (
+                    <li key={label} className="h-[1.75rem] flex items-center">
+                      <Link className="group transition-all duration-300 hover:text-cyan-400 hover:translate-x-1 block w-full" href={href}>
+                        <span className="relative inline-block">
+                          {label}
+                          <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-cyan-400 transition-all duration-300 group-hover:w-full"></span>
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* Colonne 2: Offre, Agence */}
+                <ul className="space-y-3 text-sm text-white/85 md:[text-shadow:0_2px_14px_rgba(0,0,0,0.75)]">
+                  {[
+                    { label: t("footer.offre"), href: "/#offre" },
+                    { label: t("footer.agence"), href: "/#agence" },
+                  ].map(({ label, href }) => (
+                    <li key={label} className="h-[1.75rem] flex items-center">
+                      <Link className="group transition-all duration-300 hover:text-cyan-400 hover:translate-x-1 block w-full" href={href}>
+                        <span className="relative inline-block">
+                          {label}
+                          <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-cyan-400 transition-all duration-300 group-hover:w-full"></span>
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* Colonne 3: Humind, Contact */}
+                <ul className="space-y-3 text-sm text-white/85 md:[text-shadow:0_2px_14px_rgba(0,0,0,0.75)]">
+                  {[
+                    { label: t("footer.humind"), href: "/humind" },
+                    { label: t("footer.contact"), href: "/#contact" },
+                  ].map(({ label, href }) => (
+                    <li key={label} className="h-[1.75rem] flex items-center">
+                      <Link className="group transition-all duration-300 hover:text-cyan-400 hover:translate-x-1 block w-full" href={href}>
+                        <span className="relative inline-block">
+                          {label}
+                          <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-cyan-400 transition-all duration-300 group-hover:w-full"></span>
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
         </div>

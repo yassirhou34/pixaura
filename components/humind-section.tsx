@@ -83,7 +83,7 @@ export function HumindSection() {
                 {t("humindHome.heading")}
               </span>
             </h2>
-            <p className="text-base text-white/70 md:text-lg leading-relaxed max-w-xl" style={{ wordSpacing: 'normal', whiteSpace: 'normal' }}>
+            <p className="text-base text-white/70 md:text-lg leading-relaxed max-w-xl text-justify text-justify-smooth" style={{ wordSpacing: 'normal', whiteSpace: 'normal' }}>
               {t("humindHome.description")}
             </p>
           </Reveal>

@@ -4,6 +4,11 @@ export type Language = 'fr' | 'en'
 
 export const translations = {
   fr: {
+    // Immersive intro
+    intro: {
+      international: "INTERNATIONAL",
+      advertisingAgency: "Agence de publicité française",
+    },
     // Navigation
     nav: {
       services: 'Services',
@@ -11,7 +16,7 @@ export const translations = {
       offre: 'Offre',
       agence: 'Agence',
       // Navbar label only: display in full caps
-      humind: 'HUMIND',
+      humind: 'Humind',
       contact: 'Contact',
       // CTA label: small wording change only
       takeAppointment: 'Prendre rendez-vous',
@@ -39,6 +44,7 @@ export const translations = {
       headline3End: "pour amplifier l'impact.",
       subheadline: "Agence créative française aux ambitions globales, nous sculptons des expériences audiovisuelles et digitales premium pour les marques qui veulent rayonner dans le monde entier.",
       viewPortfolio: "Voir nos réalisations",
+      contactUs: "Nous contacter",
       explore: "Explorer",
     },
     // Services section
@@ -102,7 +108,7 @@ export const translations = {
       benefit2Title: "Stratégie marketing",
       benefit2Desc: "Développez une approche data-driven et créative qui maximise votre impact sur vos audiences et génère des résultats mesurables.",
       benefit3Label: "IDENTITÉ",
-      benefit3Title: "Identité visuelle",
+      benefit3Title: "Identité\nvisuelle",
       benefit3Desc: "Créez un univers visuel premium qui capte l'attention, renforce votre mémorabilité et communique vos valeurs avec élégance.",
       benefit4Label: "CROISSANCE",
       benefit4Title: "Augmentation du chiffre d'affaires",
@@ -162,7 +168,7 @@ export const translations = {
       carouselSlide5Title: "Interview Exclusive",
       carouselSlide5Description: "Production podcast et contenu digital pour Humind.",
       carouselSlide5Tag1: "Podcast",
-      carouselSlide5Tag2: "Digital",
+      carouselSlide5Tag2: "Humind",
       carouselSlide5Tag3: "Content",
       carouselProject: "Projet",
       carouselTotal: "Total",
@@ -446,7 +452,7 @@ export const translations = {
     // Mentions légales page
     mentionsLegales: {
       badge: "Informations légales",
-      title: "Mentions Légales",
+      title: "Mentions légales",
       subtitle: "PIXAURA INTERNATIONAL",
       editeur: {
         title: "Éditeur du site",
@@ -590,6 +596,12 @@ export const translations = {
         title: "Modifications",
         content: "La présente politique de confidentialité peut être modifiée à tout moment afin de garantir sa conformité avec la législation en vigueur. Nous vous conseillons de consulter régulièrement cette page.",
       },
+      consent: {
+        message: "Nous utilisons des cookies pour améliorer votre expérience et analyser notre trafic. Acceptez-vous tous les cookies ?",
+        acceptAll: "Accepter tous les cookies",
+        reject: "Refuser",
+        learnMore: "En savoir plus",
+      },
     },
     // Humind page
     humindPage: {
@@ -604,7 +616,7 @@ export const translations = {
       watchOnYouTube: "Voir sur YouTube",
       conceptTitle1: "Le concept",
       conceptTitle2: "Humind",
-      conceptDescription: "Humind est une plateforme d'interviews imaginée et produite par Pixaura International, dédiée à mettre en lumière des parcours de vie marquants. Elle célèbre la sincérité, l'émotion et la transmission, loin des codes corporate.",
+      conceptDescription: "Humind est une plateforme d'interviews imaginée et produite par Pixaura International, dédiée à mettre en lumière des parcours de vie marquants.\nElle célèbre la sincérité, l'émotion et la transmission, loin des codes corporate.",
       shortFormat: "Format court",
       shortFormatDuration: "3-6",
       shortFormatDesc: "Percutantes et rythmées pour TikTok, Reels, Shorts",
@@ -796,6 +808,11 @@ export const translations = {
     },
   },
   en: {
+    // Immersive intro
+    intro: {
+      international: "INTERNATIONAL",
+      advertisingAgency: "French advertising agency",
+    },
     // Navigation
     nav: {
       services: 'Services',
@@ -803,7 +820,7 @@ export const translations = {
       offre: 'Offers',
       agence: 'Agency',
       // Navbar label only: display in full caps in English too
-      humind: 'HUMIND',
+      humind: 'Humind',
       contact: 'Contact',
       takeAppointment: 'Schedule an appointment',
     },
@@ -831,6 +848,7 @@ export const translations = {
       headline3End: "to amplify impact.",
       subheadline: "French creative agency with global ambitions, we craft premium audiovisual and digital experiences for brands that want to shine worldwide.",
       viewPortfolio: "View our portfolio",
+      contactUs: "Contact us",
       explore: "Explore",
     },
     // Services section
@@ -891,13 +909,13 @@ export const translations = {
       benefit1Title: "Brand image enhancement",
       benefit1Desc: "Transform your online presence with a strong and consistent identity that reflects your excellence and sets you apart from the competition.",
       benefit2Label: "STRATEGY",
-      benefit2Title: "Marketing strategy",
+      benefit2Title: "Marketing\nstrategy",
       benefit2Desc: "Develop a data-driven and creative approach that maximizes your impact on your audiences and generates measurable results.",
       benefit3Label: "IDENTITY",
-      benefit3Title: "Visual identity",
+      benefit3Title: "Visual\nidentity",
       benefit3Desc: "Create a premium visual universe that captures attention, strengthens your memorability and communicates your values with elegance.",
       benefit4Label: "GROWTH",
-      benefit4Title: "Revenue increase",
+      benefit4Title: "Revenue\nincrease",
       benefit4Desc: "Optimize your conversion and generate more revenue through an effective marketing strategy and converting content.",
     },
     // Portfolio section
@@ -954,7 +972,7 @@ export const translations = {
       carouselSlide5Title: "Exclusive Interview",
       carouselSlide5Description: "Podcast production and digital content for Humind.",
       carouselSlide5Tag1: "Podcast",
-      carouselSlide5Tag2: "Digital",
+      carouselSlide5Tag2: "Humind",
       carouselSlide5Tag3: "Content",
       carouselProject: "Project",
       carouselTotal: "Total",
@@ -1390,6 +1408,12 @@ export const translations = {
         title: "Modifications",
         content: "This privacy policy may be modified at any time to ensure compliance with current legislation. We advise you to consult this page regularly.",
       },
+      consent: {
+        message: "We use cookies to improve your experience and analyze our traffic. Do you accept all cookies?",
+        acceptAll: "Accept all cookies",
+        reject: "Reject",
+        learnMore: "Learn more",
+      },
     },
     // Humind page
     humindPage: {
@@ -1404,7 +1428,7 @@ export const translations = {
       watchOnYouTube: "Watch on YouTube",
       conceptTitle1: "The",
       conceptTitle2: "Humind concept",
-      conceptDescription: "Humind is an interview platform imagined and produced by Pixaura International, dedicated to highlighting remarkable life journeys. It celebrates sincerity, emotion and transmission, far from corporate codes.",
+      conceptDescription: "Humind is an interview platform imagined and produced by Pixaura International, dedicated to highlighting remarkable life journeys.\nIt celebrates sincerity, emotion and transmission, far from corporate codes.",
       shortFormat: "Short format",
       shortFormatDuration: "3-6",
       shortFormatDesc: "Punchy and rhythmic for TikTok, Reels, Shorts",

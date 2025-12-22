@@ -316,9 +316,9 @@ export default function HumindPage() {
         />
       </div>
 
-      <div className="relative z-10">
+      <div className="relative z-30">
         {/* Hero Section - Section 01 */}
-        <section className="relative flex min-h-screen w-full items-center justify-center overflow-hidden pt-36 pb-24">
+        <section className="relative z-30 flex min-h-screen w-full items-center justify-center overflow-hidden pt-36 pb-24">
           <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-12 px-6 md:px-12">
             <div className="grid lg:grid-cols-12 gap-16 items-start text-white">
               {/* Left Column - Ultra Premium Header */}
@@ -642,9 +642,9 @@ export default function HumindPage() {
           </div>
         </div>
 
-        {/* Section 1 - Le concept Humind - Ultra Premium */}
-        <section className="relative mx-auto w-full max-w-7xl px-6 pb-32 pt-12 md:px-12">
-          <div className="grid lg:grid-cols-12 gap-16 items-start text-white">
+        {/* Section 4 - Nos valeurs fondamentales - Ultra Premium */}
+        <section className="relative z-30 mx-auto w-full max-w-7xl px-6 pb-32 pt-12 md:px-12 overflow-visible">
+          <div className="grid lg:grid-cols-12 gap-16 items-start text-white relative z-30">
             {/* Left Column - Ultra Premium Header */}
             <div className="lg:col-span-4 flex flex-col gap-8">
               <div className="space-y-4">
@@ -665,7 +665,7 @@ export default function HumindPage() {
 
             {/* Right Column - Ultra Premium Content */}
             <div className="lg:col-span-8 space-y-10">
-              <p className="text-xl text-white/70 max-w-3xl leading-[1.8] font-light">
+              <p className="text-xl text-white/70 max-w-3xl leading-[1.8] font-light whitespace-pre-line">
                 {t("humindPage.conceptDescription")}
               </p>
 
@@ -766,20 +766,20 @@ export default function HumindPage() {
         </div>
 
         {/* Section 2 - Nos valeurs fondamentales - Ultra Premium */}
-        <section className="relative z-20 mx-auto w-full max-w-7xl px-6 pb-32 pt-12 md:px-12">
-          <div className="grid lg:grid-cols-12 gap-16 items-start text-white relative z-20">
+        <section className="relative z-30 mx-auto w-full max-w-7xl px-6 pb-32 pt-12 md:px-12 overflow-visible">
+          <div className="grid lg:grid-cols-12 gap-16 items-start text-white relative z-30">
             {/* Left Column - Ultra Premium Header */}
-            <div className="lg:col-span-5 flex flex-col gap-8 relative z-20">
-              <div className="space-y-4 relative z-20">
+            <div className="lg:col-span-5 flex flex-col gap-8 relative z-40">
+              <div className="space-y-4 relative z-40">
                 <div className="flex items-center gap-3">
                   <div className="h-px w-12 bg-gradient-to-r from-purple-400/60 to-transparent" />
                   <span className="text-[10px] uppercase tracking-[0.6em] text-white/30 font-bold">Section 04</span>
                 </div>
-                <h2 className="text-4xl md:text-5xl lg:text-6xl font-black leading-[1.05] tracking-tight">
-                  <span className="block bg-gradient-to-br from-white via-white/95 to-white/80 bg-clip-text text-transparent drop-shadow-[0_0_40px_rgba(255,255,255,0.3)]">
+                <h2 className="text-4xl md:text-5xl lg:text-6xl font-black leading-[1.05] tracking-tight relative z-40 min-h-[120px] md:min-h-[140px] lg:min-h-[160px]">
+                  <span className="block text-white drop-shadow-[0_0_40px_rgba(255,255,255,0.3)] relative z-40 whitespace-normal break-words">
                     {t("humindPage.valuesTitle1")}
                   </span>
-                  <span className="block mt-2 bg-gradient-to-br from-purple-200 via-pink-200 to-rose-200 bg-clip-text text-transparent">
+                  <span className="block mt-2 bg-gradient-to-br from-purple-200 via-pink-200 to-rose-200 bg-clip-text text-transparent relative z-40 whitespace-normal break-words">
                     {t("humindPage.valuesTitle2")}
                   </span>
                 </h2>
@@ -787,7 +787,7 @@ export default function HumindPage() {
             </div>
 
             {/* Right Column - Ultra Premium Content */}
-            <div className="lg:col-span-7 space-y-10 relative z-20 lg:pt-[104px]">
+            <div className="lg:col-span-7 space-y-10 relative z-30 lg:pt-[104px]">
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[
                   { icon: Heart, title: t("humindPage.authenticity"), desc: t("humindPage.authenticityDesc"), gradient: "from-red-500/40 via-pink-500/40 to-rose-500/40", iconGlow: "rgba(239,68,68,0.6)" },
@@ -798,13 +798,13 @@ export default function HumindPage() {
                 ].map((value, idx) => {
                   const Icon = value.icon
                   return (
-                    <div key={idx} className="group relative z-20 h-full flex flex-col">
+                    <div key={idx} className="group relative z-30 h-full flex flex-col">
                       {/* Multi-layer glow */}
                       <div className={`absolute -inset-0.5 bg-gradient-to-br ${value.gradient} rounded-[28px] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000`} />
                       <div className={`absolute -inset-1 bg-gradient-to-br ${value.gradient} rounded-[28px] blur-xl opacity-0 group-hover:opacity-60 transition-opacity duration-1000`} />
 
                       {/* Main card */}
-                      <div className="relative flex flex-col h-full rounded-[28px] border border-white/10 bg-gradient-to-br from-white/12 via-white/6 to-white/4 backdrop-blur-3xl p-8 shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.1)] transition-all duration-700 group-hover:border-white/25 group-hover:shadow-[0_20px_60px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.2)] group-hover:scale-[1.03] group-hover:-translate-y-1 z-20 overflow-visible">
+                      <div className="relative flex flex-col h-full rounded-[28px] border border-white/10 bg-gradient-to-br from-white/12 via-white/6 to-white/4 backdrop-blur-3xl p-8 shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.1)] transition-all duration-700 group-hover:border-white/25 group-hover:shadow-[0_20px_60px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.2)] group-hover:scale-[1.03] group-hover:-translate-y-1 z-30 overflow-visible">
                         <div className={`absolute inset-0 rounded-[28px] bg-gradient-to-br ${value.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-700`} />
 
                         {/* Shine */}
@@ -1038,8 +1038,8 @@ export default function HumindPage() {
         </div>
 
         {/* Section 5 - Humind dans l'écosystème Pixaura - Ultra Premium */}
-        <section className="relative mx-auto w-full max-w-7xl px-6 pb-32 pt-12 md:px-12">
-          <div className="grid lg:grid-cols-12 gap-16 items-start text-white">
+        <section className="relative z-30 mx-auto w-full max-w-7xl px-6 pb-32 pt-12 md:px-12">
+          <div className="grid lg:grid-cols-12 gap-16 items-start text-white relative z-30">
             {/* Left Column - Ultra Premium Header */}
             <div className="lg:col-span-4 flex flex-col gap-8">
               <div className="space-y-4">
@@ -1047,11 +1047,11 @@ export default function HumindPage() {
                   <div className="h-px w-12 bg-gradient-to-r from-indigo-400/60 to-transparent" />
                   <span className="text-[10px] uppercase tracking-[0.6em] text-white/30 font-bold">Section 07</span>
                 </div>
-                <h2 className="text-5xl md:text-6xl font-black leading-[0.95] tracking-tight">
-                  <span className="block bg-gradient-to-br from-white via-white/95 to-white/80 bg-clip-text text-transparent drop-shadow-[0_0_40px_rgba(255,255,255,0.3)]">
+                <h2 className="text-5xl md:text-6xl font-black leading-[0.95] tracking-tight relative z-40 min-h-[120px] md:min-h-[140px] lg:min-h-[160px]">
+                  <span className="block text-white drop-shadow-[0_0_40px_rgba(255,255,255,0.3)] relative z-40">
                     {t("humindPage.ecosystemTitle1")}
                   </span>
-                  <span className="block mt-2 bg-gradient-to-br from-indigo-200 via-purple-200 to-pink-200 bg-clip-text text-transparent">
+                  <span className="block mt-2 bg-gradient-to-br from-indigo-200 via-purple-200 to-pink-200 bg-clip-text text-transparent relative z-40">
                     {t("humindPage.ecosystemTitle2")}
                   </span>
                 </h2>
@@ -1059,7 +1059,7 @@ export default function HumindPage() {
             </div>
 
             {/* Right Column - Ultra Premium Content */}
-            <div className="lg:col-span-8 space-y-10 lg:pt-[104px]">
+            <div className="lg:col-span-8 space-y-10 relative z-30 lg:pt-[104px] lg:pl-8">
               <div className="grid md:grid-cols-3 gap-6">
                 {[
                   { icon: Rocket, title: t("humindPage.labTitle"), desc: t("humindPage.labDesc"), gradient: "from-blue-500/40 via-cyan-500/40 to-sky-500/40", iconGlow: "rgba(59,130,246,0.6)" },
@@ -1068,7 +1068,7 @@ export default function HumindPage() {
                 ].map((item, idx) => {
                   const Icon = item.icon
                   return (
-                    <div key={idx} className="group relative h-full flex flex-col">
+                    <div key={idx} className="group relative z-30 h-full flex flex-col">
                       <div className={`absolute -inset-0.5 bg-gradient-to-br ${item.gradient} rounded-[28px] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000`} />
                       <div className={`absolute -inset-1 bg-gradient-to-br ${item.gradient} rounded-[28px] blur-xl opacity-0 group-hover:opacity-60 transition-opacity duration-1000`} />
                       <div className="relative flex flex-col h-full rounded-[28px] border border-white/10 bg-gradient-to-br from-white/12 via-white/6 to-white/4 backdrop-blur-3xl p-8 shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.1)] transition-all duration-700 group-hover:border-white/25 group-hover:shadow-[0_20px_60px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.2)] group-hover:scale-[1.03] group-hover:-translate-y-1">

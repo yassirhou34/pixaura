@@ -16,6 +16,7 @@ import { ContactHomeSection } from "@/components/contact-home-section"
 import { SectionDivider } from "@/components/section-divider"
 import { GlobalAtmosphere } from "@/components/global-atmosphere"
 import { ImmersiveIntro } from "@/components/immersive-intro"
+import { CookieConsent } from "@/components/cookie-consent"
 
 export default function Home() {
   // Always start with false to avoid hydration mismatch
@@ -304,6 +305,9 @@ export default function Home() {
             <ContactHomeSection />
             <Footer />
           </div>
+          
+          {/* Cookie Consent Banner - S'affiche uniquement après l'intro sur la page d'accueil */}
+          <CookieConsent />
         </>
       )}
     </main>

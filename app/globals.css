@@ -1544,6 +1544,7 @@ select:focus option:checked {
   display: flex;
   flex-direction: column;
   gap: 0.28rem;
+  min-width: 0;
 }
 
 .latest-client {
@@ -1552,6 +1553,9 @@ select:focus option:checked {
   text-transform: uppercase;
   color: rgba(197, 209, 255, 0.65);
   font-weight: 600;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
 }
 
 .latest-title {
@@ -1560,6 +1564,7 @@ select:focus option:checked {
   letter-spacing: -0.02em;
   color: rgba(255, 255, 255, 0.95);
   line-height: 1.4;
+  text-align: left;
 }
 
 .latest-card-right {
@@ -1860,20 +1865,23 @@ select:focus option:checked {
   max-width: 85ch;
   color: rgba(245, 248, 255, 0.9);
   font-size: clamp(1.15rem, 1.5vw, 1.45rem);
-  line-height: 1.9;
+  line-height: 1.75;
   font-weight: 400;
-  letter-spacing: 0.02em;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  letter-spacing: 0.01em;
+  font-family: var(--font-sans), "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-align: justify;
+  text-justify: inter-word;
 }
 
 .latest-subheading-highlight {
   color: rgba(255, 255, 255, 1);
-  font-weight: 500;
-  letter-spacing: 0.02em;
+  font-weight: 400;
+  letter-spacing: 0.01em;
   text-shadow: 0 0 30px rgba(255, 255, 255, 0.15);
+  font-family: var(--font-sans), "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
 }
 
 .latest-count {

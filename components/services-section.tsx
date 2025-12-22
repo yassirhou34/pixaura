@@ -178,8 +178,8 @@ const offers = [
             </p>
           </div>
 
-          {/* Grid des bénéfices - Design Moderne avec Images Mises en Valeur */}
-          <div className="grid gap-8 md:grid-cols-2 md:auto-rows-fr">
+          {/* Grid des bénéfices - Design Moderne avec Images Mises en Valeur - Cartes plus larges */}
+          <div className="grid gap-8 md:grid-cols-2 md:auto-rows-fr max-w-7xl mx-auto">
             {[
               {
                 icon: Target,
@@ -219,17 +219,17 @@ const offers = [
               }
             ].map((benefit, index) => (
               <Reveal key={index} delay={benefit.delay} className="h-full">
-                <div className={`group relative h-full overflow-hidden rounded-2xl sm:rounded-3xl border border-white/15 bg-black/40 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.4)] transition-all duration-700 hover:border-white/25 hover:shadow-[0_30px_80px_rgba(0,0,0,0.5)] ${
+                <div className={`group relative flex h-full w-full overflow-hidden rounded-2xl sm:rounded-3xl border border-white/15 bg-black/40 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.4)] transition-all duration-700 hover:border-white/25 hover:shadow-[0_30px_80px_rgba(0,0,0,0.5)] ${
                   benefit.imagePosition === 'left' ? 'md:flex-row' : 'md:flex-row-reverse'
-                } flex flex-col`}>
-                  {/* Image Section - Large et Visible */}
-                  <div className="relative w-full md:w-[45%] h-64 md:h-full overflow-hidden">
+                } flex-col`}>
+                  {/* Image Section - Hauteur fixe plus grande et identique pour toutes les cartes - Largeur réduite pour plus d'espace texte */}
+                  <div className="relative w-full md:w-[35%] h-72 md:h-[400px] md:min-h-[400px] md:max-h-[400px] overflow-hidden flex-shrink-0">
                     <Image
                       src={benefit.image}
                       alt={benefit.title}
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-110"
-                      sizes="(max-width: 768px) 100vw, 45vw"
+                      sizes="(max-width: 768px) 100vw, 35vw"
                     />
                     {/* Gradient overlay léger - juste pour la lisibilité du label */}
                     <div 
@@ -251,12 +251,14 @@ const offers = [
                     </div>
                   </div>
                   
-                  {/* Content Section - align titles consistently at the top */}
-                  <div className="relative w-full md:w-[55%] p-8 md:p-10 flex flex-col justify-start bg-gradient-to-br from-white/5 via-white/3 to-transparent">
-                    <div className="space-y-4">
-                      <h3 className="text-2xl md:text-3xl font-bold leading-tight text-white">
+                  {/* Content Section - Alignement STRICT avec hauteur fixe pour les titres - Largeur maximale pour aération */}
+                  <div className="relative w-full md:w-[65%] flex flex-col bg-gradient-to-br from-white/5 via-white/3 to-transparent">
+                    <div className="pt-8 pb-8 px-8 md:pt-10 md:pb-10 md:px-10 flex-1 flex flex-col">
+                      {/* Titre avec hauteur fixe pour 2 lignes maximum - alignement parfait - sans troncature - taille ajustée */}
+                      <h3 className="text-2xl md:text-[1.75rem] font-bold leading-[1.2] text-white md:min-h-[4.5rem] md:max-h-[4.5rem] md:flex md:items-start md:mb-4 whitespace-pre-line">
                         {benefit.title}
                       </h3>
+                      {/* Paragraphe avec espacement fixe */}
                       <p className="text-base text-white/75 leading-relaxed group-hover:text-white/85 transition-colors duration-500">
                         {benefit.description}
                       </p>
@@ -307,16 +309,20 @@ const offers = [
 
                   {/* Expandable content on mobile, always visible on desktop */}
                   <div className={`flex flex-col gap-4 sm:gap-6 flex-1 transition-all duration-500 md:block ${isExpanded ? 'block' : 'hidden md:block'}`}>
-                    <h3 className="text-xl sm:text-2xl font-semibold md:text-[30px] leading-tight flex-shrink-0">{offer.title}</h3>
-                    <p className="text-sm text-white/70 md:text-base text-justify min-h-[80px] sm:min-h-[90px] md:min-h-[100px] flex-shrink-0">{offer.description}</p>
+                    <div className="flex-shrink-0 md:min-h-[180px]">
+                      <h3 className={`text-xl sm:text-2xl font-semibold md:text-[30px] leading-tight ${index === 5 ? 'whitespace-pre-line' : ''}`}>
+                        {index === 5 ? offer.title.replace('Custom website creation', 'Custom website\ncreation') : offer.title}
+                      </h3>
+                      <p className="text-sm text-white/70 md:text-base text-justify min-h-[80px] sm:min-h-[90px] md:min-h-[100px] mt-2 md:mt-3">{offer.description}</p>
+                    </div>
 
                     <div className="flex flex-col gap-4 pt-4 text-[11px] font-semibold uppercase tracking-[0.32em] text-white/45 flex-shrink-0">
-                      {offer.deliverables.map((item) => (
+                      {offer.deliverables.map((item, itemIndex) => (
                         <div
                           key={item}
-                          className="flex items-center justify-between gap-4 border-b border-white/12 pb-3 transition-colors duration-500 group-hover:border-white/25"
+                          className="flex items-center justify-between gap-4 border-b border-white/12 pb-3 transition-colors duration-500 group-hover:border-white/25 h-[2.75rem]"
                         >
-                          <span className="flex-1 text-left text-white/65 transition-colors duration-500 group-hover:text-white/95">
+                          <span className="flex-1 text-left text-white/65 transition-colors duration-500 group-hover:text-white/95 flex items-center">
                             {item}
                           </span>
                         </div>

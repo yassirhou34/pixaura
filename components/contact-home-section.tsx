@@ -34,7 +34,7 @@ export function ContactHomeSection() {
     privacy: false,
   })
 
-  const totalSteps = 5
+  const totalSteps = 4
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target
@@ -98,8 +98,6 @@ export function ContactHomeSection() {
       case 3:
         return formData.budget !== ""
       case 4:
-        return formData.delai !== ""
-      case 5:
         return formData.secteur !== "" && formData.privacy
       default:
         return false
@@ -312,35 +310,8 @@ export function ContactHomeSection() {
                     </div>
                   )}
 
-                  {/* Step 4: Délai */}
+                  {/* Step 4: Secteur */}
                   {currentStep === 4 && (
-                    <div className="space-y-6 animate-fadeIn">
-                      <h3 className="text-2xl font-bold text-white mb-6">
-                        {t("contactHome.step4")}
-                      </h3>
-                      <div>
-                        <label className="block text-sm font-semibold text-white/80 mb-2">
-                          {t("contactHome.desiredTimeline")}
-                        </label>
-                        <select
-                          name="delai"
-                          value={formData.delai}
-                          onChange={handleChange}
-                          required
-                          className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-300 text-white backdrop-blur-sm hover:border-white/20 cursor-pointer"
-                        >
-                          <option value="" style={{ backgroundColor: '#1a1a1a', color: '#ffffff' }}>{t("contactHome.selectTimeline")}</option>
-                          <option value="1-2weeks" style={{ backgroundColor: '#1a1a1a', color: '#ffffff' }}>{t("contactHome.timeline1to2weeks")}</option>
-                          <option value="3-4weeks" style={{ backgroundColor: '#1a1a1a', color: '#ffffff' }}>{t("contactHome.timeline3to4weeks")}</option>
-                          <option value="1-3months" style={{ backgroundColor: '#1a1a1a', color: '#ffffff' }}>{t("contactHome.timeline1to3months")}</option>
-                          <option value="flexible" style={{ backgroundColor: '#1a1a1a', color: '#ffffff' }}>{t("contactHome.flexible")}</option>
-                        </select>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Step 5: Secteur */}
-                  {currentStep === 5 && (
                     <div className="space-y-6 animate-fadeIn">
                       <h3 className="text-2xl font-bold text-white mb-6">
                         {t("contactHome.step5")}

@@ -236,13 +236,6 @@ export function PortfolioSection() {
           <span>{activeProject?.category}</span>
         </div>
         <h3 className="text-center">{activeProject?.title}</h3>
-        <Link
-          href="/realisations"
-          className="latest-preview-link"
-        >
-          {t("portfolio.exploreProject")}
-          <ArrowUpRight className="h-4 w-4" />
-        </Link>
       </div>
     </div>
   )
@@ -653,13 +646,6 @@ export function PortfolioSection() {
                             <div className="latest-card-thumb-title">
                               {project.title}
                             </div>
-                            <Link
-                              href="/realisations"
-                              className="latest-card-thumb-link"
-                            >
-                              {t("portfolio.exploreProject")}
-                              <ArrowUpRight className="h-3.5 w-3.5" />
-                            </Link>
                           </div>
                         </div>
                       )}

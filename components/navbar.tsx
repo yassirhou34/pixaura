@@ -73,7 +73,6 @@ export function Navbar() {
 
   const navItems = [
     { label: t("nav.services"), href: "/#services" },
-    { label: t("nav.realisations"), href: "/realisations" },
     { label: t("nav.offre"), href: "/#offre" },
     { label: t("nav.agence"), href: "/#agence" },
     { label: t("nav.humind"), href: "/humind" },
