@@ -24,7 +24,12 @@ async function getAvailablePort() {
 (async () => {
   const port = await getAvailablePort();
   // Use --webpack to disable Turbopack (fixes jsx-dev-runtime HMR issue)
-  const proc = spawn('next', ['dev', '--webpack', '-p', port.toString()], {
+  // Use pnpm exec to ensure next is found in node_modules/.bin
+  const isWindows = process.platform === 'win32';
+  const command = isWindows ? 'pnpm' : 'next';
+  const args = isWindows ? ['exec', 'next', 'dev', '--webpack', '-p', port.toString()] : ['dev', '--webpack', '-p', port.toString()];
+  
+  const proc = spawn(command, args, {
     stdio: 'inherit',
     shell: true,
     env: process.env
