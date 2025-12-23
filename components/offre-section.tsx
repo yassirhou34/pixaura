@@ -295,35 +295,22 @@ export function OffreSection() {
                 </div>
 
                 {/* Image Section - Style 3 Piliers */}
-                <div className="relative h-72 w-full overflow-hidden">
-                  <Image
-                    src={pack.image}
-                    alt={pack.name}
-                    fill
-                    className="object-cover transition duration-700 ease-out group-hover:scale-110"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 30vw"
-                    loading="lazy"
-                  />
-                  {/* Enhanced Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20" />
-                  {/* Animated gradient on hover */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${pack.gradient} opacity-0 transition-opacity duration-700 group-hover:opacity-20`} />
-                  
+                <div className="relative h-32 w-full overflow-hidden flex items-center justify-center">
                   {/* Premium Badge with enhanced styling */}
-                  <div className="absolute bottom-5 left-5 right-5 flex items-end justify-center">
-                    <span className={`rounded-full border border-white/30 bg-white/20 px-5 py-2.5 text-[11px] font-bold uppercase tracking-[0.35em] text-white backdrop-blur-md shadow-lg transition-all duration-500 group-hover:border-white/40 group-hover:bg-white/25 group-hover:scale-105 ${pack.premium ? 'bg-gradient-to-r from-amber-500/30 to-yellow-500/30 border-amber-400/40' : ''}`}>
+                  <div className="flex items-center justify-center w-full">
+                    <span className={`rounded-full border border-white/30 bg-white/20 px-8 py-3.5 text-sm font-bold uppercase tracking-[0.35em] text-white backdrop-blur-md shadow-lg transition-all duration-500 group-hover:border-white/40 group-hover:bg-white/25 group-hover:scale-105 ${pack.premium ? 'bg-gradient-to-r from-amber-500/30 to-yellow-500/30 border-amber-400/40' : ''}`}>
                       {pack.badge}
                     </span>
                   </div>
                 </div>
 
+                {/* Separator Line */}
+                <div className="h-px w-full bg-gradient-to-r from-transparent via-white/60 to-transparent" />
+
                 {/* Enhanced Content Section */}
                 <div className="flex flex-col gap-5 px-8 py-10 text-white flex-1">
-                  {/* Title with enhanced styling - Fixed height for alignment */}
+                  {/* Description - Fixed height for alignment */}
                   <div className="space-y-2 text-center h-[120px] flex flex-col justify-center flex-shrink-0">
-                    <h3 className="text-2xl font-black leading-tight tracking-tight md:text-3xl bg-gradient-to-r from-white via-white to-white/80 bg-clip-text text-transparent group-hover:from-white group-hover:via-white group-hover:to-white transition-all duration-500">
-                      {pack.name}
-                    </h3>
                     <p className="text-sm font-medium text-white/60 md:text-base leading-relaxed text-center">
                       {pack.description}
                     </p>

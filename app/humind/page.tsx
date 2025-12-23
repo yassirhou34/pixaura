@@ -362,7 +362,7 @@ export default function HumindPage() {
           <div className="grid lg:grid-cols-12 gap-10 items-stretch text-white">
             {/* Visual Card */}
             <div className="lg:col-span-7">
-              <div className="group relative h-full min-h-[320px] overflow-hidden rounded-[32px] border border-white/15 bg-black/40 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.6)]">
+              <div className={`group relative h-full ${showStradaleVideo ? 'min-h-[600px] md:min-h-[700px]' : 'min-h-[320px]'} overflow-hidden rounded-[32px] border border-white/15 bg-black/40 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.6)]`}>
                 {showStradaleVideo ? (
                   <>
                     {/* Full-card video */}
@@ -372,7 +372,7 @@ export default function HumindPage() {
                       src="/Banque d_images/pod1.mp4"
                       controls
                       playsInline
-                      className="absolute inset-0 h-full w-full object-cover"
+                      className="absolute inset-0 h-full w-full object-contain"
                       poster="/Banque d_images/Copie de M7_03194.jpg"
                     />
 
@@ -766,35 +766,38 @@ export default function HumindPage() {
         </div>
 
         {/* Section 2 - Nos valeurs fondamentales - Ultra Premium */}
-        <section className="relative z-30 mx-auto w-full max-w-7xl px-6 pb-32 pt-12 md:px-12 overflow-visible">
-          <div className="grid lg:grid-cols-12 gap-16 items-start text-white relative z-30">
+        <section className="relative z-50 mx-auto w-full max-w-7xl px-6 pb-32 pt-12 md:px-12 overflow-visible">
+          <div className="grid lg:grid-cols-12 gap-16 items-start text-white relative z-50">
             {/* Left Column - Ultra Premium Header */}
-            <div className="lg:col-span-5 flex flex-col gap-8 relative z-40">
-              <div className="space-y-4 relative z-40">
+            <div className="lg:col-span-5 flex flex-col gap-8 relative z-[60] overflow-visible pr-8">
+              <div className="space-y-4 relative z-[60] overflow-visible w-full">
                 <div className="flex items-center gap-3">
                   <div className="h-px w-12 bg-gradient-to-r from-purple-400/60 to-transparent" />
                   <span className="text-[10px] uppercase tracking-[0.6em] text-white/30 font-bold">Section 04</span>
                 </div>
-                <h2 className="text-4xl md:text-5xl lg:text-6xl font-black leading-[1.05] tracking-tight relative z-40 min-h-[120px] md:min-h-[140px] lg:min-h-[160px]">
-                  <span className="block text-white drop-shadow-[0_0_40px_rgba(255,255,255,0.3)] relative z-40 whitespace-normal break-words">
+                <h2 className="text-4xl md:text-5xl lg:text-6xl font-black leading-[1.05] tracking-tight relative z-[60] min-h-[120px] md:min-h-[140px] lg:min-h-[160px] overflow-visible w-full">
+                  <span className="block text-white drop-shadow-[0_0_40px_rgba(255,255,255,0.3)] relative z-[60] whitespace-normal break-words">
                     {t("humindPage.valuesTitle1")}
                   </span>
-                  <span className="block mt-2 bg-gradient-to-br from-purple-200 via-pink-200 to-rose-200 bg-clip-text text-transparent relative z-40 whitespace-normal break-words">
-                    {t("humindPage.valuesTitle2")}
-                  </span>
+                  {t("humindPage.valuesTitle2") && (
+                    <span className="inline-block mt-2 bg-gradient-to-br from-purple-200 via-pink-200 to-rose-200 bg-clip-text text-transparent relative z-[60] whitespace-nowrap overflow-visible pr-8" style={{ WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', position: 'relative', display: 'inline-block', width: 'fit-content', maxWidth: '100%' }}>
+                      {t("humindPage.valuesTitle2")}
+                    </span>
+                  )}
                 </h2>
               </div>
             </div>
 
             {/* Right Column - Ultra Premium Content */}
             <div className="lg:col-span-7 space-y-10 relative z-30 lg:pt-[104px]">
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-6">
                 {[
+                  // Ligne du haut : Authenticité, Inspiration
                   { icon: Heart, title: t("humindPage.authenticity"), desc: t("humindPage.authenticityDesc"), gradient: "from-red-500/40 via-pink-500/40 to-rose-500/40", iconGlow: "rgba(239,68,68,0.6)" },
                   { icon: Zap, title: t("humindPage.inspiration"), desc: t("humindPage.inspirationDesc"), gradient: "from-yellow-500/40 via-orange-500/40 to-amber-500/40", iconGlow: "rgba(234,179,8,0.6)" },
-                  { icon: Users, title: t("humindPage.transmission"), desc: t("humindPage.transmissionDesc"), gradient: "from-blue-500/40 via-cyan-500/40 to-sky-500/40", iconGlow: "rgba(59,130,246,0.6)" },
-                  { icon: Globe, title: t("humindPage.accessibility"), desc: t("humindPage.accessibilityDesc"), gradient: "from-green-500/40 via-emerald-500/40 to-teal-500/40", iconGlow: "rgba(34,197,94,0.6)" },
+                  // Ligne du bas : Diversité, Accessibilité
                   { icon: Sparkles, title: t("humindPage.diversity"), desc: t("humindPage.diversityDesc"), gradient: "from-purple-500/40 via-violet-500/40 to-fuchsia-500/40", iconGlow: "rgba(168,85,247,0.6)" },
+                  { icon: Globe, title: t("humindPage.accessibility"), desc: t("humindPage.accessibilityDesc"), gradient: "from-green-500/40 via-emerald-500/40 to-teal-500/40", iconGlow: "rgba(34,197,94,0.6)" },
                 ].map((value, idx) => {
                   const Icon = value.icon
                   return (

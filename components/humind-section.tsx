@@ -7,7 +7,7 @@ import { Reveal } from "@/components/reveal"
 import { useTranslation } from "@/contexts/translation-context"
 
 const featuredEpisode = {
-  title: "IL A JOUÉ AVEC MARADONA: RAÚL VARGAS RÍOS SUR HUMIND",
+  title: "IL A JOUÉ AVEC MARADONA : RAÚL VARGAS RÍOS SUR HUMIND",
   description:
     "Interview exclusive avec Raúl Vargas Ríos sur son parcours exceptionnel dans le football professionnel.",
   image: "/Banque d_images/Copie de M7_03385.jpg",
@@ -122,9 +122,6 @@ export function HumindSection() {
               <span className="relative z-10">{t("humindHome.exploreEpisodes")}</span>
               <span className="text-base transition-transform duration-400 group-hover:translate-x-2 relative z-10">→</span>
             </Link>
-            <span className="text-[0.7rem] uppercase tracking-[0.35em] text-white/45 font-medium">
-              {t("humindHome.newEpisode")}
-            </span>
           </Reveal>
         </div>
 

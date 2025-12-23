@@ -91,7 +91,8 @@ function MobileVideo({ src, index }: { src: string; index: number }) {
             width: '100%',
             height: '100%',
             objectFit: 'cover',
-            backgroundColor: '#000000'
+            objectPosition: 'center',
+            backgroundColor: 'transparent'
           }}
           onError={(e) => {
             // Silent error handling - show black background
@@ -192,7 +193,7 @@ export function PortfolioSection() {
               opacity: 1,
               willChange: 'auto',
               pointerEvents: 'none',
-              backgroundColor: '#000000'
+              backgroundColor: 'transparent'
             }}
             onError={(e) => {
               // Silent error handling for Vercel

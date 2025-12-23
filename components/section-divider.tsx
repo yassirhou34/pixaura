@@ -18,11 +18,6 @@ export function SectionDivider({ label }: SectionDividerProps) {
 
       {label ? (
         <div className="absolute flex items-center gap-5">
-          <span className="relative flex h-4 w-4 items-center justify-center">
-            <span className="absolute h-3 w-3 rounded-full bg-white" />
-            <span className="absolute h-7 w-7 animate-ping rounded-full bg-white/70" />
-          </span>
-
           <div className="relative flex items-center justify-center rounded-full border border-white/45 bg-white/15 px-12 py-3 backdrop-blur-2xl shadow-[0_0_40px_rgba(255,255,255,0.35)]">
             <div className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-200/70 via-white/60 to-purple-300/70" />
             <div className="absolute -inset-[6px] rounded-full border border-white/40" />
@@ -31,11 +26,6 @@ export function SectionDivider({ label }: SectionDividerProps) {
               {label}
             </span>
           </div>
-
-          <span className="relative flex h-4 w-4 items-center justify-center">
-            <span className="absolute h-3 w-3 rounded-full bg-white" />
-            <span className="absolute h-7 w-7 animate-ping rounded-full bg-white/70" />
-          </span>
         </div>
       ) : null}
 
