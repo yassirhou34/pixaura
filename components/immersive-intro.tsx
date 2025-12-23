@@ -38,7 +38,7 @@ const LOADING_PHASES = [
 
 export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
   const { t } = useTranslation()
-  const [stage, setStage] = useState<Stage>("loading")
+  const [stage, setStage] = useState<Stage>("transition")
   const [loadingProgress, setLoadingProgress] = useState(0)
   const [holdProgress, setHoldProgress] = useState(0)
   const holdProgressRef = useRef(0)
@@ -183,29 +183,7 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
     stageRef.current = stage
   }, [stage])
 
-  useEffect(() => {
-    if (stage !== "loading") return
-
-    setLoadingProgress(0)
-    let rafId: number
-    const start = performance.now()
-
-    const tick = (now: number) => {
-      const elapsed = now - start
-      const next = Math.min(100, (elapsed / LOADING_DURATION) * 100)
-      setLoadingProgress(next)
-
-      if (next >= 100) {
-        setStage("transition")
-        return
-      }
-
-      rafId = requestAnimationFrame(tick)
-    }
-
-    rafId = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(rafId)
-  }, [stage])
+  // Loading stage removed - start directly at transition (Immersion screen)
 
   useEffect(() => {
     if (stage === "hold") {
@@ -218,12 +196,11 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
   }, [stage])
 
   useEffect(() => {
-    if (stage !== "transition") return
-    setHoldProgress(0)
-    const timeoutId = setTimeout(() => {
+    if (stage === "transition") {
+      setHoldProgress(0)
+      // Go directly to hold stage (Immersion screen) - no delay
       setStage("hold")
-    }, 1300)
-    return () => clearTimeout(timeoutId)
+    }
   }, [stage])
 
   useEffect(() => {
@@ -320,10 +297,9 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
     }
   }, [stage, audioStarted])
 
+  // Loading stage removed - audio starts immediately
   useEffect(() => {
-    if (stage === "loading") {
-      setAudioStarted(false)
-    }
+    // Audio will start when stage is "start" or "hold"
   }, [stage])
 
   // ULTRA-AGGRESSIVE PRELOAD for Backv2.mp4 - CRITICAL for Vercel CDN performance
