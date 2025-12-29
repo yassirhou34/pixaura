@@ -867,19 +867,6 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
 
       {(stage === "hold" || stage === "finishing") && (
         <div className="relative z-10 flex h-full w-full flex-col justify-between px-8 py-10 text-white md:px-16">
-          <header className="flex items-center justify-start text-xs font-semibold uppercase tracking-[0.4em] text-white/80 mb-6 md:mb-0">
-            <div className="flex items-center gap-2">
-              <Image
-                src="/Banque d_images/PIXaura-soft white.png"
-                alt="Pixaura logo"
-                width={120}
-                height={36}
-                className="h-8 w-auto object-contain"
-                priority
-              />
-            </div>
-          </header>
-
           <main className="flex flex-1 flex-col items-center justify-center gap-14">
             <div className="text-center">
               <p className="text-xs uppercase tracking-[0.6em] text-white/60">cliquez et maintenez pour entrer</p>
@@ -910,10 +897,35 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
                 event.preventDefault()
                 cancelHold()
               }}
+              onTouchMove={(event) => {
+                // Empêcher la sélection de texte sur mobile
+                event.preventDefault()
+              }}
+              onContextMenu={(event) => {
+                // Empêcher le menu contextuel sur mobile (peut causer la sélection)
+                if (window.innerWidth < 768) {
+                  event.preventDefault()
+                }
+              }}
               disabled={stage !== "hold"}
               className="group relative flex h-40 w-40 items-center justify-center rounded-full border border-white/45 bg-white/10 text-[11px] font-semibold uppercase tracking-[0.35em] text-white shadow-[0_30px_60px_rgba(8,13,38,0.55)] transition-all duration-500 hover:scale-[1.06] disabled:cursor-default disabled:opacity-80"
+              style={{
+                WebkitUserSelect: 'none',
+                userSelect: 'none',
+                WebkitTouchCallout: 'none',
+                touchAction: 'manipulation',
+              }}
             >
-              <span className="relative z-20 tracking-[0.38em]">cliquez & maintenez</span>
+              <span 
+                className="relative z-20 tracking-[0.38em] select-none md:select-auto"
+                style={{
+                  WebkitUserSelect: 'none',
+                  userSelect: 'none',
+                  WebkitTouchCallout: 'none',
+                }}
+              >
+                cliquez & maintenez
+              </span>
               <div className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle,_rgba(112,162,255,0.2),_transparent_75%)] blur-[18px]" />
               <div className="absolute inset-3 rounded-full border border-white/25 opacity-60" />
               <div className="absolute inset-[10px] rounded-full border border-white/15 opacity-60" />
@@ -976,17 +988,17 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
             </button>
 
             <div className="flex flex-col items-center gap-4 text-[11px] uppercase tracking-[0.35em] text-white/65">
-              <span>maintenir pour continuer • relâcher pour réinitialiser</span>
+              <span className="text-center sm:text-left">maintenir pour continuer • relâcher pour réinitialiser</span>
               <div className="flex items-center gap-4 text-white/75">
-                <span>progress</span>
+                <span>progression</span>
                 <span>{displayHold.toString().padStart(3, "0")}%</span>
               </div>
             </div>
           </main>
 
-          <footer className="flex flex-col gap-6 text-[11px] uppercase tracking-[0.35em] text-white/65 md:flex-row md:items-center md:justify-between">
+          <footer className="flex flex-col items-center gap-6 text-[11px] uppercase tracking-[0.35em] text-white/65">
             <div className="flex items-center gap-4">
-              <span>experience 02</span>
+              <span>experience</span>
               <div className="h-[2px] w-32 overflow-hidden rounded-full bg-white/20">
                 <div
                   className="h-full w-full origin-left bg-white transition-transform duration-100"

@@ -1145,7 +1145,7 @@ export default function OffrePage() {
                     fontFamily: 'Montserrat, sans-serif',
                     lineHeight: '1.6',
                   }}>
-                    Marques premium ou internationales cherchant un accompagnement complet
+                    Marques premium ou internationales cherchant un accompagnement complet.
                   </p>
                   
                   {/* Pricing Block - Ultra Premium */}

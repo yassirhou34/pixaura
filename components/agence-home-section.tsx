@@ -161,8 +161,8 @@ export function AgenceHomeSection() {
         <div className="mb-32 grid gap-10 md:grid-cols-2 md:items-stretch">
           {founders.map((founder, index) => (
             <Reveal key={index} delay={index * 150}>
-              {/* Mobile: THE ULTIMATE PREMIUM VERSION - BEST CREATION */}
-              <div className="md:hidden group relative overflow-hidden rounded-[32px] sm:rounded-[40px] border border-white/25 bg-gradient-to-br from-white/10 via-white/8 to-white/6 p-8 sm:p-12 text-white backdrop-blur-3xl transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-white/40 hover:bg-gradient-to-br hover:from-white/12 hover:via-white/10 hover:to-white/8 hover:shadow-[0_20px_60px_rgba(0,115,255,0.4),0_0_0_1px_rgba(255,255,255,0.1)] hover:-translate-y-1 shadow-[0_12px_40px_rgba(0,0,0,0.5),0_4px_16px_rgba(0,0,0,0.3)] h-full">
+              {/* Mobile: IMPROVED PREMIUM VERSION - ENHANCED DESIGN */}
+              <div className="md:hidden group relative overflow-hidden rounded-[32px] sm:rounded-[40px] border border-white/25 bg-gradient-to-br from-black/90 via-slate-900/85 to-black/90 p-0 text-white backdrop-blur-3xl transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-white/40 hover:shadow-[0_20px_60px_rgba(0,115,255,0.4),0_0_0_1px_rgba(255,255,255,0.1)] hover:-translate-y-1 shadow-[0_12px_40px_rgba(0,0,0,0.5),0_4px_16px_rgba(0,0,0,0.3)] h-full">
                 {/* Ultimate Multi-Layer Glow Effects - Always Visible */}
                 <div className="pointer-events-none absolute -inset-6 opacity-30 group-hover:opacity-60 transition-opacity duration-700">
                   <div className="absolute inset-0 rounded-[40px] bg-gradient-to-r from-cyan-400/25 via-purple-500/25 to-cyan-400/25 blur-3xl animate-pulse" style={{ animationDuration: '3s' }} />
@@ -179,85 +179,80 @@ export function AgenceHomeSection() {
                   }} />
                 </div>
 
-                {/* Image - MAXIMUM CLARITY & BEAUTY - Ultra Clear */}
-                <div className="absolute top-0 right-0 h-full w-full sm:w-2/5 overflow-hidden rounded-r-[32px] sm:rounded-r-[40px] opacity-85 sm:opacity-90">
+                {/* Image Section - Positioned at Top, Full Width, Face Fully Visible */}
+                <div className="relative h-72 sm:h-96 w-full overflow-hidden">
                   <Image
                     src={founder.image}
                     alt={founder.name}
                     fill
-                    className="object-cover object-center scale-110 group-hover:scale-115 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                    className="object-cover object-center scale-100 group-hover:scale-105 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
                     sizes="100vw"
                     priority
+                    style={{ objectPosition: 'center 30%' }}
                   />
-                  {/* Ultra light gradient - maximum image visibility */}
-                  <div className="absolute inset-0 bg-gradient-to-l from-black/60 via-black/25 to-black/10 sm:from-black/50 sm:via-black/20 sm:to-black/40" />
-                  {/* Premium light effects on image */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/15 via-transparent to-transparent opacity-70" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-transparent via-purple-500/15 to-cyan-400/15 opacity-50" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent" />
-                  {/* Animated light sweep */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" style={{
-                    transform: 'translateX(-100%)',
-                    animation: 'lightSweep 3s ease-in-out infinite',
-                  }} />
+                  {/* Enhanced gradient overlay - protects face visibility */}
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/0 via-black/20 to-black/95" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                  
+                  {/* Badge positioned bottom-right on image - doesn't cover face */}
+                  <div className="absolute bottom-4 right-4 z-20">
+                    <span className="inline-flex items-center gap-2 rounded-full border-2 border-white/30 bg-gradient-to-r from-white/25 via-white/20 to-white/25 px-4 py-1.5 text-[9px] sm:text-[10px] font-extrabold uppercase tracking-[0.35em] text-white shadow-[0_0_50px_rgba(89,129,255,0.45),0_4px_15px_rgba(0,0,0,0.5)] backdrop-blur-2xl">
+                      <Sparkles className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-sky-300 drop-shadow-[0_0_12px_rgba(56,189,248,0.8)] animate-pulse" style={{ animationDuration: '2s' }} />
+                      {t("agenceHome.founder")}
+                    </span>
+                  </div>
                 </div>
 
-                {/* Content - Ultimate Premium Typography & Perfect Spacing */}
-                <div className="relative flex flex-col gap-6 sm:gap-8 z-10">
-                  {/* Ultimate Premium Badge - Extraordinary */}
-                  <span className="inline-flex w-fit items-center gap-3 sm:gap-3.5 rounded-full border-2 border-white/30 bg-gradient-to-r from-white/20 via-white/18 to-white/20 px-6 py-2.5 sm:px-8 sm:py-3 text-xs sm:text-sm font-extrabold uppercase tracking-[0.45em] sm:tracking-[0.5em] text-white shadow-[0_0_50px_rgba(89,129,255,0.45),0_0_80px_rgba(56,189,248,0.3),0_6px_20px_rgba(0,0,0,0.4)] backdrop-blur-2xl transition-all duration-500 group-hover:shadow-[0_0_60px_rgba(89,129,255,0.55),0_0_100px_rgba(56,189,248,0.4),0_8px_24px_rgba(0,0,0,0.5)] group-hover:border-white/40 group-hover:bg-gradient-to-r group-hover:from-white/25 group-hover:via-white/20 group-hover:to-white/25 group-hover:scale-105">
-                    <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-sky-300 drop-shadow-[0_0_12px_rgba(56,189,248,0.8)] animate-pulse" style={{ animationDuration: '2s' }} />
-                    • {t("agenceHome.founder")}
-                  </span>
-                  
-                  {/* Ultimate Premium Name - Extra Large & Beautiful */}
-                  <h3 className="max-w-2xl min-h-[5.25rem] sm:min-h-[6.25rem] line-clamp-2 text-4xl sm:text-5xl md:text-6xl font-black leading-[1.02] text-white tracking-tight" style={{ 
+                {/* Content Section - Below Image, Protected Space */}
+                <div className="relative flex flex-col gap-5 px-6 sm:px-8 py-6 sm:py-8 z-10 bg-gradient-to-b from-black/95 via-black/98 to-black/95 -mt-8 rounded-t-[32px] sm:rounded-t-[40px]">
+                  {/* Name - Large & Visible, No Face Overlap */}
+                  <h3 className="text-3xl sm:text-4xl font-black leading-[1.1] text-white tracking-tight mb-1" style={{ 
                     fontFamily: 'Montserrat, sans-serif',
-                    letterSpacing: '-0.03em',
-                    textShadow: '0 3px 25px rgba(0,0,0,0.6), 0 6px 50px rgba(0,0,0,0.4), 0 0 80px rgba(0,0,0,0.3), 0 1px 3px rgba(0,0,0,0.8)',
-                    lineHeight: '1.02',
+                    letterSpacing: '-0.02em',
+                    textShadow: '0 3px 25px rgba(0,0,0,0.8), 0 6px 50px rgba(0,0,0,0.6), 0 1px 3px rgba(0,0,0,0.9)',
                   }}>
                     {founder.name}
                   </h3>
                   
-                  {/* Ultimate Premium Role - Beautiful Gradient */}
-                  <p className="max-w-2xl min-h-[3.5rem] sm:min-h-[3.75rem] line-clamp-3 text-sm sm:text-base font-extrabold uppercase tracking-[0.25em] leading-tight bg-gradient-to-r from-purple-400 via-purple-300 via-cyan-300 to-cyan-400 bg-clip-text text-transparent drop-shadow-[0_3px_15px_rgba(168,85,247,0.5),0_0_30px_rgba(56,189,248,0.3)]" style={{
+                  {/* Role - Full Text, Multiple Lines, Better Readability */}
+                  <p className="text-[11px] sm:text-sm font-bold uppercase tracking-[0.2em] sm:tracking-[0.25em] leading-[1.5] sm:leading-[1.6] break-words whitespace-normal bg-gradient-to-r from-purple-400 via-cyan-300 to-purple-400 bg-clip-text text-transparent mb-4" style={{
                     backgroundSize: '200% 200%',
                     animation: 'gradientShift 4s ease infinite',
+                    textShadow: '0 2px 10px rgba(168,85,247,0.3)',
                   }}>
                     {founder.role}
                   </p>
                   
-                  {/* Ultimate Premium Description - Perfect Readability */}
-                  <p className="max-w-2xl min-h-[7rem] sm:min-h-[7.5rem] line-clamp-4 text-base sm:text-lg md:text-xl text-white leading-relaxed font-semibold" style={{ 
+                  {/* Premium Divider */}
+                  <div className="relative w-full h-px mb-5">
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+                    <div className="absolute left-1/2 -translate-x-1/2 w-24 h-px bg-gradient-to-r from-cyan-400/60 via-purple-500/60 to-cyan-400/60 blur-sm" />
+                  </div>
+                  
+                  {/* Description - Clear & Readable */}
+                  <p className="text-sm sm:text-base text-white/90 leading-relaxed font-medium mb-4" style={{ 
                     fontFamily: 'Montserrat, sans-serif',
-                    textShadow: '0 2px 12px rgba(0,0,0,0.5), 0 4px 24px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.7)',
-                    lineHeight: '1.8',
+                    textShadow: '0 2px 12px rgba(0,0,0,0.6), 0 1px 3px rgba(0,0,0,0.8)',
+                    lineHeight: '1.75',
                   }}>
                     {founder.description}
                   </p>
                   
-                  {/* Ultimate Premium Separator - Extraordinary Glow */}
-                  <div className="max-w-2xl pt-6 border-t-2 border-white/35 relative">
-                    <div className="absolute top-0 left-0 w-24 h-1 bg-gradient-to-r from-cyan-400/80 via-purple-500/80 to-cyan-400/80 blur-md opacity-70 group-hover:opacity-100 transition-opacity duration-500" />
-                    <div className="absolute top-0 left-0 w-32 h-px bg-gradient-to-r from-cyan-400/60 via-purple-500/60 to-transparent blur-sm" />
-                    <p className="min-h-[7rem] sm:min-h-[7.5rem] line-clamp-4 text-base sm:text-lg md:text-xl text-white leading-relaxed font-medium pt-6" style={{ 
+                  {/* Vision - Separated Section */}
+                  <div className="pt-4 border-t border-white/20">
+                    <p className="text-sm sm:text-base text-white/85 leading-relaxed font-normal" style={{ 
                       fontFamily: 'Montserrat, sans-serif',
-                      textShadow: '0 2px 12px rgba(0,0,0,0.5), 0 4px 24px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.7)',
-                      lineHeight: '1.85',
+                      textShadow: '0 2px 12px rgba(0,0,0,0.6), 0 1px 3px rgba(0,0,0,0.8)',
+                      lineHeight: '1.75',
                     }}>
                       {founder.vision}
                     </p>
                   </div>
                 </div>
 
-                {/* Ultimate Premium Corner Accents - Enhanced */}
-                <div className="absolute top-6 right-6 w-16 h-16 border-t-2 border-r-2 border-white/30 rounded-tr-[32px] opacity-60 group-hover:opacity-90 transition-all duration-700 group-hover:border-white/50" />
-                <div className="absolute bottom-6 left-6 w-16 h-16 border-b-2 border-l-2 border-white/30 rounded-bl-[32px] opacity-60 group-hover:opacity-90 transition-all duration-700 group-hover:border-white/50" />
-                
-                {/* Premium Light Rays */}
-                <div className="absolute top-0 left-0 w-1/2 h-1/2 bg-gradient-to-br from-cyan-400/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-to-tl from-purple-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                {/* Premium Corner Accents */}
+                <div className="absolute top-4 right-4 w-12 h-12 border-t-2 border-r-2 border-white/30 rounded-tr-[32px] opacity-50 group-hover:opacity-80 transition-all duration-700" />
+                <div className="absolute bottom-4 left-4 w-12 h-12 border-b-2 border-l-2 border-white/30 rounded-bl-[32px] opacity-50 group-hover:opacity-80 transition-all duration-700" />
               </div>
 
               {/* Desktop: Original Split Layout */}

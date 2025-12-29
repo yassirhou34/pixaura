@@ -140,14 +140,14 @@ export function HomeVideoCarousel() {
     const shouldLoad = distance <= 1
 
     // Preload Logic:
-    // Mobile: Auto for Current, NONE for Neighbors (Focus bandwidth)
+    // Mobile: Auto for Current and Neighbors (smooth transitions)
     // Desktop: Auto for Current, Metadata for Neighbors (Smoother)
     let preload: "auto" | "metadata" | "none" = "none"
 
     if (index === currentIndex) {
       preload = "auto"
     } else if (distance <= 1) {
-      preload = isMobile ? "none" : "metadata"
+      preload = isMobile ? "auto" : "metadata" // Précharger sur mobile pour transitions smooth
     }
 
     return { shouldLoad, preload }
@@ -163,7 +163,8 @@ export function HomeVideoCarousel() {
       video.muted = isMuted
 
       if (index === currentIndex) {
-        if (isPlaying && !isTransitioning) {
+        // Sur mobile, permettre de jouer même pendant transition pour smooth
+        if (isPlaying && (isMobile || !isTransitioning)) {
           // Only try to play if we actually have a source
           if (video.getAttribute('src')) {
             // Check if already playing to avoid interruption
@@ -189,7 +190,7 @@ export function HomeVideoCarousel() {
         video.currentTime = 0
       }
     })
-  }, [currentIndex, isPlaying, isMuted, isTransitioning, slides])
+  }, [currentIndex, isPlaying, isMuted, isTransitioning, isMobile, slides])
 
 
   // Keyboard navigation
@@ -210,27 +211,42 @@ export function HomeVideoCarousel() {
   const handleTransition = useCallback((newIndex: number, dir: 'left' | 'right') => {
     if (isTransitioning || newIndex === currentIndex) return
 
-    setIsTransitioning(true)
-    setDirection(dir)
-    setNextIndex(newIndex)
-
     const nextVideo = videoRefs.current[newIndex]
-    if (nextVideo) {
-      // Ensure it's ready
-      nextVideo.currentTime = 0
-      nextVideo.load()
-    }
-
-    // Transition timing
-    setTimeout(() => {
+    
+    if (isMobile) {
+      // Sur mobile : transition immédiate et directe
+      if (nextVideo) {
+        nextVideo.currentTime = 0
+        if (nextVideo.readyState >= 2) {
+          nextVideo.play().catch(() => {})
+        }
+      }
+      // Changement immédiat sur mobile
       setCurrentIndex(newIndex)
+      setIsTransitioning(false)
+      setDirection(null)
       setNextIndex(null)
+    } else {
+      // Sur desktop : garder le comportement original
+      setIsTransitioning(true)
+      setDirection(dir)
+      setNextIndex(newIndex)
+      
+      if (nextVideo) {
+        nextVideo.currentTime = 0
+        nextVideo.load()
+      }
+      
       setTimeout(() => {
-        setIsTransitioning(false)
-        setDirection(null)
-      }, 150)
-    }, 800)
-  }, [currentIndex, isTransitioning])
+        setCurrentIndex(newIndex)
+        setNextIndex(null)
+        setTimeout(() => {
+          setIsTransitioning(false)
+          setDirection(null)
+        }, 150)
+      }, 800)
+    }
+  }, [currentIndex, isTransitioning, isMobile])
 
   const handleNext = useCallback(() => {
     if (isTransitioning) return
@@ -292,7 +308,8 @@ export function HomeVideoCarousel() {
 
   // Helper to handle canPlay event
   const handleCanPlay = (index: number) => {
-    if (index === currentIndex && isPlaying && !isTransitioning) {
+    // Sur mobile, permettre de jouer même pendant transition
+    if (index === currentIndex && isPlaying && (isMobile || !isTransitioning)) {
       const video = videoRefs.current[index]
       if (video && video.paused) {
         video.play().catch(() => { })
@@ -489,30 +506,48 @@ export function HomeVideoCarousel() {
                 let transformClass = ''
                 let opacityClass = ''
                 let blurClass = ''
+                let zIndexClass = 'z-0 pointer-events-none'
 
-                if (isActive && !isTransitioning) {
+                if (isMobile) {
+                  // Sur mobile : transition ultra simple - juste opacity
+                  if (isActive) {
+                    opacityClass = 'opacity-100'
+                    zIndexClass = 'z-10'
+                  } else {
+                    opacityClass = 'opacity-0'
+                    zIndexClass = 'z-0 pointer-events-none'
+                  }
                   transformClass = 'scale-100 translate-x-0'
-                  opacityClass = 'opacity-100'
                   blurClass = 'blur-0'
-                } else if (isEntering && nextIndex !== null) {
-                  transformClass = direction === 'right' ? 'scale-[0.88] -translate-x-12' : 'scale-[0.88] translate-x-12'
-                  opacityClass = 'opacity-100'
-                  blurClass = 'blur-sm'
-                } else if (isExiting) {
-                  transformClass = direction === 'right' ? 'scale-[0.88] translate-x-12' : 'scale-[0.88] -translate-x-12'
-                  opacityClass = 'opacity-0'
-                  blurClass = 'blur-sm'
                 } else {
-                  transformClass = 'scale-100 translate-x-0'
-                  opacityClass = 'opacity-0'
-                  blurClass = 'blur-0'
+                  // Sur desktop : garder le comportement original
+                  if (isActive && !isTransitioning) {
+                    transformClass = 'scale-100 translate-x-0'
+                    opacityClass = 'opacity-100'
+                    blurClass = 'blur-0'
+                    zIndexClass = 'z-10'
+                  } else if (isEntering && nextIndex !== null) {
+                    transformClass = direction === 'right' ? 'scale-[0.88] -translate-x-12' : 'scale-[0.88] translate-x-12'
+                    opacityClass = 'opacity-100'
+                    blurClass = 'blur-sm'
+                    zIndexClass = 'z-10'
+                  } else if (isExiting) {
+                    transformClass = direction === 'right' ? 'scale-[0.88] translate-x-12' : 'scale-[0.88] -translate-x-12'
+                    opacityClass = 'opacity-0'
+                    blurClass = 'blur-sm'
+                    zIndexClass = 'z-10'
+                  } else {
+                    transformClass = 'scale-100 translate-x-0'
+                    opacityClass = 'opacity-0'
+                    blurClass = 'blur-0'
+                    zIndexClass = 'z-0 pointer-events-none'
+                  }
                 }
 
                 return (
                   <div
                     key={slide.id}
-                    className={`absolute inset-0 transition-all duration-[1800ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${transformClass} ${opacityClass} ${blurClass} ${isActive ? 'z-10' : 'z-0 pointer-events-none'
-                      }`}
+                    className={`absolute inset-0 transition-opacity duration-200 ease-out lg:transition-all lg:duration-[1800ms] lg:ease-[cubic-bezier(0.16,1,0.3,1)] ${transformClass} ${opacityClass} ${blurClass} ${zIndexClass}`}
                   >
                     <div className="absolute inset-0 flex items-center justify-center bg-black">
                       <video

@@ -23,7 +23,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="bg-transparent" suppressHydrationWarning>
+    <html lang="fr" className="bg-transparent" suppressHydrationWarning>
       <head>
         {/* Preconnect to Vercel CDN for faster asset loading */}
         <link rel="preconnect" href="https://pixaura-woad.vercel.app" />
@@ -34,15 +34,25 @@ export default function RootLayout({
             __html: `
               (function() {
                 // FORCE LANGUAGE: Read and preserve language IMMEDIATELY before React loads
-                // This prevents French flash when navigating to Humind/Portfolio
-                if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
-                  const storedLang = localStorage.getItem('language');
-                  if (storedLang && (storedLang === 'fr' || storedLang === 'en')) {
-                    // Language is already set, ensure it's preserved
-                    localStorage.setItem('language', storedLang);
+                // Always default to French on first entry of each session (web and mobile)
+                if (typeof window !== 'undefined' && typeof localStorage !== 'undefined' && typeof sessionStorage !== 'undefined') {
+                  // Check if this is the first entry of this session
+                  const hasVisitedThisSession = sessionStorage.getItem('hasVisitedThisSession');
+                  
+                  if (!hasVisitedThisSession) {
+                    // First entry of session: always default to French, even if localStorage has 'en'
+                    localStorage.setItem('language', 'fr');
+                    sessionStorage.setItem('hasVisitedThisSession', 'true');
                   } else {
-                    // No language set, default to English to prevent French flash
-                    localStorage.setItem('language', 'en');
+                    // Not first entry: use stored language preference
+                    const storedLang = localStorage.getItem('language');
+                    if (storedLang && (storedLang === 'fr' || storedLang === 'en')) {
+                      // Language is already set, ensure it's preserved
+                      localStorage.setItem('language', storedLang);
+                    } else {
+                      // No language set, default to French
+                      localStorage.setItem('language', 'fr');
+                    }
                   }
                 }
                 

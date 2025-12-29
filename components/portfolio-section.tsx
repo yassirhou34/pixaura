@@ -639,11 +639,6 @@ export function PortfolioSection() {
                             )}
                           </div>
                           <div className="latest-card-thumb-meta">
-                            <div className="latest-card-thumb-tags">
-                              <span>{project.client}</span>
-                              <span className="divider" />
-                              <span>{project.category}</span>
-                            </div>
                             <div className="latest-card-thumb-title">
                               {project.title}
                             </div>

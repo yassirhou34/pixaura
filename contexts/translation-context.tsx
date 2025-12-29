@@ -18,24 +18,46 @@ export const TranslationProvider = ({ children }: { children: ReactNode }) => {
   // Note: We initialize with the value from localStorage if available to avoid flash,
   // but we use suppressHydrationWarning on root to allow this mismatch.
   const getInitialLanguage = (): Language => {
-    if (typeof window === 'undefined') return 'en' // Default to English for SSR
+    if (typeof window === 'undefined') return 'fr' // Default to French for SSR
+    
+    // Check if this is the first entry of this session
+    const hasVisitedThisSession = sessionStorage.getItem('hasVisitedThisSession')
+    
+    if (!hasVisitedThisSession) {
+      // First entry of session: always default to French, even if localStorage has 'en'
+      sessionStorage.setItem('hasVisitedThisSession', 'true')
+      return 'fr'
+    }
+    
+    // Not first entry: use stored language preference
     const storedLang = localStorage.getItem('language') as Language
     if (storedLang && (storedLang === 'fr' || storedLang === 'en')) {
       return storedLang
     }
-    // Default to English to prevent French flash
-    return 'en'
+    // Default to French if no language set
+    return 'fr'
   }
 
   const [language, setLanguageState] = useState<Language>(getInitialLanguage)
 
   // Ensure localStorage is in sync on mount (double check)
+  // But respect first entry rule: if first entry of session, keep French
   useEffect(() => {
-    const storedLang = localStorage.getItem('language') as Language
-    if (storedLang && (storedLang !== language)) {
-      setLanguageState(storedLang)
+    const hasVisitedThisSession = sessionStorage.getItem('hasVisitedThisSession')
+    if (!hasVisitedThisSession) {
+      // First entry of session: ensure we're using French
+      if (language !== 'fr') {
+        setLanguageState('fr')
+      }
+      sessionStorage.setItem('hasVisitedThisSession', 'true')
+    } else {
+      // Not first entry: use stored preference
+      const storedLang = localStorage.getItem('language') as Language
+      if (storedLang && (storedLang !== language)) {
+        setLanguageState(storedLang)
+      }
     }
-  }, [])
+  }, [language])
 
   // Keep <html lang="..."> in sync so hyphenation/justification behave correctly in FR/EN
   useEffect(() => {

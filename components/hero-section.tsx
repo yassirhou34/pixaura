@@ -241,7 +241,7 @@ export function HeroSection() {
   return (
     <section className="relative flex min-h-screen w-full items-center justify-center overflow-hidden">
 
-      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col gap-12 px-4 pt-32 pb-20 sm:px-6 sm:pt-36 sm:pb-24 md:px-12 lg:gap-16 xl:max-w-7xl">
+      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col gap-12 px-4 pt-32 pb-20 sm:px-6 sm:pt-36 sm:pb-24 md:px-12 lg:gap-16 lg:pb-8 xl:max-w-7xl xl:pb-6">
         <div className="grid gap-14 text-white lg:grid-cols-[minmax(0,1.05fr)_minmax(280px,0.95fr)] lg:gap-10 xl:gap-14">
           <div className="flex flex-col gap-12 relative z-10">
             <div>
@@ -287,10 +287,10 @@ export function HeroSection() {
 
             <Reveal delay={360}>
               <div className="flex flex-col gap-6 lg:gap-8">
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-4">
+                <div className="flex flex-col gap-4 justify-center sm:justify-start sm:flex-row sm:items-center sm:gap-4">
                   <Link
                     href="/#contact"
-                    className="group inline-flex items-center gap-3 rounded-full border border-white/25 px-9 py-4 text-sm font-semibold uppercase tracking-[0.32em] text-white transition-all duration-500 hover:border-white hover:bg-white/10"
+                    className="group inline-flex items-center justify-center gap-3 rounded-full border border-white/25 px-9 py-4 text-sm font-semibold uppercase tracking-[0.32em] text-white transition-all duration-500 hover:border-white hover:bg-white/10"
                   >
                     {t("hero.contactUs")}
                     <Play className="h-4 w-4 transition-transform duration-500 group-hover:scale-110" />
@@ -343,12 +343,12 @@ export function HeroSection() {
           </div>
 
           <div className="relative hidden w-full items-start justify-end lg:flex lg:mt-32 xl:mt-40">
-            <div className="flex w-full max-w-xl justify-end gap-6 xl:max-w-2xl xl:gap-8">
+            <div className="flex w-full max-w-xl justify-end gap-4 xl:max-w-2xl xl:gap-5">
               {heroProjects.map((project, index) => (
                 <Reveal
                   key={project.id}
                   delay={index * 180}
-                  className="hero-highlight-card group relative isolate flex h-[360px] w-[220px] flex-col overflow-hidden rounded-[28px] border border-white/15 bg-white/5 pb-5 text-white backdrop-blur-xl transition duration-700 hover:-translate-y-2 hover:border-white/30 hover:bg-white/10 xl:h-[400px] xl:w-[240px]"
+                  className="hero-highlight-card group relative isolate flex h-[360px] w-[220px] flex-col overflow-hidden rounded-[28px] border border-white/15 bg-white/5 pb-0 text-white backdrop-blur-xl transition duration-700 hover:-translate-y-2 hover:border-white/30 hover:bg-white/10 xl:h-[400px] xl:w-[240px]"
                 >
                   <div className="relative h-[58%] w-full overflow-hidden">
                     <Image
@@ -373,11 +373,8 @@ export function HeroSection() {
                     </div>
                   </div>
 
-                  <div className="flex flex-1 flex-col justify-between px-6 pt-5">
+                  <div className="flex flex-1 flex-col justify-center px-6 pt-3 pb-2">
                     <h3 className="text-base font-semibold leading-snug text-white text-center">{project.title}</h3>
-                    <div className="mt-4">
-                      <span className="block h-px w-full bg-white/20" />
-                    </div>
                   </div>
                 </Reveal>
               ))}
