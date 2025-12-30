@@ -1,7 +1,14 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { Resend } from "resend"
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Initialize Resend lazily to avoid build-time errors when env vars are not available
+function getResend() {
+  const apiKey = process.env.RESEND_API_KEY
+  if (!apiKey) {
+    throw new Error("RESEND_API_KEY is not configured")
+  }
+  return new Resend(apiKey)
+}
 
 // Map budget values to French labels
 const budgetLabels: Record<string, string> = {
@@ -270,6 +277,9 @@ export async function POST(req: NextRequest) {
       console.error("RESEND_API_KEY is not configured")
       return NextResponse.json({ error: "Email service not configured" }, { status: 500 })
     }
+
+    // Initialize Resend with API key
+    const resend = getResend()
 
     // Determine language (you can add logic to detect language from the request if needed)
     // For now, we'll send both French and English versions
