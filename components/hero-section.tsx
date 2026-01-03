@@ -6,6 +6,7 @@ import Link from "next/link"
 import { ArrowRight, Play } from "lucide-react"
 import { Reveal } from "@/components/reveal"
 import { useTranslation } from "@/contexts/translation-context"
+import { getAssetUrl } from "@/lib/cloudinary"
 
 const heroProjects = [
   {
@@ -13,14 +14,14 @@ const heroProjects = [
     client: "Touraine Cars",
     title: "Night Drive Experience",
     category: "Film • Activation",
-    image: "/Banque d_images/Copie de M7_03225.jpg",
+    image: getAssetUrl("/Banque d_images/Copie de M7_03225.jpg", "image"),
   },
   {
     id: 2,
     client: "BSD / UFC Paris",
     title: "Stage MMA Immersion",
     category: "Social • Event",
-    image: "/Banque d_images/StageUfc.jpg",
+    image: getAssetUrl("/Banque d_images/StageUfc.jpg", "image"),
   },
 ]
 

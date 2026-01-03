@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState, useMemo } from "react"
 import { Pause, Play, Volume2, VolumeX, ChevronLeft, ChevronRight } from "lucide-react"
 import { useTranslation } from "@/contexts/translation-context"
+import { getAssetUrl } from "@/lib/cloudinary"
 
 export function HomeVideoCarousel() {
   const { t } = useTranslation()
@@ -13,7 +14,7 @@ export function HomeVideoCarousel() {
       id: 2,
       title: t("portfolio.carouselSlide2Title"),
       description: t("portfolio.carouselSlide2Description"),
-      video: "/Banque d_images/rally1.mp4",
+      video: getAssetUrl("/Banque d_images/rally1.mp4", "video"),
       tags: [t("portfolio.carouselSlide2Tag1"), t("portfolio.carouselSlide2Tag2"), t("portfolio.carouselSlide2Tag3")],
     },
     // Slide 1 becomes second
@@ -21,21 +22,21 @@ export function HomeVideoCarousel() {
       id: 1,
       title: t("portfolio.carouselSlide1Title"),
       description: t("portfolio.carouselSlide1Description"),
-      video: "/Banque d_images/Immobilier.mp4",
+      video: getAssetUrl("/Banque d_images/Immobilier.mp4", "video"),
       tags: [t("portfolio.carouselSlide1Tag1"), t("portfolio.carouselSlide1Tag2"), t("portfolio.carouselSlide1Tag3")],
     },
     {
       id: 3,
       title: t("portfolio.carouselSlide3Title"),
       description: t("portfolio.carouselSlide3Description"),
-      video: "/Banque d_images/halowen.mp4",
+      video: getAssetUrl("/Banque d_images/halowen.mp4", "video"),
       tags: [t("portfolio.carouselSlide3Tag1"), t("portfolio.carouselSlide3Tag2"), t("portfolio.carouselSlide3Tag3")],
     },
     {
       id: 5,
       title: t("portfolio.carouselSlide5Title"),
       description: t("portfolio.carouselSlide5Description"),
-      video: "/Banque d_images/pod1.mp4",
+      video: getAssetUrl("/Banque d_images/pod1.mp4", "video"),
       tags: [t("portfolio.carouselSlide5Tag1"), t("portfolio.carouselSlide5Tag2"), t("portfolio.carouselSlide5Tag3")],
     },
   ], [t])

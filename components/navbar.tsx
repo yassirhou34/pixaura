@@ -5,6 +5,7 @@ import Image from "next/image"
 import { useEffect, useState } from "react"
 import { useRouter, usePathname } from "next/navigation"
 import { useTranslation } from "@/contexts/translation-context"
+import { getAssetUrl } from "@/lib/cloudinary"
 import { Globe, Sparkles } from "lucide-react"
 
 export function Navbar() {
@@ -36,7 +37,7 @@ export function Navbar() {
   useEffect(() => {
     if (pathname !== '/humind') {
       const preloadVideo = document.createElement('video')
-      preloadVideo.src = '/Banque d_images/noir.mp4'
+      preloadVideo.src = getAssetUrl('/Banque d_images/noir.mp4', 'video')
       preloadVideo.preload = 'auto'
       preloadVideo.muted = true
       preloadVideo.playsInline = true
@@ -80,7 +81,7 @@ export function Navbar() {
   ]
 
   const isHumindPage = pathname === "/humind"
-  const logoSrc = isHumindPage ? "/Banque d_images/humind-white.png" : "/Banque d_images/PIXaura-soft white.png"
+  const logoSrc = isHumindPage ? getAssetUrl("/Banque d_images/humind-white.png", "image") : getAssetUrl("/Banque d_images/PIXaura-soft white.png", "image")
   const logoAlt = isHumindPage ? "Humind Logo" : "Pixaura International Logo"
 
   return (
@@ -173,7 +174,7 @@ export function Navbar() {
                   // AGGRESSIVE PRELOAD: Ensure video is preloaded before navigation
                   if (item.href === '/humind') {
                     const preloadVideo = document.createElement('video')
-                    preloadVideo.src = '/Banque d_images/noir.mp4'
+                    preloadVideo.src = getAssetUrl('/Banque d_images/noir.mp4', 'video')
                     preloadVideo.preload = 'auto'
                     preloadVideo.muted = true
                     preloadVideo.playsInline = true
@@ -210,7 +211,7 @@ export function Navbar() {
                   // AGGRESSIVE PRELOAD: Preload Humind video on hover
                   if (item.href === '/humind') {
                     const preloadVideo = document.createElement('video')
-                    preloadVideo.src = '/Banque d_images/noir.mp4'
+                    preloadVideo.src = getAssetUrl('/Banque d_images/noir.mp4', 'video')
                     preloadVideo.preload = 'auto'
                     preloadVideo.muted = true
                     preloadVideo.playsInline = true
@@ -453,7 +454,7 @@ export function Navbar() {
                   // AGGRESSIVE PRELOAD: Ensure video is preloaded before navigation
                   if (item.href === '/humind') {
                     const preloadVideo = document.createElement('video')
-                    preloadVideo.src = '/Banque d_images/noir.mp4'
+                    preloadVideo.src = getAssetUrl('/Banque d_images/noir.mp4', 'video')
                     preloadVideo.preload = 'auto'
                     preloadVideo.muted = true
                     preloadVideo.playsInline = true

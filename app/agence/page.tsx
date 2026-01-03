@@ -45,14 +45,14 @@ export default function AgencePage() {
     {
       name: "Franck Bourré",
       role: "CO-FONDATEUR & DIRECTEUR ADMINISTRATIF ET COMMERCIAL",
-      image: "/Banque d_images/Copie de M7_03372.jpg",
+      image: getAssetUrl("/Banque d_images/Copie de M7_03372.jpg", "image"),
       description: "Entrepreneur depuis 2005, expert en gestion de projets ambitieux et en développement stratégique.",
       vision: "Allier rigueur opérationnelle, stratégie long terme et compréhension fine des enjeux économiques.",
     },
     {
       name: "Julien Hochet",
       role: "CO-FONDATEUR & DIRECTEUR MARKETING ET COMMUNICATION",
-      image: "/Banque d_images/Copie de M7_01248.jpg",
+      image: getAssetUrl("/Banque d_images/Copie de M7_01248.jpg", "image"),
       description: "Ancien opérateur spécialisé des troupes parachutistes de l'armée de l'air, il incarne discipline, créativité et dépassement de soi.",
       vision: "Spécialiste du cadrage, montage et stratégie de communication digitale. Collaborations : Reebok, Adobe France, Shiftech.",
     },
@@ -516,7 +516,7 @@ export default function AgencePage() {
                       playsInline
                       className="w-full h-full object-cover opacity-25 group-hover:opacity-35 transition-opacity duration-700"
                     >
-                      <source src="/Banque d_images/stageMMa.mp4" type="video/mp4" />
+                      <source src={getAssetUrl("/Banque d_images/stageMMa.mp4", "video")} type="video/mp4" />
                     </video>
                     <div className="absolute inset-0 bg-gradient-to-br from-purple-500/50 via-black/70 to-black/90" />
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />

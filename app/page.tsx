@@ -1,6 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
+import { getAssetUrl } from "@/lib/cloudinary"
 
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
@@ -31,9 +32,9 @@ export default function Home() {
 
     // Preload all hero images immediately
     const heroImages = [
-      "/Banque d_images/Copie de M7_03225.jpg",
-      "/Banque d_images/StageUfc.jpg",
-      "/Banque d_images/Copie de M7_01248.jpg"
+      getAssetUrl("/Banque d_images/Copie de M7_03225.jpg", "image"),
+      getAssetUrl("/Banque d_images/StageUfc.jpg", "image"),
+      getAssetUrl("/Banque d_images/Copie de M7_01248.jpg", "image")
     ]
 
     // Create link elements for aggressive preloading
@@ -231,7 +232,7 @@ export default function Home() {
       <div className="pointer-events-none fixed inset-0 -z-10">
         {/* Desktop placeholder image (shown first) */}
         <img
-          src="/Banque d_images/ippppp1.png"
+          src={getAssetUrl("/Banque d_images/ippppp1.png", "image")}
           alt="Background"
           className="hidden md:block absolute inset-0 h-full w-full object-cover transition-opacity duration-700"
           style={{
@@ -259,11 +260,11 @@ export default function Home() {
             height: '100%'
           }}
         >
-          <source src="/Banque d_images/Copie de BACKGROUND WEB DESKTOP.mp4" type="video/mp4" />
+          <source src={getAssetUrl("/Banque d_images/Copie de BACKGROUND WEB DESKTOP.mp4", "video")} type="video/mp4" />
         </video>
         {/* Background image - visible only on mobile */}
         <img
-          src="/Banque d_images/backnoiree.png"
+          src={getAssetUrl("/Banque d_images/backnoiree.png", "image")}
           alt="Background"
           className="block md:hidden h-full w-full object-cover"
           style={{

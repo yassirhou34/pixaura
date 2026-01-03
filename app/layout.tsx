@@ -3,7 +3,7 @@ import type { Metadata } from "next"
 import { Montserrat, Space_Grotesk } from "next/font/google"
 import "./globals.css"
 import { TranslationProvider } from "@/contexts/translation-context"
-import { ErrorBoundary } from "@/components/error-boundary"
+import { ErrorBoundaryWrapper } from "@/components/error-boundary-wrapper"
 
 // Primary premium font for the whole site (outside intros/loading)
 const montserrat = Montserrat({ subsets: ["latin"], variable: "--font-sans" })
@@ -161,16 +161,20 @@ export default function RootLayout({
           }}
         />
         {/* Only preload critical background image for mobile - NO VIDEO PRELOADS */}
-        <link rel="preload" href="/Banque d_images/backnoiree.png" as="image" />
+        {process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME ? (
+          <link rel="preload" href={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/q_auto,f_auto,fl_immutable_cache/pixaura/back-noiree.jpg`} as="image" />
+        ) : (
+          <link rel="preload" href="/Banque d_images/backnoiree.png" as="image" />
+        )}
       </head>
       <body
         className={`${montserrat.className} ${spaceGrotesk.variable} antialiased bg-transparent text-foreground`}
       >
-        <ErrorBoundary>
+        <ErrorBoundaryWrapper>
           <TranslationProvider>
             {children}
           </TranslationProvider>
-        </ErrorBoundary>
+        </ErrorBoundaryWrapper>
       </body>
     </html>
   )

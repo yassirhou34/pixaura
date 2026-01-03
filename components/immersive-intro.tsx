@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import Image from "next/image"
 import { useTranslation } from "@/contexts/translation-context"
+import { getAssetUrl } from "@/lib/cloudinary"
 
 type Stage = "loading" | "start" | "transition" | "hold" | "finishing" | "hidden"
 
@@ -64,8 +65,8 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
 
   const backgroundVideo =
     stage === "hold" || stage === "transition" || stage === "finishing"
-      ? "/Banque d_images/Backv2.mp4"
-      : "/Banque d_images/back3.mp4"
+      ? getAssetUrl("/Banque d_images/Backv2.mp4", "video")
+      : getAssetUrl("/Banque d_images/Backv2.mp4", "video") // Using Backv2 instead of deleted back3
 
   const [videoLoaded, setVideoLoaded] = useState(false)
   const [videoError, setVideoError] = useState(false)
@@ -233,6 +234,7 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
   }, [])
 
   useEffect(() => {
+    // Audio file stays local (not uploaded to Cloudinary)
     const audio = new Audio("/Banque d_images/mixkit-relaxing-harp-sweep-2628.wav")
     audio.loop = false
     audio.volume = 0.65
@@ -370,7 +372,7 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
 
     // ULTRA-AGGRESSIVE preload settings for Vercel CDN
     preloadVideo.preload = "auto"
-    preloadVideo.src = "/Banque d_images/Backv2.mp4"
+    preloadVideo.src = getAssetUrl("/Banque d_images/Backv2.mp4", "video")
     
     // Force load immediately
     preloadVideo.load()
@@ -459,7 +461,7 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
     if (stage === "start" && preloadVideoReady && preloadVideoRef.current) {
       const preloadVideo = preloadVideoRef.current
       if (preloadVideo.readyState >= 2 || preloadVideoBuffered) {
-        nextVideo.src = "/Banque d_images/Backv2.mp4"
+        nextVideo.src = getAssetUrl("/Banque d_images/Backv2.mp4", "video")
         nextVideo.preload = "auto"
         nextVideo.currentTime = 0
         nextVideo.load()
@@ -491,7 +493,7 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
     if (!video || !backgroundVideo) return
 
     // CRITICAL: When switching to Backv2.mp4, use preloaded video INSTANTLY
-    if (backgroundVideo === "/Banque d_images/Backv2.mp4" && preloadVideoReady && preloadVideoRef.current) {
+    if (backgroundVideo === getAssetUrl("/Banque d_images/Backv2.mp4", "video") && preloadVideoReady && preloadVideoRef.current) {
       const preloadVideo = preloadVideoRef.current
       
       if (preloadVideo.readyState >= 2 || preloadVideoBuffered) {
@@ -563,9 +565,9 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
       }
     }
 
-    // Only reset for back3.mp4 (initial video) - this is safe
+    // Only reset for initial video - this is safe
     // BUT: If we're coming from a stage where Backv2 was showing, keep it visible
-    if (backgroundVideo === "/Banque d_images/back3.mp4" && stage === "loading") {
+    if (stage === "loading") {
       // Only reset on initial load
       setVideoLoaded(false)
       setShowNextVideo(false)
@@ -639,7 +641,7 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
         preload="auto"
         muted
         playsInline
-        src="/Banque d_images/Backv2.mp4"
+        src={getAssetUrl("/Banque d_images/Backv2.mp4", "video")}
       />
       {/* NEXT VIDEO LAYER - Preloads and shows Backv2.mp4 BEFORE transition to prevent black screen */}
       {showNextVideo && (
@@ -668,7 +670,7 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
             }
           }}
         >
-          <source src="/Banque d_images/Backv2.mp4" type="video/mp4" />
+          <source src={getAssetUrl("/Banque d_images/Backv2.mp4", "video")} type="video/mp4" />
         </video>
       )}
       
@@ -755,7 +757,7 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
       )}
       {/* Background image - visible only on mobile */}
       <img
-        src="/Banque d_images/backnoiree.png"
+        src={getAssetUrl("/Banque d_images/backnoiree.png", "image")}
         alt="Background"
         className="block md:hidden absolute inset-0 h-full w-full object-cover"
       />
@@ -872,7 +874,7 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
               <p className="text-xs uppercase tracking-[0.6em] text-white/60">cliquez et maintenez pour entrer</p>
               <div className="my-8 sm:my-10 md:my-12 flex flex-col items-center justify-center gap-4 sm:gap-5">
                 <Image
-                  src="/Banque d_images/PIXaura-soft white.png"
+                  src={getAssetUrl("/Banque d_images/PIXaura-soft white.png", "image")}
                   alt="Pixaura logo"
                   width={560}
                   height={168}

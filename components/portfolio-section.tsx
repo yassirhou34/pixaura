@@ -6,6 +6,7 @@ import Link from "next/link"
 import { ArrowRight, ArrowUpRight } from "lucide-react"
 import { Reveal } from "@/components/reveal"
 import { useTranslation } from "@/contexts/translation-context"
+import { getAssetUrl } from "@/lib/cloudinary"
 
 // Optimized mobile video component with lazy loading and smooth playback
 function MobileVideo({ src, index }: { src: string; index: number }) {
@@ -115,8 +116,8 @@ export function PortfolioSection() {
       title: t("portfolio.project1TitleAlt"), // "Expérience de Conduite Nocturne" (FR) / "Night Drive Experience" (EN)
       category: t("portfolio.categoryFilmVideo"),
       tags: [t("portfolio.categoryFilmVideo"), t("portfolio.tagSocial"), t("portfolio.tagEvent")],
-      video: "/Banque d_images/halowen.mp4",
-      poster: "/Banque d_images/Copie de IMG_7149.jpg",
+      video: getAssetUrl("/Banque d_images/halowen.mp4", "video"),
+      poster: getAssetUrl("/Banque d_images/Copie de IMG_7149.jpg", "image"),
     },
     {
       id: 2,
@@ -125,7 +126,7 @@ export function PortfolioSection() {
       category: t("portfolio.categoryPhoto"),
       tags: [t("portfolio.categoryPhoto"), t("portfolio.tagSocial"), t("portfolio.tagBranding")],
       video: null,
-      poster: "/Banque d_images/art1.jpg",
+      poster: getAssetUrl("/Banque d_images/art1.jpg", "image"),
     },
     {
       id: 3,
@@ -133,8 +134,8 @@ export function PortfolioSection() {
       title: t("portfolio.project3TitleAlt2"), // "Résidences Lumière" (FR) / "Light Residences" (EN)
       category: t("portfolio.categoryFilmVideo"),
       tags: [t("portfolio.categoryFilmVideo"), t("portfolio.tagSocial"), t("portfolio.tagCorporate")],
-      video: "/Banque d_images/Immobilier.mp4",
-      poster: "/Banque d_images/Copie de M7_00487.jpg",
+      video: getAssetUrl("/Banque d_images/Immobilier.mp4", "video"),
+      poster: getAssetUrl("/Banque d_images/Copie de M7_00487.jpg", "image"),
     },
     {
       id: 5,
@@ -142,8 +143,8 @@ export function PortfolioSection() {
       title: t("portfolio.project5Title"),
       category: t("portfolio.categoryFilmVideo"),
       tags: [t("portfolio.categoryFilmVideo"), t("portfolio.categoryPhoto"), t("portfolio.tagEvent")],
-      video: "/Banque d_images/rally2.mp4",
-      poster: "/Banque d_images/Copie de M7_02930.jpg",
+      video: getAssetUrl("/Banque d_images/rally2.mp4", "video"),
+      poster: getAssetUrl("/Banque d_images/Copie de M7_02930.jpg", "image"),
     },
     {
       id: 6,
@@ -152,7 +153,7 @@ export function PortfolioSection() {
       category: t("portfolio.categoryPhoto"),
       tags: [t("portfolio.categoryPhoto"), t("portfolio.tagBranding"), t("portfolio.tagDesign")],
       video: null,
-      poster: "/Banque d_images/Copie de M7_09197.jpg",
+      poster: getAssetUrl("/Banque d_images/Copie de M7_09197.jpg", "image"),
     },
     {
       id: 8,
@@ -160,8 +161,8 @@ export function PortfolioSection() {
       title: t("portfolio.project8TitleAlt"), // "Stage d'Immersion MMA" (FR) / "MMA Training Immersion" (EN)
       category: t("portfolio.categoryFilmVideo"),
       tags: [t("portfolio.categoryFilmVideo"), t("portfolio.categoryPhoto"), t("portfolio.tagSocial")],
-      video: "/Banque d_images/stageMMa.mp4",
-      poster: "/Banque d_images/StageUfc.jpg",
+      video: getAssetUrl("/Banque d_images/stageMMa.mp4", "video"),
+      poster: getAssetUrl("/Banque d_images/StageUfc.jpg", "image"),
     },
   ]
   const [activeId, setActiveId] = useState<number>(latestProjects[0]?.id ?? 0)

@@ -10,6 +10,7 @@ import { Footer } from "@/components/footer"
 import { Palette, Car, Building2, Dumbbell, UtensilsCrossed, Briefcase, Users, ArrowRight } from "lucide-react"
 import { SectionDivider } from "@/components/section-divider"
 import { useTranslation } from "@/contexts/translation-context"
+import { getAssetUrl } from "@/lib/cloudinary"
 
 // Types de projets - will be translated in component
 const formatFilters = ["Branding"]
@@ -23,14 +24,14 @@ const projects = [
     category: "Film / Vidéo",
     formats: ["Film / Vidéo", "Social"],
     sector: "Automobile",
-    image: "/Banque d_images/Copie de IMG_7149.jpg",
+    image: getAssetUrl("/Banque d_images/Copie de IMG_7149.jpg", "image"),
     video: null,
     shortDescription: "Dans la nuit noire du 31 octobre, les feuilles orange d'automne tourbillonnent dans l'air froid, emportées par le vent comme des éclats de flamme.",
     gallery: [
-      "/Banque d_images/Copie de M7_00259.jpg",
-      "/Banque d_images/Copie de M7_00197.jpg",
-      "/Banque d_images/Copie de M7_00197.jpg",
-      "/Banque d_images/halowen.mp4",
+      getAssetUrl("/Banque d_images/Copie de M7_00259.jpg", "image"),
+      getAssetUrl("/Banque d_images/Copie de M7_00197.jpg", "image"),
+      getAssetUrl("/Banque d_images/Copie de M7_00197.jpg", "image"),
+      getAssetUrl("/Banque d_images/halowen.mp4", "video"),
     ],
     objective: "Créer une campagne visuelle pour Halloween avec Touraine Cars, combinant ambiance automnale et message de sécurité routière pour une soirée terrifiante mais prudente.",
     creativeIdea: "Ambiance automnale, feuilles orange tourbillonnantes, atmosphère entre deux mondes : celui des vivants et celui qui s'éveille à la tombée du jour. Silhouettes masquées avançant en silence, leurs yeux brillent d'un éclat étrange, presque hypnotique. Esthétique cinématique sombre et poétique.",
@@ -43,14 +44,14 @@ const projects = [
     category: "Photo",
     formats: ["Photo", "Social", "Branding"],
     sector: "Artistes & Créateurs",
-    image: "/Banque d_images/art1.jpg",
+    image: getAssetUrl("/Banque d_images/art1.jpg", "image"),
     video: null,
     shortDescription: "Il est né d'une solitude confinée, dans un carnet taché d'encre et d'anxiété. Chaque soir, pendant que le monde se refermait sur lui-même (Covid 2020), Maxime s'y réfugiait.",
     gallery: [
-      "/Banque d_images/art2.jpg",
-      "/Banque d_images/art3.jpg",
-      "/Banque d_images/art5.jpg",
-      "/Banque d_images/art6.jpg",
+      getAssetUrl("/Banque d_images/art2.jpg", "image"),
+      getAssetUrl("/Banque d_images/art3.jpg", "image"),
+      getAssetUrl("/Banque d_images/art5.jpg", "image"),
+      getAssetUrl("/Banque d_images/art6.jpg", "image"),
     ],
     objective: "Mettre en valeur un projet artistique thérapeutique né du confinement COVID-2020, transformation du stress et de l'anxiété en œuvre d'art, symbole d'une résistance douce.",
     creativeIdea: "Transformation de l'anxiété en art, Mr Microbe comme symbole de résistance douce. Là où d'autres voyaient la peur, Maxime voyait une forme, une matière, un visage : celui de son stress qu'il apprenait enfin à apprivoiser. Son trait devenait thérapie, son microbe miroir.",
@@ -63,14 +64,14 @@ const projects = [
     category: "Film / Vidéo",
     formats: ["Film / Vidéo", "Social"],
     sector: "Immobilier",
-    image: "/Banque d_images/Copie de M7_00487.jpg",
+    image: getAssetUrl("/Banque d_images/Copie de M7_00487.jpg", "image"),
     video: null,
     shortDescription: "Nous avons eu le plaisir d'interviewer plusieurs conseillers immobiliers de chez BSK Immobilier. L'objectif ? Mettre en lumière leur expertise, leur personnalité et leur vision du métier.",
     gallery: [
-      "/Banque d_images/Copie de LDP_5182.jpg",
-      "/Banque d_images/Copie de LDP_5161.jpg",
-      "/Banque d_images/Copie de M7_00487.jpg",
-      "/Banque d_images/Immobilier.mp4",
+      getAssetUrl("/Banque d_images/Copie de LDP_5182.jpg", "image"),
+      getAssetUrl("/Banque d_images/Copie de LDP_5161.jpg", "image"),
+      getAssetUrl("/Banque d_images/Copie de M7_00487.jpg", "image"),
+      getAssetUrl("/Banque d_images/Immobilier.mp4", "video"),
     ],
     objective: "Valoriser l'image de marque BSK Immobilier et créer du contenu authentique qui permet de se démarquer dans un secteur ultra-concurrentiel, en mettant en lumière l'humain derrière le professionnel.",
     creativeIdea: "Mise en lumière de l'humain derrière le professionnel, contenu authentique qui révèle l'expertise, la personnalité et la vision du métier de chaque conseiller immobilier. Approche storytelling humaine et professionnelle.",
@@ -83,13 +84,13 @@ const projects = [
     category: "Film / Vidéo",
     formats: ["Film / Vidéo", "Photo", "Social"],
     sector: "Automobile",
-    image: "/Banque d_images/Copie de M7_02930.jpg",
+    image: getAssetUrl("/Banque d_images/Copie de M7_02930.jpg", "image"),
     video: null,
     shortDescription: "La première boucle du Castles Rally 2025 vient de s'achever… et quelle entrée en matière ! Un plateau d'exception, des paysages à couper le souffle, des routes sinueuses.",
     gallery: [
-      "/Banque d_images/Copie de M7_02930.jpg",
-      "/Banque d_images/Copie de M7_03008.jpg",
-      "/Banque d_images/rally2.mp4",
+      getAssetUrl("/Banque d_images/Copie de M7_02930.jpg", "image"),
+      getAssetUrl("/Banque d_images/Copie de M7_03008.jpg", "image"),
+      getAssetUrl("/Banque d_images/rally2.mp4", "video"),
     ],
     objective: "Documenter la première boucle du Castles Rally 2025, capturer l'énergie et l'excitation de l'événement, mettre en valeur les supercars et les paysages exceptionnels.",
     creativeIdea: "Capturer l'énergie et l'excitation de la première boucle, mettre en valeur les supercars, les paysages à couper le souffle et les routes sinueuses. Ambiance événementielle vibrante et premium.",
@@ -102,13 +103,13 @@ const projects = [
     category: "Photo",
     formats: ["Photo", "Branding"],
     sector: "Restauration",
-    image: "/Banque d_images/Copie de M7_09197.jpg",
+    image: getAssetUrl("/Banque d_images/Copie de M7_09197.jpg", "image"),
     video: null,
     shortDescription: "Pour ce projet, nous nous sommes inspirés directement du cépage roi de Vouvray : le Chenin. Un vin pur, régulier, précis… des qualités que nous avons voulu traduire dans l'aménagement de ce lieu.",
     gallery: [
-      "/Banque d_images/Copie de M7_09197.jpg",
-      "/Banque d_images/Copie de M7_09214.jpg",
-      "/Banque d_images/Copie de M7_09236.jpg",
+      getAssetUrl("/Banque d_images/Copie de M7_09197.jpg", "image"),
+      getAssetUrl("/Banque d_images/Copie de M7_09214.jpg", "image"),
+      getAssetUrl("/Banque d_images/Copie de M7_09236.jpg", "image"),
     ],
     objective: "Créer un aménagement sur-mesure inspiré du cépage Chenin de Vouvray, traduire les qualités du vin (pur, régulier, précis) dans l'aménagement du lieu, valoriser l'histoire et l'âme du vin.",
     creativeIdea: "Inspiration directe du cépage roi de Vouvray : le Chenin. Les lames de bois, toutes de la même taille, rappellent la régularité et la rigueur du travail du viticulteur. Le thème de la barrique s'invite dans la matière et la teinte, en écho à l'élevage traditionnel. Les niches dorées soulignent la pureté et la noblesse du Chenin.",
@@ -121,11 +122,11 @@ const projects = [
     category: "Film / Vidéo",
     formats: ["Film / Vidéo", "Photo", "Social"],
     sector: "Sport & Bien-être",
-    image: "/Banque d_images/StageUfc.jpg",
-    video: "/Banque d_images/stageMMa.mp4",
+    image: getAssetUrl("/Banque d_images/StageUfc.jpg", "image"),
+    video: getAssetUrl("/Banque d_images/stageMMa.mp4", "video"),
     shortDescription: "STAGE BSD + TEAM BSD POUR L'UFC PARIS 4. Retour en images sur la journée du 15 juin avec Benoît Saint-Denis, notre God of War. Plus de 80 participants réunis au MMA FIGHT CLUB GYM.",
     gallery: [
-      "/Banque d_images/stageMMa.mp4",
+      getAssetUrl("/Banque d_images/stageMMa.mp4", "video"),
     ],
     objective: "Documenter le stage MMA avec Benoît Saint-Denis (God of War) et créer du contenu pour promouvoir l'événement UFC Paris, capturer l'énergie et l'exigence du stage.",
     creativeIdea: "Capturer l'énergie et l'exigence du stage, mise en valeur de Benoît Saint-Denis et de la Team BSD, ambiance sportive intense et professionnelle, valorisation du savoir, de l'énergie et de l'exigence.",
@@ -316,11 +317,11 @@ export default function RealisationsPage() {
             retryLoad()
           }}
         >
-          <source src="/Banque d_images/i3.mp4" type="video/mp4" />
+          <source src={getAssetUrl("/Banque d_images/background-web-desktop.mp4", "video")} type="video/mp4" />
         </video>
         {/* Background image - visible only on mobile */}
         <img
-          src="/Banque d_images/backnoiree.png"
+          src={getAssetUrl("/Banque d_images/backnoiree.png", "image")}
           alt="Background"
           className="block md:hidden h-full w-full object-cover"
           style={{

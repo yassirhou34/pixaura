@@ -6,6 +6,7 @@ import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { Play, ArrowRight, Sparkles, Heart, Zap, Users, Globe, Film, Mic, BarChart3, Lightbulb, Target, Rocket } from "lucide-react"
 import { useTranslation } from "@/contexts/translation-context"
+import { getAssetUrl } from "@/lib/cloudinary"
 
 // Structure de données pour les épisodes
 interface Episode {
@@ -99,7 +100,7 @@ export default function HumindPage() {
   // AGGRESSIVE PRELOAD - Preload video in hidden element before main video
   useEffect(() => {
     const preloadVideo = document.createElement('video')
-    preloadVideo.src = '/Banque d_images/noir.mp4'
+    preloadVideo.src = getAssetUrl('/Banque d_images/noir.mp4', 'video')
     preloadVideo.preload = 'auto'
     preloadVideo.muted = true
     preloadVideo.playsInline = true
@@ -124,7 +125,7 @@ export default function HumindPage() {
       const wasPreloaded = sessionStorage.getItem('humindVideoPreloaded') === 'true'
       
       // Set video source and force immediate load
-      video.src = '/Banque d_images/noir.mp4'
+      video.src = getAssetUrl('/Banque d_images/noir.mp4', 'video')
       video.preload = 'auto'
       
       // If preloaded, video should be ready faster
@@ -229,7 +230,7 @@ export default function HumindPage() {
           preload="auto"
           muted
           playsInline
-          src="/Banque d_images/noir.mp4"
+          src={getAssetUrl("/Banque d_images/noir.mp4", "video")}
         />
         <video
           ref={videoRef}
@@ -299,11 +300,11 @@ export default function HumindPage() {
             }
           }}
         >
-          <source src="/Banque d_images/noir.mp4" type="video/mp4" />
+          <source src={getAssetUrl("/Banque d_images/noir.mp4", "video")} type="video/mp4" />
         </video>
         {/* Background image - visible only on mobile */}
         <img
-          src="/Banque d_images/backnoiree.png"
+          src={getAssetUrl("/Banque d_images/backnoiree.png", "image")}
           alt="Background"
           className="block md:hidden h-full w-full object-cover"
           style={{
@@ -369,11 +370,11 @@ export default function HumindPage() {
                     <video
                       ref={stradaleVideoRef}
                       id="stradale-video-player"
-                      src="/Banque d_images/pod1.mp4"
+                      src={getAssetUrl("/Banque d_images/pod1.mp4", "video")}
                       controls
                       playsInline
                       className="absolute inset-0 h-full w-full object-contain"
-                      poster="/Banque d_images/Copie de M7_03194.jpg"
+                      poster={getAssetUrl("/Banque d_images/Copie de M7_03194.jpg", "image")}
                     />
 
                     {/* Back button over video - top-left, styled like white pill CTA */}
@@ -393,7 +394,7 @@ export default function HumindPage() {
                     {/* Background image */}
                     <div className="absolute inset-0">
                       <Image
-                        src="/Banque d_images/Copie de M7_03194.jpg"
+                        src={getAssetUrl("/Banque d_images/Copie de M7_03194.jpg", "image")}
                         alt="Stradale Events x Humind"
                         fill
                         priority

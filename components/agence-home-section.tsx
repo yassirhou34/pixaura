@@ -6,6 +6,7 @@ import Link from "next/link"
 import { Sparkles, ArrowRight } from "lucide-react"
 import { Reveal } from "@/components/reveal"
 import { useTranslation } from "@/contexts/translation-context"
+import { getAssetUrl } from "@/lib/cloudinary"
 
 export function AgenceHomeSection() {
   const { t, language } = useTranslation()
@@ -35,14 +36,14 @@ export function AgenceHomeSection() {
     {
       name: t("agenceHome.franckName"),
       role: t("agenceHome.franckRole"),
-      image: "/Banque d_images/Copie de M7_03372.jpg",
+      image: getAssetUrl("/Banque d_images/Copie de M7_03372.jpg", "image"),
       description: t("agenceHome.franckDesc"),
       vision: t("agenceHome.franckVision"),
     },
     {
       name: t("agenceHome.julienName"),
       role: t("agenceHome.julienRole"),
-      image: "/Banque d_images/Copie de M7_01248.jpg",
+      image: getAssetUrl("/Banque d_images/Copie de M7_01248.jpg", "image"),
       description: t("agenceHome.julienDesc"),
       vision: t("agenceHome.julienVision"),
     },
