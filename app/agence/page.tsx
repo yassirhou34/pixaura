@@ -5,6 +5,7 @@ import Image from "next/image"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { Sparkles, Target, BarChart3, Users, GraduationCap, Film, Shield, TrendingUp, Globe } from "lucide-react"
+import { getAssetUrl } from "@/lib/cloudinary"
 
 export default function AgencePage() {
   const [mounted, setMounted] = useState(false)
