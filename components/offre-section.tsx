@@ -104,15 +104,12 @@ export function OffreSection() {
         t("offreHome.signatureFeature1"),
         t("offreHome.signatureFeature2"),
         t("offreHome.signatureFeature3"),
-        t("offreHome.signatureFeature4"),
-        t("offreHome.signatureFeature5"),
-        t("offreHome.signatureFeature6"),
-      ],
+      ].filter(f => f && f.trim() !== ""), // Filtrer les features vides
       gradient: "from-amber-500 via-yellow-400 to-amber-600",
       glow: "rgba(245, 158, 11, 0.3)",
       accent: "amber",
       premium: true,
-      badge: t("offreHome.premium")
+      badge: t("offreHome.signatureName")
     }
   ]
   const [mounted, setMounted] = useState(false)
@@ -309,25 +306,25 @@ export function OffreSection() {
 
                 {/* Enhanced Content Section */}
                 <div className="flex flex-col gap-5 px-8 py-10 text-white flex-1">
-                  {/* Description - Fixed height for alignment */}
-                  <div className="space-y-2 text-center h-[120px] flex flex-col justify-center flex-shrink-0">
+                  {/* Description - Fixed height for alignment - Hauteur fixe pour aligner toutes les descriptions */}
+                  <div className="space-y-2 text-center h-[180px] md:h-[200px] flex flex-col justify-center flex-shrink-0">
                     <p className="text-sm font-medium text-white/60 md:text-base leading-relaxed text-center">
                       {pack.description}
                     </p>
                   </div>
 
                   {/* Price Section - Premium Design - Fixed height for alignment */}
-                  <div className="relative overflow-hidden rounded-2xl border border-white/20 bg-white/5 p-6 backdrop-blur-sm transition-all duration-500 group-hover:border-white/30 group-hover:bg-white/10 h-[120px] flex items-center justify-center flex-shrink-0">
+                  <div className="relative overflow-hidden rounded-2xl border border-white/20 bg-white/5 p-6 backdrop-blur-sm transition-all duration-500 group-hover:border-white/30 group-hover:bg-white/10 min-h-[140px] flex flex-col items-center justify-center flex-shrink-0">
                     <div className={`absolute inset-0 bg-gradient-to-br ${pack.gradient} opacity-0 transition-opacity duration-500 group-hover:opacity-10`} />
-                    <div className="relative z-10 space-y-1 text-center">
-                      <div className="text-2xl font-black text-white md:text-3xl">{pack.price}</div>
-                      <div className="text-xs font-semibold text-white/50 md:text-sm uppercase tracking-wide">{pack.priceDetail}</div>
+                    <div className="relative z-10 space-y-2 text-center w-full">
+                      <div className="text-2xl font-black text-white md:text-3xl leading-tight">{pack.price}</div>
+                      <div className="text-xs font-semibold text-white/50 md:text-sm uppercase tracking-wide mt-2">{pack.priceDetail}</div>
                     </div>
                   </div>
 
                   {/* Features List - Compact Premium Design */}
                   <div className="space-y-3 pt-2 flex-1">
-                    {pack.features.map((feature, idx) => (
+                    {pack.features.filter(f => f && f.trim() !== "").map((feature, idx) => (
                       <div
                         key={idx}
                         className="flex items-start gap-3 text-sm text-white/70 transition-colors duration-300 group-hover:text-white/90"

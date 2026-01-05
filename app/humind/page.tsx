@@ -992,6 +992,14 @@ export default function HumindPage() {
                 {t("humindPage.pixauraDescription")}
               </p>
 
+              {/* Important Notice */}
+              <div className="relative rounded-[24px] border border-white/20 bg-white/5 backdrop-blur-xl p-8 shadow-[0_8px_32px_rgba(0,0,0,0.4)]">
+                <div className="absolute inset-0 rounded-[24px] bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-pink-500/10 opacity-50" />
+                <p className="relative text-base text-white/80 max-w-3xl leading-[1.8] font-light whitespace-pre-line">
+                  {t("humindPage.pixauraImportant")}
+                </p>
+              </div>
+
               <div className="grid md:grid-cols-3 gap-6">
                 {[
                   { icon: Film, title: t("humindPage.narrationTitle"), desc: t("humindPage.narrationDesc"), gradient: "from-blue-500/40 via-cyan-500/40 to-sky-500/40", iconGlow: "rgba(59,130,246,0.6)" },

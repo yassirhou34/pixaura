@@ -12,7 +12,7 @@ type ImmersiveIntroProps = {
 }
 
 const LOADING_DURATION = 2600
-const HOLD_DURATION = 2400
+const HOLD_DURATION = 900
 const RESET_DURATION = 520
 const START_TRANSITION_DELAY = 600
 
@@ -59,6 +59,7 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
   const [holdPulse, setHoldPulse] = useState(0)
   const [trailPositions, setTrailPositions] = useState<{ id: number; progress: number }[]>([])
   const lastTrailProgressRef = useRef(0)
+  const [flashActive, setFlashActive] = useState(false)
 
   const displayLoading = useMemo(() => Math.round(loadingProgress), [loadingProgress])
   const displayHold = useMemo(() => Math.round(holdProgress), [holdProgress])
@@ -101,6 +102,8 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
   const finishIntro = useCallback(() => {
     setHoldProgress(100)
     setStage("finishing")
+    // Désactiver le flash à la fin
+    setFlashActive(false)
     setTimeout(() => setIsFadingOut(true), 260)
     setTimeout(() => {
       setStage("hidden")
@@ -165,6 +168,8 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
       holdTrailRef.current = requestAnimationFrame(trailLoop)
     }
     holdTrailRef.current = requestAnimationFrame(trailLoop)
+    // Activer le flash lumineux pendant toute la durée de l'appui
+    setFlashActive(true)
   }, [animateHold, clearHoldAnimations])
 
   const cancelHold = useCallback(() => {
@@ -178,6 +183,8 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
     if (holdTrailRef.current) cancelAnimationFrame(holdTrailRef.current)
     setTrailPositions([])
     lastTrailProgressRef.current = 0
+    // Désactiver le flash quand on relâche
+    setFlashActive(false)
   }, [animateReset, clearHoldAnimations, holdProgress])
 
   useEffect(() => {
@@ -869,23 +876,72 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
 
       {(stage === "hold" || stage === "finishing") && (
         <div className="relative z-10 flex h-full w-full flex-col justify-between px-8 py-10 text-white md:px-16">
-          <main className="flex flex-1 flex-col items-center justify-center gap-14">
-            <div className="text-center">
-              <p className="text-xs uppercase tracking-[0.6em] text-white/60">cliquez et maintenez pour entrer</p>
-              <div className="my-8 sm:my-10 md:my-12 flex flex-col items-center justify-center gap-4 sm:gap-5">
-                <Image
-                  src={getAssetUrl("/Banque d_images/PIXaura-soft white.png", "image")}
-                  alt="Pixaura logo"
-                  width={560}
-                  height={168}
-                  className="h-[clamp(68px,12vw,140px)] w-auto object-contain drop-shadow-[0_0_30px_rgba(0,0,0,0.45)]"
-                  priority
+          {/* Flash lumineux amélioré pendant l'appui */}
+          {flashActive && (
+            <>
+              {/* Flash principal - intensité variable selon la progression */}
+              <div
+                className="pointer-events-none fixed inset-0 z-[10000] transition-opacity duration-200"
+                style={{
+                  opacity: 0.3 + (holdProgress / 100) * 0.4,
+                  background: `radial-gradient(circle at center, 
+                    rgba(255,255,255,${0.6 + (holdProgress / 100) * 0.3}) 0%, 
+                    rgba(100,180,255,${0.5 + (holdProgress / 100) * 0.3}) 15%, 
+                    rgba(150,100,255,${0.4 + (holdProgress / 100) * 0.2}) 35%, 
+                    rgba(50,150,255,${0.2 + (holdProgress / 100) * 0.2}) 50%, 
+                    transparent 75%)`,
+                }}
+              />
+              {/* Halo pulsant autour du bouton */}
+              <div
+                className="pointer-events-none fixed inset-0 z-[9999] flex items-center justify-center transition-opacity duration-200"
+                style={{
+                  opacity: 0.4 + (holdProgress / 100) * 0.3,
+                }}
+              >
+                <div
+                  className="absolute rounded-full blur-3xl transition-all duration-300"
+                  style={{
+                    width: `${200 + (holdProgress / 100) * 300}px`,
+                    height: `${200 + (holdProgress / 100) * 300}px`,
+                    background: `radial-gradient(circle, 
+                      rgba(255,255,255,${0.8 + (holdProgress / 100) * 0.2}) 0%, 
+                      rgba(100,200,255,${0.7 + (holdProgress / 100) * 0.2}) 30%, 
+                      rgba(150,100,255,${0.5 + (holdProgress / 100) * 0.2}) 60%, 
+                      transparent 100%)`,
+                    animation: 'pulse 1.5s ease-in-out infinite',
+                  }}
                 />
-                <span className="text-[clamp(12px,2vw,17px)] font-normal uppercase tracking-[0.45em] text-white/70 mt-1 sm:mt-2">
-                  Agence de publicité française
-                </span>
               </div>
-            </div>
+              {/* Effet de lueur supplémentaire */}
+              <div
+                className="pointer-events-none fixed inset-0 z-[9998] transition-opacity duration-200"
+                style={{
+                  opacity: 0.2 + (holdProgress / 100) * 0.25,
+                  background: `conic-gradient(from 0deg at 50% 50%, 
+                    rgba(255,255,255,${0.3 + (holdProgress / 100) * 0.2}) 0deg, 
+                    rgba(100,200,255,${0.25 + (holdProgress / 100) * 0.15}) 90deg, 
+                    rgba(150,100,255,${0.2 + (holdProgress / 100) * 0.15}) 180deg, 
+                    rgba(255,255,255,${0.3 + (holdProgress / 100) * 0.2}) 360deg)`,
+                  filter: 'blur(60px)',
+                }}
+              />
+            </>
+          )}
+          <header className="flex flex-col items-center justify-center gap-4 sm:gap-5 pt-8 sm:pt-10 md:pt-12">
+            <Image
+              src={getAssetUrl("/Banque d_images/PIXaura-soft white.png", "image")}
+              alt="Pixaura logo"
+              width={560}
+              height={168}
+              className="h-[clamp(80px,15vw,160px)] w-auto object-contain drop-shadow-[0_0_30px_rgba(0,0,0,0.45)]"
+              priority
+            />
+            <span className="text-[clamp(14px,2.5vw,20px)] font-normal uppercase tracking-[0.45em] text-white/70 mt-1 sm:mt-2 text-center">
+              Agence de publicité française
+            </span>
+          </header>
+          <main className="flex flex-1 flex-col items-center justify-center gap-14">
 
             <button
               onMouseDown={startHold}
@@ -989,27 +1045,22 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
               <div className="pointer-events-none absolute inset-[34px] rounded-full border border-white/10 opacity-20 animate-[spin_18s_linear_infinite_reverse]" />
             </button>
 
-            <div className="flex flex-col items-center gap-4 text-[11px] uppercase tracking-[0.35em] text-white/65">
-              <span className="text-center sm:text-left">maintenir pour continuer • relâcher pour réinitialiser</span>
+            <div className="flex flex-col items-center gap-2 text-[11px] uppercase tracking-[0.35em] text-white/65">
               <div className="flex items-center gap-4 text-white/75">
                 <span>progression</span>
                 <span>{displayHold.toString().padStart(3, "0")}%</span>
               </div>
-            </div>
-          </main>
-
-          <footer className="flex flex-col items-center gap-6 text-[11px] uppercase tracking-[0.35em] text-white/65">
-            <div className="flex items-center gap-4">
-              <span>experience</span>
-              <div className="h-[2px] w-32 overflow-hidden rounded-full bg-white/20">
-                <div
-                  className="h-full w-full origin-left bg-white transition-transform duration-100"
-                  style={{ transform: `scaleX(${Math.max(displayHold, 2) / 100})` }}
-                />
+              <div className="flex items-center gap-4">
+                <span>experience</span>
+                <div className="h-[2px] w-32 overflow-hidden rounded-full bg-white/20">
+                  <div
+                    className="h-full w-full origin-left bg-white transition-transform duration-100"
+                    style={{ transform: `scaleX(${Math.max(displayHold, 2) / 100})` }}
+                  />
+                </div>
               </div>
             </div>
-            <span className="text-white/50">Débloquez l&apos;univers immersif Pixaura</span>
-          </footer>
+          </main>
         </div>
       )}
     </div>

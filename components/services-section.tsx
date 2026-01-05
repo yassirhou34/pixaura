@@ -1,11 +1,178 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { ChevronDown, ChevronUp, TrendingUp, Target, Palette, DollarSign } from "lucide-react"
+import { ChevronDown, ChevronUp, TrendingUp, Target, Palette, DollarSign, ChevronLeft, ChevronRight } from "lucide-react"
 import { Reveal } from "@/components/reveal"
 import { useTranslation } from "@/contexts/translation-context"
+
+function formatDescription(text: string) {
+  // Split by double newlines to separate sections
+  const sections = text.split(/\n\n+/)
+  
+  return (
+    <div className="space-y-6">
+      {sections.map((section, index) => {
+        const trimmed = section.trim()
+        // Check if it's a title (all caps, no lowercase letters, and relatively short)
+        const isTitle = trimmed === trimmed.toUpperCase() && 
+                        trimmed.length < 50 && 
+                        !trimmed.includes('.') &&
+                        trimmed.split(' ').length < 8
+        
+        if (isTitle) {
+          return (
+            <h3 
+              key={index}
+              className="text-center text-xl sm:text-2xl md:text-3xl font-black uppercase tracking-wider text-white mb-4 mt-6"
+            >
+              {trimmed}
+            </h3>
+          )
+        }
+        
+        return (
+          <p key={index} className="text-justify leading-relaxed">
+            {trimmed}
+          </p>
+        )
+      })}
+    </div>
+  )
+}
+
+function PhotoSlider() {
+  const images = [
+    "/Banque d_images/Copie de M7_00197.jpg", // Position 1
+    "/Banque d_images/Copie de M7_00259.jpg", // Position 2
+    "/Banque d_images/Copie de LDP_5182.jpg", // Position 3
+    "/Banque d_images/Copie de DSC04614.jpg",
+    "/Banque d_images/Copie de DSC04678.jpg",
+    "/Banque d_images/Copie de DSC04796.jpg", // Position 6 - remplacée
+    "/Banque d_images/Copie de M7_09197.jpg",
+    "/Banque d_images/Copie de M7_09236.jpg", // Position 8 - remplacée
+  ]
+
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [imageErrors, setImageErrors] = useState<Set<number>>(new Set())
+  const intervalRef = useRef<NodeJS.Timeout | null>(null)
+
+  const handleImageError = (index: number) => {
+    setImageErrors((prev) => new Set(prev).add(index))
+  }
+
+  // Auto-play functionality
+  useEffect(() => {
+    intervalRef.current = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length)
+    }, 4000) // Change image every 4 seconds
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+      }
+    }
+  }, [images.length])
+
+  const goToPrevious = () => {
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length)
+    // Reset auto-play timer
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current)
+    }
+    intervalRef.current = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length)
+    }, 4000)
+  }
+
+  const goToNext = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length)
+    // Reset auto-play timer
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current)
+    }
+    intervalRef.current = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length)
+    }, 4000)
+  }
+
+  const goToSlide = (index: number) => {
+    setCurrentIndex(index)
+    // Reset auto-play timer
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current)
+    }
+    intervalRef.current = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length)
+    }, 4000)
+  }
+
+  return (
+    <div className="relative w-full max-w-6xl mx-auto">
+      {/* Slider Container */}
+      <div className="relative h-[400px] sm:h-[500px] md:h-[600px] rounded-2xl sm:rounded-3xl overflow-hidden border border-white/20 bg-white/5 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.4)]">
+        {/* Images */}
+        <div className="relative w-full h-full">
+          {images.map((src, index) => {
+            if (imageErrors.has(index)) {
+              return null // Ne pas afficher les images en erreur
+            }
+            return (
+              <div
+                key={index}
+                className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
+                  index === currentIndex ? "opacity-100 z-10" : "opacity-0 z-0"
+                }`}
+              >
+                <img
+                  src={src}
+                  alt={`Photo ${index + 1}`}
+                  className="w-full h-full object-cover"
+                  onError={() => handleImageError(index)}
+                />
+                {/* Gradient overlay for better text readability if needed */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+              </div>
+            )
+          })}
+        </div>
+
+        {/* Navigation Arrows */}
+        <button
+          onClick={goToPrevious}
+          className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 transition-all duration-300 hover:scale-110"
+          aria-label="Photo précédente"
+        >
+          <ChevronLeft className="w-6 h-6 text-white" />
+        </button>
+        <button
+          onClick={goToNext}
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 transition-all duration-300 hover:scale-110"
+          aria-label="Photo suivante"
+        >
+          <ChevronRight className="w-6 h-6 text-white" />
+        </button>
+
+        {/* Dots Indicator */}
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+          {images.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => goToSlide(index)}
+              className={`h-2 rounded-full transition-all duration-300 ${
+                index === currentIndex
+                  ? "w-8 bg-white"
+                  : "w-2 bg-white/40 hover:bg-white/60"
+              }`}
+              aria-label={`Aller à la photo ${index + 1}`}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
 
 export function ServicesSection() {
   const { t } = useTranslation()
@@ -80,16 +247,16 @@ const offers = [
           <div className="absolute inset-y-0 -left-20 hidden w-1/3 bg-[radial-gradient(circle_at_center,_rgba(0,115,255,0.35),_transparent_70%)] opacity-70 md:block" />
           
           {/* Image - Right Side */}
-          <div className="absolute top-0 right-0 h-full w-full md:w-1/3 overflow-hidden rounded-r-[24px] sm:rounded-r-[32px] md:rounded-r-[40px] opacity-30 md:opacity-50">
+          <div className="absolute top-0 right-0 h-full w-full md:w-1/3 overflow-hidden rounded-r-[24px] sm:rounded-r-[32px] md:rounded-r-[40px] opacity-30 md:opacity-80">
             <Image
               src="/Banque d_images/Copie de M7_00487.jpg"
               alt="Nos expertises"
               fill
-              className="object-cover object-center"
+              className="object-cover object-center brightness-110 md:brightness-125 contrast-105 md:contrast-110"
               sizes="(max-width: 768px) 100vw, 33vw"
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-l from-black/90 via-black/60 to-black/40 md:from-transparent md:via-black/40 md:to-black/80" />
+            <div className="absolute inset-0 bg-gradient-to-l from-black/90 via-black/60 to-black/40 md:from-transparent md:via-black/20 md:to-black/50" />
           </div>
 
           <div className="relative flex flex-col gap-6 sm:gap-8 md:flex-row md:items-end md:justify-between z-10">
@@ -100,9 +267,9 @@ const offers = [
               <h2 className="max-w-2xl text-2xl sm:text-3xl md:text-4xl lg:text-[52px] font-black leading-tight">
                 {t("services.title")}
               </h2>
-              <p className="max-w-2xl text-sm sm:text-base text-white/90 md:text-white/80 md:text-lg leading-relaxed whitespace-pre-line text-justify">
-                {t("services.description")}
-              </p>
+              <div className="max-w-2xl text-sm sm:text-base text-white/90 md:text-white/80 md:text-lg leading-relaxed">
+                {formatDescription(t("services.description"))}
+              </div>
             </Reveal>
           </div>
 
@@ -164,6 +331,11 @@ const offers = [
           </Reveal>
         </div>
 
+        {/* Photo Slider - Below the main card */}
+        <Reveal delay={200} className="relative z-10 mt-8 sm:mt-12">
+          <PhotoSlider />
+        </Reveal>
+
         {/* Section Bénéfices Clients - Design Innovant Moderne */}
         <Reveal delay={400} className="relative z-10 mt-16 sm:mt-20">
           <div className="mb-12 text-center">
@@ -191,13 +363,22 @@ const offers = [
                 imagePosition: "left"
               },
               {
+                icon: DollarSign,
+                label: t("services.benefit4Label"),
+                title: t("services.benefit4Title"),
+                description: t("services.benefit4Desc"),
+                image: "/Banque d_images/Copie de DSC04796.jpg",
+                delay: 200,
+                imagePosition: "right"
+              },
+              {
                 icon: TrendingUp,
                 label: t("services.benefit2Label"),
                 title: t("services.benefit2Title"),
                 description: t("services.benefit2Desc"),
                 image: "/Banque d_images/Copie de M7_00487.jpg",
-                delay: 200,
-                imagePosition: "right"
+                delay: 300,
+                imagePosition: "left"
               },
               {
                 icon: Palette,
@@ -205,15 +386,6 @@ const offers = [
                 title: t("services.benefit3Title"),
                 description: t("services.benefit3Desc"),
                 image: "/Banque d_images/art2.jpg",
-                delay: 300,
-                imagePosition: "left"
-              },
-              {
-                icon: DollarSign,
-                label: t("services.benefit4Label"),
-                title: t("services.benefit4Title"),
-                description: t("services.benefit4Desc"),
-                image: "/Banque d_images/Copie de DSC04796.jpg",
                 delay: 400,
                 imagePosition: "right"
               }
@@ -222,8 +394,8 @@ const offers = [
                 <div className={`group relative flex h-full w-full overflow-hidden rounded-2xl sm:rounded-3xl border border-white/15 bg-black/40 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.4)] transition-all duration-700 hover:border-white/25 hover:shadow-[0_30px_80px_rgba(0,0,0,0.5)] ${
                   benefit.imagePosition === 'left' ? 'md:flex-row' : 'md:flex-row-reverse'
                 } flex-col`}>
-                  {/* Image Section - Hauteur fixe plus grande et identique pour toutes les cartes - Largeur réduite pour plus d'espace texte */}
-                  <div className="relative w-full md:w-[35%] h-72 md:h-[400px] md:min-h-[400px] md:max-h-[400px] overflow-hidden flex-shrink-0">
+                  {/* Image Section - Hauteur fixe en mobile, s'étend sur toute la hauteur en desktop */}
+                  <div className="relative w-full md:w-[35%] h-72 sm:h-80 md:h-full overflow-hidden flex-shrink-0">
                     <Image
                       src={benefit.image}
                       alt={benefit.title}
@@ -252,14 +424,14 @@ const offers = [
                   </div>
                   
                   {/* Content Section - Alignement STRICT avec hauteur fixe pour les titres - Largeur maximale pour aération */}
-                  <div className="relative w-full md:w-[65%] flex flex-col bg-gradient-to-br from-white/5 via-white/3 to-transparent">
-                    <div className="pt-8 pb-8 px-8 md:pt-10 md:pb-10 md:px-10 flex-1 flex flex-col">
+                  <div className="relative w-full md:w-[65%] flex flex-col bg-gradient-to-br from-white/5 via-white/3 to-transparent min-h-0">
+                    <div className="pt-8 pb-8 px-8 md:pt-10 md:pb-10 md:px-10 flex-1 flex flex-col min-h-0">
                       {/* Titre avec hauteur fixe pour 2 lignes maximum - alignement parfait - sans troncature - taille ajustée */}
-                      <h3 className="text-2xl md:text-[1.75rem] font-bold leading-[1.2] text-white md:min-h-[4.5rem] md:max-h-[4.5rem] md:flex md:items-start md:mb-4 whitespace-pre-line">
+                      <h3 className="text-2xl md:text-[1.75rem] font-bold leading-[1.2] text-white md:mb-4 whitespace-pre-line">
                         {benefit.title}
                       </h3>
                       {/* Paragraphe avec espacement fixe */}
-                      <p className="text-base text-white/75 leading-relaxed group-hover:text-white/85 transition-colors duration-500">
+                      <p className="text-base text-white/75 leading-relaxed group-hover:text-white/85 transition-colors duration-500 flex-1 overflow-y-auto">
                         {benefit.description}
                       </p>
                     </div>
