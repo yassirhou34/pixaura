@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
+import Link from "next/link"
 import { Check, ArrowRight } from "lucide-react"
 import { Reveal } from "@/components/reveal"
 import { OffreModal } from "@/components/offre-modal"
@@ -284,7 +285,10 @@ export function OffreSection() {
         <div className="grid gap-8 md:grid-cols-3 md:items-stretch">
           {packs.map((pack, index) => (
             <Reveal key={pack.name} delay={index * 100}>
-              <div className="group relative overflow-hidden rounded-3xl border border-white/15 bg-white/5 text-white backdrop-blur-xl transition duration-700 ease-out hover:-translate-y-3 hover:scale-[1.01] hover:border-white/25 hover:bg-white/10 hover:shadow-[0_45px_140px_rgba(0,0,0,0.55)] h-full flex flex-col">
+              <Link 
+                href="#rendez-vous"
+                className="group relative overflow-hidden rounded-3xl border border-white/15 bg-white/5 text-white backdrop-blur-xl transition duration-700 ease-out hover:-translate-y-3 hover:scale-[1.01] hover:border-white/25 hover:bg-white/10 hover:shadow-[0_45px_140px_rgba(0,0,0,0.55)] h-full flex flex-col cursor-pointer"
+              >
                 {/* Premium Glow Effects - Style Réalisations */}
                 <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-700 ease-out group-hover:opacity-100">
                   <div className={`absolute -inset-6 rounded-[40px] bg-gradient-to-r ${pack.gradient} blur-3xl animate-pulse`} style={{ opacity: 0.2 }} />
@@ -335,7 +339,7 @@ export function OffreSection() {
                     ))}
                   </div>
                 </div>
-              </div>
+              </Link>
             </Reveal>
           ))}
         </div>

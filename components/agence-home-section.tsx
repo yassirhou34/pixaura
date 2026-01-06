@@ -8,6 +8,21 @@ import { Reveal } from "@/components/reveal"
 import { useTranslation } from "@/contexts/translation-context"
 import { getAssetUrl } from "@/lib/cloudinary"
 
+// Instagram Icon Component
+const InstagramIcon = ({ className }: { className?: string }) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+  >
+    <path
+      d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"
+      fill="currentColor"
+    />
+  </svg>
+)
+
 export function AgenceHomeSection() {
   const { t, language } = useTranslation()
   
@@ -39,6 +54,7 @@ export function AgenceHomeSection() {
       image: getAssetUrl("/Banque d_images/Copie de M7_03372.jpg", "image"),
       description: t("agenceHome.franckDesc"),
       vision: t("agenceHome.franckVision"),
+      instagram: "https://www.instagram.com/franck_kgsman/",
     },
     {
       name: t("agenceHome.julienName"),
@@ -46,29 +62,10 @@ export function AgenceHomeSection() {
       image: getAssetUrl("/Banque d_images/Copie de M7_01248.jpg", "image"),
       description: t("agenceHome.julienDesc"),
       vision: t("agenceHome.julienVision"),
+      instagram: "https://www.instagram.com/_julienhochet/",
     },
   ]
 
-  const commitments = [
-    {
-      badge: t("agenceHome.commitment1Badge"),
-      title: t("agenceHome.commitment1Title"),
-      description: t("agenceHome.commitment1Desc"),
-      gradient: "from-blue-500 via-cyan-500 to-blue-600",
-    },
-    {
-      badge: t("agenceHome.commitment2Badge"),
-      title: t("agenceHome.commitment2Title"),
-      description: t("agenceHome.commitment2Desc"),
-      gradient: "from-purple-500 via-pink-500 to-purple-600",
-    },
-    {
-      badge: t("agenceHome.commitment3Badge"),
-      title: t("agenceHome.commitment3Title"),
-      description: t("agenceHome.commitment3Desc"),
-      gradient: "from-emerald-500 via-teal-500 to-emerald-600",
-    },
-  ]
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -205,7 +202,7 @@ export function AgenceHomeSection() {
                 </div>
 
                 {/* Content Section - Below Image, Protected Space */}
-                <div className="relative flex flex-col gap-5 px-6 sm:px-8 py-6 sm:py-8 z-10 bg-gradient-to-b from-black/95 via-black/98 to-black/95 -mt-8 rounded-t-[32px] sm:rounded-t-[40px]">
+                <div className="relative flex flex-col gap-5 px-6 sm:px-8 py-6 sm:py-8 pb-8 sm:pb-10 z-10 bg-gradient-to-b from-black/95 via-black/98 to-black/95 -mt-8 rounded-t-[32px] sm:rounded-t-[40px]">
                   {/* Name - Large & Visible, No Face Overlap */}
                   <h3 className="text-3xl sm:text-4xl font-black leading-[1.1] text-white tracking-tight mb-1" style={{ 
                     fontFamily: 'Montserrat, sans-serif',
@@ -241,13 +238,46 @@ export function AgenceHomeSection() {
                   
                   {/* Vision - Separated Section */}
                   <div className="pt-4 border-t border-white/20">
-                    <p className="text-sm sm:text-base text-white/85 leading-relaxed font-normal" style={{ 
+                    <p className="text-sm sm:text-base text-white/85 leading-relaxed font-normal mb-6" style={{ 
                       fontFamily: 'Montserrat, sans-serif',
                       textShadow: '0 2px 12px rgba(0,0,0,0.6), 0 1px 3px rgba(0,0,0,0.8)',
                       lineHeight: '1.75',
                     }}>
                       {founder.vision}
                     </p>
+                  </div>
+                  
+                  {/* Instagram Section - Enhanced with Separator */}
+                  <div className="mt-6 pt-6 border-t border-white/10 flex items-center justify-end gap-4">
+                    {/* Elegant Separator Line */}
+                    <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent">
+                      <div className="h-px w-16 bg-gradient-to-r from-purple-400/60 via-pink-400/60 to-orange-400/60 blur-sm ml-auto" />
+                    </div>
+                    
+                    {/* Instagram Button - Enhanced */}
+                    <a
+                      href={founder.instagram}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group/ig relative inline-flex items-center gap-2.5 px-5 py-3 rounded-full bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 text-white font-semibold text-sm transition-all duration-300 hover:scale-110 hover:shadow-[0_0_35px_rgba(225,48,108,0.7)] overflow-hidden backdrop-blur-sm"
+                      style={{ fontFamily: 'Montserrat, sans-serif' }}
+                    >
+                      {/* Animated gradient background */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 opacity-100 group-hover/ig:opacity-0 transition-opacity duration-300" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 opacity-0 group-hover/ig:opacity-100 transition-opacity duration-300" />
+                      
+                      {/* Shine effect */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover/ig:translate-x-full transition-transform duration-700" />
+                      
+                      {/* Icon */}
+                      <InstagramIcon className="w-4 h-4 sm:w-5 sm:h-5 relative z-10" />
+                      
+                      {/* Text */}
+                      <span className="relative z-10 hidden sm:inline">Instagram</span>
+                      
+                      {/* Glow effect */}
+                      <div className="absolute -inset-1.5 bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 rounded-full blur-md opacity-50 group-hover/ig:opacity-80 transition-opacity duration-300 -z-10" />
+                    </a>
                   </div>
                 </div>
 
@@ -298,7 +328,7 @@ export function AgenceHomeSection() {
                   </div>
                   
                   {/* Content Container - Right Side (58%) */}
-                  <div className="relative w-[58%] p-10 flex flex-col justify-start z-10">
+                  <div className="relative w-[58%] p-10 pb-12 flex flex-col justify-start z-10">
                     {/* Enhanced Background for Better Text Contrast */}
                     <div className="absolute inset-0 bg-gradient-to-br from-black/40 via-black/30 to-black/40 rounded-r-[32px]" />
                     <div className="absolute inset-0 bg-gradient-to-br from-black/20 via-black/15 to-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-r-[32px]" />
@@ -339,13 +369,46 @@ export function AgenceHomeSection() {
                     
                     {/* Vision - Premium Separated Section */}
                     <div className="relative pt-6 border-t border-white/25">
-                      <p className="min-h-[6.5rem] line-clamp-4 text-white text-[14px] leading-[1.8] font-normal" style={{ 
+                      <p className="min-h-[6.5rem] line-clamp-4 text-white text-[14px] leading-[1.8] font-normal mb-6" style={{ 
                         fontFamily: 'Montserrat, sans-serif',
                         lineHeight: '1.8',
                         textShadow: '0 2px 18px rgba(0,0,0,0.55), 0 1px 3px rgba(0,0,0,0.75)',
                       }}>
                         {founder.vision}
                       </p>
+                      
+                      {/* Instagram Section - Enhanced with Separator */}
+                      <div className="mt-6 pt-6 border-t border-white/15 flex items-center justify-end gap-4">
+                        {/* Elegant Separator Line */}
+                        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent">
+                          <div className="h-px w-20 bg-gradient-to-r from-purple-400/60 via-pink-400/60 to-orange-400/60 blur-sm ml-auto" />
+                        </div>
+                        
+                        {/* Instagram Button - Enhanced */}
+                        <a
+                          href={founder.instagram}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="group/ig relative inline-flex items-center gap-2.5 px-5 py-3 rounded-full bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 text-white font-semibold text-sm transition-all duration-300 hover:scale-110 hover:shadow-[0_0_35px_rgba(225,48,108,0.7)] overflow-hidden backdrop-blur-sm"
+                          style={{ fontFamily: 'Montserrat, sans-serif' }}
+                        >
+                          {/* Animated gradient background */}
+                          <div className="absolute inset-0 bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 opacity-100 group-hover/ig:opacity-0 transition-opacity duration-300" />
+                          <div className="absolute inset-0 bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 opacity-0 group-hover/ig:opacity-100 transition-opacity duration-300" />
+                          
+                          {/* Shine effect */}
+                          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover/ig:translate-x-full transition-transform duration-700" />
+                          
+                          {/* Icon */}
+                          <InstagramIcon className="w-5 h-5 relative z-10" />
+                          
+                          {/* Text */}
+                          <span className="relative z-10">Instagram</span>
+                          
+                          {/* Glow effect */}
+                          <div className="absolute -inset-1.5 bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 rounded-full blur-md opacity-50 group-hover/ig:opacity-80 transition-opacity duration-300 -z-10" />
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -361,72 +424,6 @@ export function AgenceHomeSection() {
               <div className="absolute left-1/2 h-px w-32 -translate-x-1/2 bg-gradient-to-r from-blue-400/50 via-purple-400/70 to-cyan-400/50" />
             </div>
           </div>
-        </div>
-
-        {/* Section Labels & Engagements */}
-        <Reveal>
-          <div className="mb-16 text-left">
-            <span className="inline-flex w-fit items-center gap-3 rounded-full border border-white/20 bg-white/10 px-6 py-2 text-sm font-semibold uppercase tracking-[0.5em] text-white shadow-[0_0_35px_rgba(89,129,255,0.25)] backdrop-blur-md">
-              {t("agenceHome.commitmentsBadge")}
-            </span>
-            <h2 className="mt-8 text-4xl font-black leading-tight text-white md:text-5xl lg:text-6xl text-left">
-              {t("agenceHome.commitmentsTitle")}
-            </h2>
-            <p className="mt-6 max-w-3xl text-base text-white/70 md:text-lg text-left whitespace-pre-line">
-              {t("agenceHome.commitmentsDesc")}
-            </p>
-          </div>
-        </Reveal>
-
-        {/* Commitments Cards - Style Réalisations Premium */}
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-3 md:items-stretch">
-          {commitments.map((commitment, index) => {
-            return (
-              <Reveal key={index} delay={index * 100} className="min-w-0">
-                <div className="group relative min-w-0 overflow-hidden rounded-3xl border border-white/20 bg-white/8 text-white backdrop-blur-2xl transition duration-700 ease-out hover:-translate-y-3 hover:scale-[1.01] hover:border-white/30 hover:bg-white/12 hover:shadow-[0_45px_140px_rgba(0,0,0,0.55)] h-full flex flex-col">
-                  {/* Premium Glow Effects - Style Réalisations */}
-                  <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-700 ease-out group-hover:opacity-100">
-                    <div className="absolute -inset-6 rounded-[40px] bg-gradient-to-r from-primary/20 via-white/10 to-cyan-400/20 blur-3xl animate-pulse" />
-                    <div className="absolute inset-0 rounded-[30px] border border-white/20 opacity-60" />
-                  </div>
-
-                  {/* Badge Header Section - Replacing Icon - Same height as original */}
-                  <div className="relative h-64 w-full overflow-hidden flex items-center justify-center">
-                    {/* Background Gradient - More Visible */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/15 via-white/8 to-white/15" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-                    
-                    {/* Badge - Centered - Larger size */}
-                    <div className="relative z-10 flex items-center justify-center">
-                      <span className="inline-block rounded-full border border-white/25 bg-white/20 px-6 py-3 text-sm font-bold uppercase tracking-[0.35em] text-white backdrop-blur-md">
-                        {commitment.badge}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Content Section - Centered */}
-                  <div className="flex flex-col justify-between px-8 pt-8 pb-10 text-white text-center flex-1">
-                    {/* Title - Fixed Height */}
-                    <div className="flex-shrink-0 min-h-[60px] flex items-center justify-center mb-4 px-2">
-                      <h3 className="text-xl font-bold leading-tight text-white whitespace-normal md:whitespace-nowrap" style={{ 
-                        fontFamily: 'Montserrat, sans-serif',
-                      }}>
-                        {commitment.title}
-                      </h3>
-                    </div>
-                    {/* Description - Fixed Position */}
-                    <div className="flex-1 flex items-start justify-center mt-auto px-2">
-                      <p className="text-base leading-relaxed text-white/90 font-medium" style={{ 
-                        fontFamily: 'Montserrat, sans-serif',
-                      }}>
-                        {commitment.description}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </Reveal>
-            )
-          })}
         </div>
       </div>
     </section>

@@ -10,10 +10,23 @@ import { useTranslation } from "@/contexts/translation-context"
 function formatDescription(text: string) {
   // Split by double newlines to separate sections
   const sections = text.split(/\n\n+/)
+    .map(section => section.trim())
+    .filter(Boolean)
+  
+  // Les 4 premières sections correspondent aux 2 piliers (titre + texte x2)
+  // qu'on affiche déjà dans le bloc inférieur. On les enlève pour ÉVITER
+  // les doublons, quelle que soit la langue (FR, EN, etc.).
+  // Cette logique fonctionne car la structure est identique dans toutes les langues
+  const filteredSections = sections.length > 4 ? sections.slice(4) : []
+  
+  // Si on a enlevé les 4 premières sections et qu'il ne reste rien, on ne montre rien
+  if (filteredSections.length === 0) {
+    return null
+  }
   
   return (
     <div className="space-y-6">
-      {sections.map((section, index) => {
+      {filteredSections.map((section, index) => {
         const trimmed = section.trim()
         // Check if it's a title (all caps, no lowercase letters, and relatively short)
         const isTitle = trimmed === trimmed.toUpperCase() && 
@@ -178,7 +191,30 @@ export function ServicesSection() {
   const { t } = useTranslation()
   const [expandedCards, setExpandedCards] = useState<Set<number>>(new Set())
 
-const offers = [
+  // Extract the two big pillars from the long description
+  const rawDescription = t("services.description") as string
+  const descriptionSections = rawDescription
+    .split(/\n\n+/)
+    .map(section => section.trim())
+    .filter(Boolean)
+
+  const accompagnementTitle = descriptionSections[0] || t("services.process")
+  const accompagnementText = descriptionSections[1] || t("services.processDesc")
+  const croissanceTitle = descriptionSections[2] || t("services.team")
+  const croissanceText = descriptionSections[3] || t("services.teamDesc")
+
+  const pillars = [
+    {
+      title: accompagnementTitle,
+      description: accompagnementText,
+    },
+    {
+      title: croissanceTitle,
+      description: croissanceText,
+    },
+  ]
+
+  const offers = [
   {
       tag: t("services.brandingTag"),
       title: t("services.brandingTitle"),
@@ -246,8 +282,8 @@ const offers = [
         <div className="relative overflow-hidden rounded-[24px] sm:rounded-[32px] md:rounded-[40px] border border-white/15 bg-white/5 p-6 sm:p-8 md:p-10 lg:p-14 text-white backdrop-blur-xl">
           <div className="absolute inset-y-0 -left-20 hidden w-1/3 bg-[radial-gradient(circle_at_center,_rgba(0,115,255,0.35),_transparent_70%)] opacity-70 md:block" />
           
-          {/* Image - Right Side */}
-          <div className="absolute top-0 right-0 h-full w-full md:w-1/3 overflow-hidden rounded-r-[24px] sm:rounded-r-[32px] md:rounded-r-[40px] opacity-30 md:opacity-80">
+          {/* Image - Right Side - Comme la version originale : 1/3 de la largeur, sujet centré */}
+          <div className="absolute inset-y-0 right-0 h-full w-full md:w-1/3 overflow-hidden rounded-r-[24px] sm:rounded-r-[32px] md:rounded-r-[40px] opacity-30 md:opacity-80">
             <Image
               src="/Banque d_images/Copie de M7_00487.jpg"
               alt="Nos expertises"
@@ -267,65 +303,55 @@ const offers = [
               <h2 className="max-w-2xl text-2xl sm:text-3xl md:text-4xl lg:text-[52px] font-black leading-tight">
                 {t("services.title")}
               </h2>
-              <div className="max-w-2xl text-sm sm:text-base text-white/90 md:text-white/80 md:text-lg leading-relaxed">
-                {formatDescription(t("services.description"))}
-              </div>
+              {/* Les deux piliers principaux sont affichés dans le bloc inférieur, donc on n'affiche rien ici pour éviter les doublons */}
+              {formatDescription(t("services.description")) && (
+                <div className="max-w-2xl text-sm sm:text-base text-white/85 md:text-white/80 md:text-lg leading-relaxed">
+                  {formatDescription(t("services.description"))}
+                </div>
+              )}
             </Reveal>
           </div>
 
-          {/* Process & Team - Below the main card */}
-          <Reveal delay={300} className="relative z-10 mt-6 sm:mt-8">
-            <div className="relative rounded-xl sm:rounded-2xl border border-white/20 bg-white/8 p-6 sm:p-8 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.4)] max-w-2xl">
+          {/* Accompagnement & Croissance - Bloc premium en dessous - Positionné à gauche avec marge, sans toucher l'image */}
+          <Reveal delay={300} className="relative z-10 mt-8 sm:mt-10 md:mt-12">
+            {/* Sur mobile : pleine largeur (w-full). Sur desktop : largeur limitée pour ne pas toucher l'image */}
+            <div className="relative rounded-xl sm:rounded-2xl border border-white/20 bg-white/8 p-6 sm:p-8 lg:p-12 xl:p-14 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.4)] w-full md:max-w-[64%] lg:max-w-[60%] mr-auto">
               {/* Subtle Glow */}
               <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-white/10 via-transparent to-white/10 blur-xl opacity-50" />
               
-              <div className="relative space-y-8">
-                {/* Process - Ultra Modern Design */}
-                <div className="group/process">
-                  <div className="flex items-start gap-4">
-                    {/* Animated Circle Indicator */}
-                    <div className="relative h-12 w-12 flex-shrink-0 flex items-center justify-center">
-                      <div className="absolute inset-0 rounded-full border-2 border-white/30 animate-ping" style={{ animationDuration: '2s' }} />
-                      <div className="absolute inset-0 rounded-full border border-white/40" />
-                      <div className="relative h-3 w-3 rounded-full bg-white/80" />
-                    </div>
-                    
-                    <div className="flex-1 space-y-2">
-                      <div className="flex items-center gap-3">
-                        <span className="text-xs font-bold uppercase tracking-[0.4em] text-white/80">{t("services.process")}</span>
-                        <div className="flex-1 h-px bg-gradient-to-r from-white/40 via-white/25 to-transparent" />
+              <div className="relative space-y-10 sm:space-y-12">
+                {pillars.map((pillar, index) => (
+                  <div key={pillar.title} className="group/pillar">
+                    <div className="flex items-start gap-4">
+                      {/* Animated Circle Indicator - Taille réduite */}
+                      <div className="relative h-12 w-12 sm:h-14 sm:w-14 flex-shrink-0 flex items-center justify-center">
+                        <div
+                          className="absolute inset-0 rounded-full border-2 border-white/30 animate-ping"
+                          style={{ animationDuration: index === 0 ? "2s" : "2.5s", animationDelay: index === 0 ? "0s" : "0.4s" }}
+                        />
+                        <div className="absolute inset-0 rounded-full border border-white/40" />
+                        <div className="relative h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full bg-white/85" />
                       </div>
-                      <p className="text-sm text-white/75 leading-relaxed group-hover/process:text-white/95 transition-colors duration-500">
-                        {t("services.processDesc")}
-                      </p>
-                    </div>
-                  </div>
-                </div>
 
-                {/* Elegant Divider */}
-                <div className="h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
-
-                {/* Team - Ultra Modern Design */}
-                <div className="group/team">
-                  <div className="flex items-start gap-4">
-                    {/* Animated Circle Indicator */}
-                    <div className="relative h-12 w-12 flex-shrink-0 flex items-center justify-center">
-                      <div className="absolute inset-0 rounded-full border-2 border-white/30 animate-ping" style={{ animationDuration: '2.5s', animationDelay: '0.5s' }} />
-                      <div className="absolute inset-0 rounded-full border border-white/40" />
-                      <div className="relative h-3 w-3 rounded-full bg-white/80" />
-                    </div>
-                    
-                    <div className="flex-1 space-y-2">
-                      <div className="flex items-center gap-3">
-                        <span className="text-xs font-bold uppercase tracking-[0.4em] text-white/80">{t("services.team")}</span>
-                        <div className="flex-1 h-px bg-gradient-to-r from-white/40 via-white/25 to-transparent" />
+                      <div className="flex-1 space-y-4 min-w-0">
+                        <div className="flex items-center gap-3">
+                          <span className="text-xs sm:text-sm md:text-base font-bold uppercase tracking-[0.45em] text-white/90 break-words">
+                            {pillar.title}
+                          </span>
+                          <div className="flex-1 h-px bg-gradient-to-r from-white/40 via-white/25 to-transparent" />
+                        </div>
+                        <p className="text-base sm:text-lg md:text-xl text-white/85 leading-relaxed group-hover/pillar:text-white/95 transition-colors duration-500 break-words overflow-wrap-anywhere">
+                          {pillar.description}
+                        </p>
                       </div>
-                      <p className="text-sm text-white/75 leading-relaxed group-hover/team:text-white/95 transition-colors duration-500">
-                        {t("services.teamDesc")}
-                      </p>
                     </div>
+
+                    {/* Divider between the two pillars */}
+                    {index === 0 && (
+                      <div className="mt-8 sm:mt-10 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+                    )}
                   </div>
-                </div>
+                ))}
               </div>
             </div>
           </Reveal>
