@@ -563,7 +563,7 @@ export function ContactHomeSection() {
                       {/* Content Section - Structure améliorée avec plus d'espace */}
                       <div className="flex flex-col justify-between px-6 md:px-8 pt-6 md:pt-8 pb-8 md:pb-10 text-white text-center flex-1">
                         {/* Title - Plus d'espace et meilleure lisibilité */}
-                        <div className="flex-shrink-0 min-h-[70px] md:min-h-[80px] flex items-center justify-center mb-5 md:mb-6 px-3">
+                        <div className="flex-shrink-0 min-h-[70px] md:min-h-[80px] flex items-start justify-center mb-5 md:mb-6 px-3">
                           <h3 className="text-lg md:text-xl lg:text-xl font-bold leading-tight text-white break-words" style={{ 
                             fontFamily: 'Montserrat, sans-serif',
                           }}>
