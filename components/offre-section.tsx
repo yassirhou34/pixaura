@@ -287,7 +287,10 @@ export function OffreSection() {
             <Reveal key={pack.name} delay={index * 100}>
               <Link 
                 href="#rendez-vous"
-                className="group relative overflow-hidden rounded-3xl border border-white/15 bg-white/5 text-white backdrop-blur-xl transition duration-700 ease-out hover:-translate-y-3 hover:scale-[1.01] hover:border-white/25 hover:bg-white/10 hover:shadow-[0_45px_140px_rgba(0,0,0,0.55)] h-full flex flex-col cursor-pointer"
+                className="group relative overflow-hidden rounded-3xl border border-white/15 bg-black/70 text-white backdrop-blur-xl transition duration-700 ease-out hover:-translate-y-3 hover:scale-[1.01] hover:border-white/25 hover:bg-black/80 hover:shadow-[0_45px_140px_rgba(0,0,0,0.85),inset_0_0_60px_rgba(0,0,0,0.5)] h-full flex flex-col cursor-pointer"
+                style={{
+                  boxShadow: '0 20px 80px rgba(0, 0, 0, 0.6), inset 0 0 40px rgba(0, 0, 0, 0.3)',
+                }}
               >
                 {/* Premium Glow Effects - Style Réalisations */}
                 <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-700 ease-out group-hover:opacity-100">
@@ -322,7 +325,9 @@ export function OffreSection() {
                     <div className={`absolute inset-0 bg-gradient-to-br ${pack.gradient} opacity-0 transition-opacity duration-500 group-hover:opacity-10`} />
                     <div className="relative z-10 space-y-2 text-center w-full">
                       <div className="text-2xl font-black text-white md:text-3xl leading-tight">{pack.price}</div>
-                      <div className="text-xs font-semibold text-white/50 md:text-sm uppercase tracking-wide mt-2">{pack.priceDetail}</div>
+                      {pack.priceDetail && (
+                        <div className="text-xs font-semibold text-white/50 md:text-sm uppercase tracking-wide mt-2">{pack.priceDetail}</div>
+                      )}
                     </div>
                   </div>
 

@@ -938,7 +938,7 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
               priority
             />
             <span className="text-[clamp(14px,2.5vw,20px)] font-normal uppercase tracking-[0.45em] text-white/70 mt-1 sm:mt-2 text-center">
-              Agence de publicité française
+              Agence créative française
             </span>
           </header>
           <main className="flex flex-1 flex-col items-center justify-center gap-14">

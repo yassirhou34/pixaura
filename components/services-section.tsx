@@ -6,6 +6,9 @@ import Link from "next/link"
 import { ChevronDown, ChevronUp, TrendingUp, Target, Palette, DollarSign, ChevronLeft, ChevronRight } from "lucide-react"
 import { Reveal } from "@/components/reveal"
 import { useTranslation } from "@/contexts/translation-context"
+import { motion } from "framer-motion"
+import { cn } from "@/lib/utils"
+import { getAssetUrl } from "@/lib/cloudinary"
 
 function formatDescription(text: string) {
   // Split by double newlines to separate sections
@@ -187,6 +190,167 @@ function PhotoSlider() {
   )
 }
 
+function ElasticGridBenefits() {
+  const { t } = useTranslation()
+  const [active, setActive] = useState(0)
+
+  const features = [
+    {
+      title: t("services.benefit1Title"),
+      desc: t("services.benefit1Desc"),
+      label: t("services.benefit1Label"),
+      img: getAssetUrl("/Banque d_images/art1.jpg", "image"),
+      icon: Target,
+      imagePath: "/Banque d_images/art1.jpg",
+      delay: 100,
+      imagePosition: "left" as const,
+    },
+    {
+      title: t("services.benefit4Title"),
+      desc: t("services.benefit4Desc"),
+      label: t("services.benefit4Label"),
+      img: getAssetUrl("/Banque d_images/Copie de DSC04796.jpg", "image"),
+      icon: DollarSign,
+      imagePath: "/Banque d_images/Copie de DSC04796.jpg",
+      delay: 200,
+      imagePosition: "right" as const,
+    },
+    {
+      title: t("services.benefit2Title"),
+      desc: t("services.benefit2Desc"),
+      label: t("services.benefit2Label"),
+      img: getAssetUrl("/Banque d_images/Copie de M7_00487.jpg", "image"),
+      icon: TrendingUp,
+      imagePath: "/Banque d_images/Copie de M7_00487.jpg",
+      delay: 300,
+      imagePosition: "left" as const,
+    },
+    {
+      title: t("services.benefit3Title"),
+      desc: t("services.benefit3Desc"),
+      label: t("services.benefit3Label"),
+      img: getAssetUrl("/Banque d_images/art2.jpg", "image"),
+      icon: Palette,
+      imagePath: "/Banque d_images/art2.jpg",
+      delay: 400,
+      imagePosition: "right" as const,
+    },
+  ]
+
+  return (
+    <>
+      {/* Mobile: Design traditionnel (cartes en grille) */}
+      <div className="grid gap-8 md:grid-cols-2 md:auto-rows-fr max-w-7xl mx-auto md:hidden">
+        {features.map((benefit, index) => (
+          <Reveal key={index} delay={benefit.delay} className="h-full">
+            <div className={`group relative flex h-full w-full overflow-hidden rounded-2xl sm:rounded-3xl border border-white/15 bg-black/40 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.4)] transition-all duration-700 hover:border-white/25 hover:shadow-[0_30px_80px_rgba(0,0,0,0.5)] ${
+              benefit.imagePosition === 'left' ? 'md:flex-row' : 'md:flex-row-reverse'
+            } flex-col`}>
+              {/* Image Section */}
+              <div className="relative w-full md:w-[35%] h-72 sm:h-80 md:h-full overflow-hidden flex-shrink-0">
+                <Image
+                  src={benefit.imagePath}
+                  alt={benefit.title}
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
+                  sizes="(max-width: 768px) 100vw, 35vw"
+                />
+                {/* Gradient overlay */}
+                <div 
+                  className={`absolute inset-0 ${
+                    benefit.imagePosition === 'left' 
+                      ? 'bg-gradient-to-r from-black/60 via-transparent to-transparent' 
+                      : 'bg-gradient-to-l from-black/60 via-transparent to-transparent'
+                  }`}
+                />
+                
+                {/* Label Badge sur l'image */}
+                <div className={`absolute top-4 ${benefit.imagePosition === 'left' ? 'left-4' : 'right-4'} z-10`}>
+                  <div className="relative">
+                    <div className="absolute inset-0 rounded-full border-2 border-white/30 animate-ping" style={{ animationDuration: '2s' }} />
+                    <div className="relative rounded-full border border-white/40 bg-white/10 backdrop-blur-md px-4 py-2">
+                      <span className="text-xs font-bold uppercase tracking-[0.4em] text-white">{benefit.label}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Content Section */}
+              <div className="relative w-full md:w-[65%] flex flex-col bg-gradient-to-br from-white/5 via-white/3 to-transparent min-h-0">
+                <div className="pt-8 pb-8 px-8 md:pt-10 md:pb-10 md:px-10 flex-1 flex flex-col min-h-0">
+                  <h3 className="text-2xl md:text-[1.75rem] font-bold leading-[1.2] text-white md:mb-4 whitespace-pre-line">
+                    {benefit.title}
+                  </h3>
+                  <p className="text-base text-white/75 leading-relaxed group-hover:text-white/85 transition-colors duration-500 flex-1 overflow-y-auto">
+                    {benefit.desc}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+
+      {/* Desktop: ElasticGrid */}
+      <div className="hidden md:flex items-center justify-center p-4 md:p-12">
+        <div className="flex flex-col md:flex-row gap-4 w-full max-w-6xl h-[600px]">
+          {features.map((item, i) => {
+            return (
+              <motion.div
+                key={i}
+                layout
+                onClick={() => setActive(i)}
+                onHoverStart={() => setActive(i)}
+                className={cn(
+                  "relative rounded-[2rem] overflow-hidden cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]",
+                  active === i ? "flex-[10]" : "flex-[1] bg-white hover:bg-neutral-200"
+                )}
+              >
+                {/* Background Image (Active Only) */}
+                <motion.div
+                  className="absolute inset-0 bg-black"
+                  initial={false}
+                  animate={{ opacity: active === i ? 1 : 0 }}
+                >
+                  {item.img && (
+                    <Image
+                      src={item.img}
+                      alt={item.title}
+                      fill
+                      className="object-cover opacity-60"
+                    />
+                  )}
+                </motion.div>
+
+                {/* Vertical Label (Inactive) */}
+                <div className={cn(
+                  "absolute inset-0 flex items-center justify-center transition-opacity duration-300",
+                  active === i ? "opacity-0 pointer-events-none" : "opacity-100"
+                )}>
+                  <h3 className="transform -rotate-90 text-xl font-bold text-neutral-400 whitespace-nowrap uppercase tracking-widest">{item.label}</h3>
+                </div>
+
+                {/* Expanded Content */}
+                <div className={cn(
+                  "relative h-full flex flex-col justify-end p-8 md:p-12 transition-opacity duration-500 delay-100",
+                  active === i ? "opacity-100" : "opacity-0 pointer-events-none"
+                )}>
+                  <motion.h2 layout="position" className="text-4xl md:text-7xl font-bold text-white mb-4 leading-tight">
+                    {item.title}
+                  </motion.h2>
+                  <motion.p layout="position" className="text-lg text-white/80 max-w-lg">
+                    {item.desc}
+                  </motion.p>
+                </div>
+              </motion.div>
+            )
+          })}
+        </div>
+      </div>
+    </>
+  )
+}
+
 export function ServicesSection() {
   const { t } = useTranslation()
   const [expandedCards, setExpandedCards] = useState<Set<number>>(new Set())
@@ -283,16 +447,16 @@ export function ServicesSection() {
           <div className="absolute inset-y-0 -left-20 hidden w-1/3 bg-[radial-gradient(circle_at_center,_rgba(0,115,255,0.35),_transparent_70%)] opacity-70 md:block" />
           
           {/* Image - Right Side - Comme la version originale : 1/3 de la largeur, sujet centré */}
-          <div className="absolute inset-y-0 right-0 h-full w-full md:w-1/3 overflow-hidden rounded-r-[24px] sm:rounded-r-[32px] md:rounded-r-[40px] opacity-30 md:opacity-80">
+          <div className="absolute inset-y-0 right-0 h-full w-full md:w-1/3 overflow-hidden rounded-r-[24px] sm:rounded-r-[32px] md:rounded-r-[40px] opacity-30 md:opacity-100">
             <Image
               src="/Banque d_images/Copie de M7_00487.jpg"
               alt="Nos expertises"
               fill
-              className="object-cover object-center brightness-110 md:brightness-125 contrast-105 md:contrast-110"
+              className="object-cover object-center brightness-110 md:brightness-125 contrast-105 md:contrast-120"
               sizes="(max-width: 768px) 100vw, 33vw"
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-l from-black/90 via-black/60 to-black/40 md:from-transparent md:via-black/20 md:to-black/50" />
+            <div className="absolute inset-0 bg-gradient-to-l from-black/90 via-black/60 to-black/40 md:from-transparent md:via-transparent md:to-black/20" />
           </div>
 
           <div className="relative flex flex-col gap-6 sm:gap-8 md:flex-row md:items-end md:justify-between z-10">
@@ -376,96 +540,8 @@ export function ServicesSection() {
             </p>
           </div>
 
-          {/* Grid des bénéfices - Design Moderne avec Images Mises en Valeur - Cartes plus larges */}
-          <div className="grid gap-8 md:grid-cols-2 md:auto-rows-fr max-w-7xl mx-auto">
-            {[
-              {
-                icon: Target,
-                label: t("services.benefit1Label"),
-                title: t("services.benefit1Title"),
-                description: t("services.benefit1Desc"),
-                image: "/Banque d_images/art1.jpg",
-                delay: 100,
-                imagePosition: "left"
-              },
-              {
-                icon: DollarSign,
-                label: t("services.benefit4Label"),
-                title: t("services.benefit4Title"),
-                description: t("services.benefit4Desc"),
-                image: "/Banque d_images/Copie de DSC04796.jpg",
-                delay: 200,
-                imagePosition: "right"
-              },
-              {
-                icon: TrendingUp,
-                label: t("services.benefit2Label"),
-                title: t("services.benefit2Title"),
-                description: t("services.benefit2Desc"),
-                image: "/Banque d_images/Copie de M7_00487.jpg",
-                delay: 300,
-                imagePosition: "left"
-              },
-              {
-                icon: Palette,
-                label: t("services.benefit3Label"),
-                title: t("services.benefit3Title"),
-                description: t("services.benefit3Desc"),
-                image: "/Banque d_images/art2.jpg",
-                delay: 400,
-                imagePosition: "right"
-              }
-            ].map((benefit, index) => (
-              <Reveal key={index} delay={benefit.delay} className="h-full">
-                <div className={`group relative flex h-full w-full overflow-hidden rounded-2xl sm:rounded-3xl border border-white/15 bg-black/40 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.4)] transition-all duration-700 hover:border-white/25 hover:shadow-[0_30px_80px_rgba(0,0,0,0.5)] ${
-                  benefit.imagePosition === 'left' ? 'md:flex-row' : 'md:flex-row-reverse'
-                } flex-col`}>
-                  {/* Image Section - Hauteur fixe en mobile, s'étend sur toute la hauteur en desktop */}
-                  <div className="relative w-full md:w-[35%] h-72 sm:h-80 md:h-full overflow-hidden flex-shrink-0">
-                    <Image
-                      src={benefit.image}
-                      alt={benefit.title}
-                      fill
-                      className="object-cover transition-transform duration-700 group-hover:scale-110"
-                      sizes="(max-width: 768px) 100vw, 35vw"
-                    />
-                    {/* Gradient overlay léger - juste pour la lisibilité du label */}
-                    <div 
-                      className={`absolute inset-0 ${
-                        benefit.imagePosition === 'left' 
-                          ? 'bg-gradient-to-r from-black/60 via-transparent to-transparent' 
-                          : 'bg-gradient-to-l from-black/60 via-transparent to-transparent'
-                      }`}
-                    />
-                    
-                    {/* Label Badge sur l'image */}
-                    <div className={`absolute top-4 ${benefit.imagePosition === 'left' ? 'left-4' : 'right-4'} z-10`}>
-                      <div className="relative">
-                        <div className="absolute inset-0 rounded-full border-2 border-white/30 animate-ping" style={{ animationDuration: '2s' }} />
-                        <div className="relative rounded-full border border-white/40 bg-white/10 backdrop-blur-md px-4 py-2">
-                          <span className="text-xs font-bold uppercase tracking-[0.4em] text-white">{benefit.label}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Content Section - Alignement STRICT avec hauteur fixe pour les titres - Largeur maximale pour aération */}
-                  <div className="relative w-full md:w-[65%] flex flex-col bg-gradient-to-br from-white/5 via-white/3 to-transparent min-h-0">
-                    <div className="pt-8 pb-8 px-8 md:pt-10 md:pb-10 md:px-10 flex-1 flex flex-col min-h-0">
-                      {/* Titre avec hauteur fixe pour 2 lignes maximum - alignement parfait - sans troncature - taille ajustée */}
-                      <h3 className="text-2xl md:text-[1.75rem] font-bold leading-[1.2] text-white md:mb-4 whitespace-pre-line">
-                        {benefit.title}
-                      </h3>
-                      {/* Paragraphe avec espacement fixe */}
-                      <p className="text-base text-white/75 leading-relaxed group-hover:text-white/85 transition-colors duration-500 flex-1 overflow-y-auto">
-                        {benefit.description}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
+          {/* ElasticGrid Component */}
+          <ElasticGridBenefits />
         </Reveal>
 
         <div className="grid gap-10 md:grid-cols-2 md:items-start">

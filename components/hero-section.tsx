@@ -3,7 +3,8 @@
 import { ReactNode, useEffect, useMemo, useRef, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowRight, Play } from "lucide-react"
+import { ArrowRight, Play, Volume2, VolumeX } from "lucide-react"
+import { motion, useMotionValue, useTransform } from "framer-motion"
 import { Reveal } from "@/components/reveal"
 import { useTranslation } from "@/contexts/translation-context"
 import { getAssetUrl } from "@/lib/cloudinary"
@@ -41,11 +42,215 @@ const getNodeText = (node: ReactNode): string => {
   return ""
 }
 
+interface VideoCardHolographicProps {
+  videoRef: React.RefObject<HTMLVideoElement>
+  videoSrc: string
+  isMuted: boolean
+  toggleMute: () => void
+}
+
+const VideoCardHolographic: React.FC<VideoCardHolographicProps> = ({
+  videoRef,
+  videoSrc,
+  isMuted,
+  toggleMute,
+}) => {
+  const x = useMotionValue(0)
+  const y = useMotionValue(0)
+  const maxRotateX = 15
+  const maxRotateY = 15
+  const perspective = 2000
+  const dragElastic = 0.16
+  const rotateX = useTransform(y, [-100, 100], [maxRotateX, -maxRotateX])
+  const rotateY = useTransform(x, [-100, 100], [-maxRotateY, maxRotateY])
+
+  const gradientFrom = "rgba(168, 85, 247, 0.2)"
+  const gradientVia = "rgba(59, 130, 246, 0)"
+  const gradientTo = "rgba(20, 184, 166, 0.2)"
+  const blob1Color = "#9333ea"
+  const blob2Color = "#2563eb"
+  const blob1Size = "16rem"
+  const blob2Size = "16rem"
+  const blob1Duration = 4
+  const blob2Duration = 5
+  const blob1Delay = 0
+  const noiseOpacity = 0.2
+  const backgroundColor = "#0a0a0a"
+  const borderColor = "rgba(255, 255, 255, 0.1)"
+
+  return (
+    <div style={{ perspective }} className="w-full">
+      <motion.div
+        style={{ 
+          x, 
+          y, 
+          rotateX, 
+          rotateY, 
+          z: 100,
+          backgroundColor,
+          borderColor,
+        }}
+        drag
+        dragElastic={dragElastic}
+        dragConstraints={{ top: 0, left: 0, right: 0, bottom: 0 }}
+        whileTap={{ cursor: "grabbing" }}
+        className="group relative isolate flex h-[480px] w-full flex-col overflow-hidden rounded-[30px] border cursor-grab shadow-2xl xl:h-[520px]"
+      >
+        <div
+          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+          style={{
+            background: `linear-gradient(to bottom right, ${gradientFrom}, ${gradientVia}, ${gradientTo})`,
+          }}
+        />
+
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')",
+            opacity: noiseOpacity,
+          }}
+        />
+
+        <motion.div
+          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
+          transition={{ duration: blob1Duration, repeat: Infinity }}
+          className="absolute -top-20 -right-20 rounded-full blur-[80px] opacity-40 mix-blend-screen pointer-events-none"
+          style={{
+            width: blob1Size,
+            height: blob1Size,
+            backgroundColor: blob1Color,
+          }}
+        />
+        <motion.div
+          animate={{ scale: [1, 1.5, 1], opacity: [0.2, 0.4, 0.2] }}
+          transition={{ duration: blob2Duration, repeat: Infinity, delay: blob1Delay }}
+          className="absolute -bottom-20 -left-20 rounded-full blur-[80px] opacity-40 mix-blend-screen pointer-events-none"
+          style={{
+            width: blob2Size,
+            height: blob2Size,
+            backgroundColor: blob2Color,
+          }}
+        />
+
+        {/* High-Tech Outer Glow Layers */}
+        <div className="pointer-events-none absolute -inset-[1px] rounded-[31px] bg-gradient-to-r from-cyan-400/30 via-purple-500/30 to-cyan-400/30 opacity-60 blur-sm" />
+        <div className="pointer-events-none absolute -inset-[2px] rounded-[32px] bg-gradient-to-br from-cyan-500/20 via-purple-500/20 to-cyan-500/20 opacity-40 blur-md" />
+
+        {/* Multi-layer glow effects - outside only */}
+        <div className="pointer-events-none absolute -inset-8 rounded-[38px] bg-gradient-to-r from-cyan-400/20 via-purple-500/20 to-cyan-400/20 blur-3xl opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
+        <div className="pointer-events-none absolute -inset-4 rounded-[34px] bg-gradient-to-br from-white/10 via-cyan-500/10 to-purple-500/10 blur-2xl opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
+
+        {/* High-Tech Frame Structure */}
+        <div className="absolute inset-0 rounded-[30px] border-[3px] border-transparent bg-gradient-to-r from-cyan-400/40 via-purple-500/40 to-cyan-400/40 p-[3px]">
+          <div className="h-full w-full rounded-[27px] bg-black/95" />
+        </div>
+
+        {/* Inner Tech Grid Pattern */}
+        <div className="absolute inset-[4px] rounded-[26px] opacity-20 pointer-events-none" style={{
+          backgroundImage: `
+            linear-gradient(rgba(34,211,238,0.1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(34,211,238,0.1) 1px, transparent 1px),
+            linear-gradient(rgba(168,85,247,0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(168,85,247,0.05) 1px, transparent 1px)
+          `,
+          backgroundSize: '20px 20px, 20px 20px, 4px 4px, 4px 4px',
+          backgroundPosition: '0 0, 0 0, 0 0, 0 0'
+        }} />
+
+        {/* Corner Tech Accents - Top Left */}
+        <div className="absolute top-0 left-0 w-16 h-16 pointer-events-none z-20">
+          <div className="absolute top-0 left-0 w-12 h-[2px] bg-gradient-to-r from-cyan-400 to-transparent" />
+          <div className="absolute top-0 left-0 h-12 w-[2px] bg-gradient-to-b from-cyan-400 to-transparent" />
+          <div className="absolute top-2 left-2 w-2 h-2 bg-cyan-400/60 blur-sm" />
+        </div>
+
+        {/* Corner Tech Accents - Top Right */}
+        <div className="absolute top-0 right-0 w-16 h-16 pointer-events-none z-20">
+          <div className="absolute top-0 right-0 w-12 h-[2px] bg-gradient-to-l from-purple-500 to-transparent" />
+          <div className="absolute top-0 right-0 h-12 w-[2px] bg-gradient-to-b from-purple-500 to-transparent" />
+          <div className="absolute top-2 right-2 w-2 h-2 bg-purple-500/60 blur-sm" />
+        </div>
+
+        {/* Corner Tech Accents - Bottom Left */}
+        <div className="absolute bottom-0 left-0 w-16 h-16 pointer-events-none z-20">
+          <div className="absolute bottom-0 left-0 w-12 h-[2px] bg-gradient-to-r from-cyan-400 to-transparent" />
+          <div className="absolute bottom-0 left-0 h-12 w-[2px] bg-gradient-to-t from-cyan-400 to-transparent" />
+          <div className="absolute bottom-2 left-2 w-2 h-2 bg-cyan-400/60 blur-sm" />
+        </div>
+
+        {/* Corner Tech Accents - Bottom Right */}
+        <div className="absolute bottom-0 right-0 w-16 h-16 pointer-events-none z-20">
+          <div className="absolute bottom-0 right-0 w-12 h-[2px] bg-gradient-to-l from-purple-500 to-transparent" />
+          <div className="absolute bottom-0 right-0 h-12 w-[2px] bg-gradient-to-t from-purple-500 to-transparent" />
+          <div className="absolute bottom-2 right-2 w-2 h-2 bg-purple-500/60 blur-sm" />
+        </div>
+
+        {/* Side Tech Lines - Vertical */}
+        <div className="absolute top-1/2 left-0 -translate-y-1/2 w-[2px] h-24 bg-gradient-to-b from-transparent via-cyan-400/40 to-transparent pointer-events-none z-20" />
+        <div className="absolute top-1/2 right-0 -translate-y-1/2 w-[2px] h-24 bg-gradient-to-b from-transparent via-purple-500/40 to-transparent pointer-events-none z-20" />
+
+        {/* Side Tech Lines - Horizontal */}
+        <div className="absolute left-1/2 top-0 -translate-x-1/2 h-[2px] w-24 bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent pointer-events-none z-20" />
+        <div className="absolute left-1/2 bottom-0 -translate-x-1/2 h-[2px] w-24 bg-gradient-to-r from-transparent via-purple-500/40 to-transparent pointer-events-none z-20" />
+
+        {/* Video container - full width, no padding */}
+        <div className="relative h-full w-full overflow-hidden rounded-[26px] m-[4px] z-10">
+          <video
+            ref={videoRef}
+            src={videoSrc}
+            autoPlay
+            loop
+            muted={isMuted}
+            playsInline
+            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+            style={{
+              transform: 'translateZ(0)',
+              willChange: 'transform'
+            }}
+          />
+
+          {/* Subtle gradient overlay - minimal */}
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/0 via-black/5 to-black/20" />
+
+          {/* Tech Scan Line Effect */}
+          <div className="pointer-events-none absolute inset-0 opacity-[0.03] bg-[linear-gradient(transparent_50%,rgba(34,211,238,0.03)_50%)] bg-[length:100%_4px]" />
+
+          {/* Mute/Unmute button - Enhanced */}
+          <button
+            onClick={toggleMute}
+            className="absolute bottom-6 right-6 z-30 flex h-14 w-14 items-center justify-center rounded-full bg-black/80 backdrop-blur-xl border-2 border-cyan-400/40 transition-all duration-500 hover:bg-black/90 hover:border-cyan-400/60 hover:scale-110 hover:shadow-[0_0_40px_rgba(34,211,238,0.8),0_0_80px_rgba(34,211,238,0.4)]"
+            aria-label={isMuted ? "Activer le son" : "Désactiver le son"}
+          >
+            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-cyan-400/20 to-purple-500/20 opacity-0 hover:opacity-100 transition-opacity duration-500" />
+            {isMuted ? (
+              <VolumeX className="h-6 w-6 text-white relative z-10 transition-all duration-300" />
+            ) : (
+              <Volume2 className="h-6 w-6 text-white relative z-10 transition-all duration-300" />
+            )}
+          </button>
+        </div>
+
+        {/* Inner Tech Border Rings */}
+        <div className="absolute inset-[6px] rounded-[24px] border border-cyan-400/20 pointer-events-none opacity-60 z-20" />
+        <div className="absolute inset-[8px] rounded-[22px] border border-purple-500/15 pointer-events-none opacity-40 z-20" />
+        <div className="absolute inset-[10px] rounded-[20px] border border-cyan-400/10 pointer-events-none opacity-30 z-20" />
+
+        {/* Holographic Overlay Effect */}
+        <div className="pointer-events-none absolute inset-0 rounded-[30px] opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-10" style={{
+          background: 'linear-gradient(135deg, rgba(34,211,238,0.05) 0%, transparent 25%, transparent 75%, rgba(168,85,247,0.05) 100%)'
+        }} />
+      </motion.div>
+    </div>
+  )
+}
+
 export function HeroSection() {
   const { t, language } = useTranslation()
   const [activeIndex, setActiveIndex] = useState(0)
   const [previousIndex, setPreviousIndex] = useState<number | null>(null)
   const [isAnimating, setIsAnimating] = useState(false)
+  const [isMuted, setIsMuted] = useState(true)
+  const videoRef = useRef<HTMLVideoElement>(null)
 
   const headlineVariants = useMemo(() => {
     // Split headline1 for better spacing
@@ -239,6 +444,17 @@ export function HeroSection() {
     }
   }, [])
 
+  // Handle video mute/unmute
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.muted = isMuted
+    }
+  }, [isMuted])
+
+  const toggleMute = () => {
+    setIsMuted(prev => !prev)
+  }
+
   return (
     <section className="relative flex min-h-screen w-full items-center justify-center overflow-hidden">
 
@@ -299,86 +515,66 @@ export function HeroSection() {
                 </div>
 
                 <div className="lg:hidden">
-                  <div className="flex flex-col gap-4 w-full">
-                    {heroProjects.map((project, index) => (
-                      <Reveal
-                        key={project.id}
-                        delay={index * 140}
-                        className="hero-highlight-card group relative isolate flex w-full flex-col overflow-hidden rounded-[24px] border border-white/15 bg-white/5 pb-5 text-white backdrop-blur-xl transition duration-700 hover:-translate-y-2 hover:border-white/30 hover:bg-white/10"
+                  <Reveal
+                    delay={140}
+                    className="group relative isolate flex w-full flex-col overflow-hidden rounded-[28px] border-2 border-white/20 bg-black/40 backdrop-blur-2xl transition-all duration-700 hover:-translate-y-2 hover:border-white/40 hover:bg-black/50 hover:shadow-[0_45px_140px_rgba(0,0,0,0.7),0_0_80px_rgba(34,211,238,0.3)]"
+                  >
+                    {/* Multi-layer glow effects - outside only */}
+                    <div className="pointer-events-none absolute -inset-6 rounded-[36px] bg-gradient-to-r from-cyan-400/20 via-purple-500/20 to-cyan-400/20 blur-3xl opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
+                    <div className="pointer-events-none absolute -inset-3 rounded-[32px] bg-gradient-to-br from-white/10 via-cyan-500/10 to-purple-500/10 blur-2xl opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
+                    
+                    {/* Video container - full width, no padding */}
+                    <div className="relative h-[320px] w-full overflow-hidden sm:h-[380px]">
+                      <video
+                        ref={videoRef}
+                        src={getAssetUrl("/Banque d_images/halowen.mp4", "video")}
+                        autoPlay
+                        loop
+                        muted={isMuted}
+                        playsInline
+                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+                        style={{
+                          transform: 'translateZ(0)',
+                          willChange: 'transform'
+                        }}
+                      />
+                      
+                      {/* Subtle gradient overlay - minimal */}
+                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/0 via-black/5 to-black/20" />
+                      
+                      {/* Mute/Unmute button */}
+                      <button
+                        onClick={toggleMute}
+                        className="absolute bottom-4 right-4 z-20 flex h-12 w-12 items-center justify-center rounded-full bg-black/70 backdrop-blur-xl border-2 border-white/30 transition-all duration-500 hover:bg-black/80 hover:border-white/50 hover:scale-110 hover:shadow-[0_0_30px_rgba(34,211,238,0.6)]"
+                        aria-label={isMuted ? "Activer le son" : "Désactiver le son"}
                       >
-                        <div className="relative h-[200px] w-full overflow-hidden sm:h-[240px]">
-                          <Image
-                            src={project.image}
-                            alt={project.title}
-                            fill
-                            className="object-cover transition duration-700 ease-out group-hover:scale-[1.05]"
-                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                            priority={true}
-                            loading="eager"
-                            quality={75}
-                            unoptimized={false}
-                          />
-                          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/0 via-black/20 to-black/80" />
-                          <div className="absolute inset-x-0 bottom-0 flex flex-col gap-2 px-5 pb-4">
-                            <span className="text-[10px] font-semibold uppercase tracking-[0.4em] text-white/70 sm:text-xs">
-                              {project.client}
-                            </span>
-                            <span className="text-[11px] font-semibold uppercase tracking-[0.35em] text-white/55 sm:text-xs">
-                              {project.category}
-                            </span>
-                          </div>
-                        </div>
-
-                        <div className="flex flex-1 flex-col justify-between px-5 pt-5">
-                          <h3 className="text-base font-semibold leading-snug text-white text-center sm:text-lg">{project.title}</h3>
-                          <div className="mt-4">
-                            <span className="block h-px w-full bg-white/20" />
-                          </div>
-                        </div>
-                      </Reveal>
-                    ))}
-                  </div>
+                        {isMuted ? (
+                          <VolumeX className="h-5 w-5 text-white transition-all duration-300" />
+                        ) : (
+                          <Volume2 className="h-5 w-5 text-white transition-all duration-300" />
+                        )}
+                      </button>
+                    </div>
+                    
+                    {/* Border rings - outside only, don't overlap video */}
+                    <div className="absolute inset-0 rounded-[28px] border-2 border-white/20 pointer-events-none" />
+                    <div className="absolute inset-[2px] rounded-[26px] border border-white/10 pointer-events-none opacity-50" />
+                  </Reveal>
                 </div>
               </div>
             </Reveal>
           </div>
 
           <div className="relative hidden w-full items-start justify-end lg:flex lg:mt-32 xl:mt-40">
-            <div className="flex w-full max-w-xl justify-end gap-4 xl:max-w-2xl xl:gap-5">
-              {heroProjects.map((project, index) => (
-                <Reveal
-                  key={project.id}
-                  delay={index * 180}
-                  className="hero-highlight-card group relative isolate flex h-[360px] w-[220px] flex-col overflow-hidden rounded-[28px] border border-white/15 bg-white/5 pb-0 text-white backdrop-blur-xl transition duration-700 hover:-translate-y-2 hover:border-white/30 hover:bg-white/10 xl:h-[400px] xl:w-[240px]"
-                >
-                  <div className="relative h-[58%] w-full overflow-hidden">
-                    <Image
-                      src={project.image}
-                      alt={project.title}
-                      fill
-                      className="object-cover transition duration-700 ease-out group-hover:scale-[1.05]"
-                      sizes="(max-width: 1280px) 220px, 260px"
-                      priority={true}
-                      loading="eager"
-                      quality={75}
-                      unoptimized={false}
-                    />
-                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/0 via-black/20 to-black/80" />
-                    <div className="absolute inset-x-0 bottom-0 flex flex-col gap-2 px-6 pb-5">
-                      <span className="text-[10px] font-semibold uppercase tracking-[0.4em] text-white/70">
-                        {project.client}
-                      </span>
-                      <span className="text-[11px] font-semibold uppercase tracking-[0.35em] text-white/55">
-                        {project.category}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-1 flex-col justify-center px-6 pt-3 pb-2">
-                    <h3 className="text-base font-semibold leading-snug text-white text-center">{project.title}</h3>
-                  </div>
-                </Reveal>
-              ))}
+            <div className="flex w-full max-w-[85%] justify-end">
+              <Reveal delay={180}>
+                <VideoCardHolographic 
+                  videoRef={videoRef}
+                  videoSrc={getAssetUrl("/Banque d_images/halowen.mp4", "video")}
+                  isMuted={isMuted}
+                  toggleMute={toggleMute}
+                />
+              </Reveal>
             </div>
           </div>
         </div>

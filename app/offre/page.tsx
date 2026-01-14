@@ -793,9 +793,10 @@ export default function OffrePage() {
                 </div>
                 
                 {/* Main Card - Ultra Premium Royal */}
-                <div className="relative bg-black/85 backdrop-blur-2xl rounded-3xl border-2 border-cyan-400/50 p-5 group-hover/pack:border-cyan-400/90 transition-all duration-700 group-hover/pack:shadow-2xl group-hover/pack:shadow-cyan-400/40 overflow-hidden" style={{ 
+                <div className="relative bg-black/95 backdrop-blur-2xl rounded-3xl border-2 border-cyan-400/50 p-5 group-hover/pack:border-cyan-400/90 transition-all duration-700 group-hover/pack:shadow-2xl group-hover/pack:shadow-cyan-400/40 overflow-hidden" style={{ 
                   transform: 'translateY(0) scale(1)',
                   transition: 'all 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
+                  boxShadow: '0 25px 100px rgba(0, 0, 0, 0.8), inset 0 0 60px rgba(0, 0, 0, 0.4)',
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-12px) scale(1.04)';
@@ -942,9 +943,10 @@ export default function OffrePage() {
                 </div>
                 
                 {/* Main Card - Ultra Premium Royal */}
-                <div className="relative bg-black/85 backdrop-blur-2xl rounded-3xl border-2 border-purple-500/50 p-5 group-hover/pack:border-purple-500/90 transition-all duration-700 group-hover/pack:shadow-2xl group-hover/pack:shadow-purple-500/40 overflow-hidden" style={{ 
+                <div className="relative bg-black/95 backdrop-blur-2xl rounded-3xl border-2 border-purple-500/50 p-5 group-hover/pack:border-purple-500/90 transition-all duration-700 group-hover/pack:shadow-2xl group-hover/pack:shadow-purple-500/40 overflow-hidden" style={{ 
                   transform: 'translateY(0) scale(1)',
                   transition: 'all 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
+                  boxShadow: '0 25px 100px rgba(0, 0, 0, 0.8), inset 0 0 60px rgba(0, 0, 0, 0.4)',
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-12px) scale(1.04)';
@@ -1087,9 +1089,10 @@ export default function OffrePage() {
                 </div>
                 
                 {/* Main Card - Ultra Premium Royal */}
-                <div className="relative bg-black/85 backdrop-blur-2xl rounded-3xl border-2 border-cyan-400/40 border-purple-500/40 p-5 group-hover/pack:border-cyan-400/80 group-hover/pack:border-purple-500/80 transition-all duration-700 group-hover/pack:shadow-2xl group-hover/pack:shadow-cyan-400/30 group-hover/pack:shadow-purple-500/30 overflow-hidden" style={{ 
+                <div className="relative bg-black/95 backdrop-blur-2xl rounded-3xl border-2 border-cyan-400/40 border-purple-500/40 p-5 group-hover/pack:border-cyan-400/80 group-hover/pack:border-purple-500/80 transition-all duration-700 group-hover/pack:shadow-2xl group-hover/pack:shadow-cyan-400/30 group-hover/pack:shadow-purple-500/30 overflow-hidden" style={{ 
                   transform: 'translateY(0) scale(1)',
                   transition: 'all 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
+                  boxShadow: '0 25px 100px rgba(0, 0, 0, 0.8), inset 0 0 60px rgba(0, 0, 0, 0.4)',
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-12px) scale(1.04)';
