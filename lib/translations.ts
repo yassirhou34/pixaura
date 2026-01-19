@@ -183,7 +183,7 @@ export const translations = {
       instagramTitle: "Découvrez tous nos projets",
       instagramTitleHighlight: "sur Instagram",
       instagramDescription: "Explorez notre portfolio complet et découvrez nos dernières réalisations en temps réel sur notre compte Instagram.",
-      instagramCta: "Voir sur Instagram",
+      instagramCta: "Consulter",
     },
     // Humind section (home)
     humindHome: {
@@ -264,7 +264,7 @@ export const translations = {
     // Agence home section
     agenceHome: {
       valuesBadge: "Nos valeurs",
-      valuesTitle: "Manifester nos valeurs",
+      valuesTitle: "Une vision claire",
       valuesDesc: "Trois piliers fondamentaux qui guident chaque projet et chaque décision.",
       value1Badge: "Créativité",
       value1Title: "Créativité contemporaine",
@@ -289,7 +289,7 @@ export const translations = {
       commitment2Title: "Confidentialité assurée",
       commitment2Desc: "Les informations et données échangées restent strictement confidentielles, avant, pendant et après la collaboration.",
       commitment3Badge: "INTÉGRITÉ",
-      commitment3Title: "Non-concurrence encadrée",
+      commitment3Title: "Clause d'exclusivité",
       commitment3Desc: "Des clauses équilibrées pour protéger les intérêts stratégiques sans freiner le développement des marques.",
       commitment4Badge: "IDENTITÉ",
       commitment4Title: "Valorisation de l'ADN de marque",
@@ -305,7 +305,7 @@ export const translations = {
     },
     // Contact home section
     contactHome: {
-      title: "Envoyez-nous vos coordonnées",
+      title: "Démarrer une collaboration",
       description: "Décrivez votre projet et nous vous recontacterons sous 48h.",
       thankYou: "Merci !",
       contactWithin48h: "Notre équipe vous recontactera sous 48 h.",
@@ -378,7 +378,7 @@ export const translations = {
     },
     // Contact page
     contact: {
-      title: "Envoyez-nous vos coordonnées",
+      title: "Démarrer une collaboration",
       step1: "Votre besoin",
       step2: "Vos coordonnées",
       step3: "Budget estimé",
@@ -995,7 +995,7 @@ export const translations = {
       instagramTitle: "Discover all our projects",
       instagramTitleHighlight: "on Instagram",
       instagramDescription: "Explore our complete portfolio and discover our latest work in real-time on our Instagram account.",
-      instagramCta: "View on Instagram",
+      instagramCta: "View",
     },
     // Humind section (home)
     humindHome: {
@@ -1076,7 +1076,7 @@ export const translations = {
     // Agence home section
     agenceHome: {
       valuesBadge: "Our values",
-      valuesTitle: "Manifest our values",
+      valuesTitle: "A clear vision",
       valuesDesc: "Three fundamental pillars that guide every project and every decision.",
       value1Badge: "Creativity",
       value1Title: "Contemporary creativity",
@@ -1101,7 +1101,7 @@ export const translations = {
       commitment2Title: "Confidentiality assured",
       commitment2Desc: "Information and data exchanged remain strictly confidential, before, during and after collaboration.",
       commitment3Badge: "INTEGRITY",
-      commitment3Title: "Framed non-competition",
+      commitment3Title: "Exclusivity clause",
       commitment3Desc: "Balanced clauses to protect strategic interests without hindering brand development.",
       commitment4Badge: "IDENTITY",
       commitment4Title: "Brand DNA valorization",
@@ -1117,7 +1117,7 @@ export const translations = {
     },
     // Contact home section
     contactHome: {
-      title: "Send us your contact details",
+      title: "Start a collaboration",
       description: "Describe your project and we will contact you within 48 hours.",
       thankYou: "Thank you!",
       contactWithin48h: "Our team will contact you within 48 hours.",
@@ -1190,7 +1190,7 @@ export const translations = {
     },
     // Contact page
     contact: {
-      title: "Send us your contact details",
+      title: "Start a collaboration",
       step1: "Your need",
       step2: "Your contact information",
       step3: "Estimated budget",
