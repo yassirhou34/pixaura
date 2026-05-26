@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 
 /** Diaporama page connexion — `frontend/public/images/` */
 export const LOGIN_SLIDER_IMAGES = [
@@ -47,6 +48,8 @@ interface SplitFormProps {
   errorMessage?: string;
   /** Image plein écran derrière la carte (ex. page connexion uniquement) */
   fullPageBackgroundImage?: string;
+  /** Indique qu'une requête est en cours (désactive le bouton et affiche un état loading) */
+  isSubmitting?: boolean;
 }
 
 export const SplitForm: React.FC<SplitFormProps> = ({
@@ -81,6 +84,7 @@ export const SplitForm: React.FC<SplitFormProps> = ({
   initialPassword = "",
   errorMessage,
   fullPageBackgroundImage,
+  isSubmitting = false,
 }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [email, setEmail] = useState(initialEmail);
@@ -152,20 +156,22 @@ export const SplitForm: React.FC<SplitFormProps> = ({
             color: leftPanelTextColor,
           }}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element -- diaporama avec scale au survol comme le design source */}
-          <img
+          <Image
             key={currentImageIndex}
             src={images[currentImageIndex]}
             alt=""
+            fill
+            priority={currentImageIndex === 0}
+            sizes="(max-width: 768px) 100vw, 50vw"
             className="absolute inset-0 z-0 h-full w-full object-cover transition-transform duration-700"
             style={{
               opacity: hasPageBg ? Math.min(imageOpacity + 0.12, 1) : imageOpacity,
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.transform = `scale(${imageScale})`;
+              (e.currentTarget as HTMLElement).style.transform = `scale(${imageScale})`;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "scale(1)";
+              (e.currentTarget as HTMLElement).style.transform = "scale(1)";
             }}
           />
           <div
@@ -292,7 +298,9 @@ export const SplitForm: React.FC<SplitFormProps> = ({
             ) : null}
             <button
               type="submit"
-              className={`relative mt-2 w-full overflow-hidden rounded-2xl py-[1.05rem] text-base font-semibold tracking-wide transition-all md:text-lg ${
+              disabled={isSubmitting}
+              aria-busy={isSubmitting}
+              className={`relative mt-2 inline-flex w-full items-center justify-center gap-3 overflow-hidden rounded-2xl py-[1.05rem] text-base font-semibold tracking-wide transition-all md:text-lg disabled:cursor-not-allowed disabled:opacity-70 ${
                 hasPageBg
                   ? "border border-white/20 bg-gradient-to-r from-white/[0.14] via-indigo-500/25 to-violet-500/20 text-white shadow-[0_0_0_1px_rgba(255,255,255,0.08)_inset,0_16px_48px_-20px_rgba(99,102,241,0.45)] backdrop-blur-md before:pointer-events-none before:absolute before:inset-0 before:bg-gradient-to-t before:from-white/10 before:to-transparent before:opacity-0 before:transition-opacity hover:border-white/30 hover:before:opacity-100 active:scale-[0.99]"
                   : "transition-opacity hover:opacity-80"
@@ -306,7 +314,22 @@ export const SplitForm: React.FC<SplitFormProps> = ({
                     }
               }
             >
-              {buttonText}
+              {isSubmitting ? (
+                <>
+                  <svg
+                    aria-hidden
+                    className="h-5 w-5 animate-spin"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                  >
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeOpacity="0.25" strokeWidth="4" />
+                    <path d="M22 12a10 10 0 0 1-10 10" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+                  </svg>
+                  <span>Connexion en cours…</span>
+                </>
+              ) : (
+                <span>{buttonText}</span>
+              )}
             </button>
           </form>
         </div>

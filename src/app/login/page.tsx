@@ -10,18 +10,24 @@ import { SplitForm } from "@/components/UIComponents/Forms/SplitForm";
 export default function LoginPage() {
   const router = useRouter();
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function handleSubmit({ email, password }: { email: string; password: string }) {
+    if (isSubmitting) return;
     setError("");
+    setIsSubmitting(true);
     try {
       const data = await apiFetch<{ token: string; user: any }>("/auth/login", {
         method: "POST",
         body: JSON.stringify({ email, password }),
       });
       saveSession(data.token, data.user);
-      router.push(data.user.role === "admin" ? "/admin/dashboard" : "/membre/p2c");
+      const dest = data.user.role === "admin" ? "/admin/dashboard" : "/membre/p2c";
+      router.prefetch(dest);
+      router.push(dest);
     } catch (err: any) {
       setError(err.message);
+      setIsSubmitting(false);
     }
   }
 
@@ -34,6 +40,7 @@ export default function LoginPage() {
       buttonText="Se connecter"
       errorMessage={error || undefined}
       onSubmit={handleSubmit}
+      isSubmitting={isSubmitting}
     />
   );
 }
