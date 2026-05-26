@@ -23,6 +23,9 @@ const FILES = [
   'Copie de M7_01248.jpg',
   'Copie de M7_03372.jpg',
   'backnoiree.png',
+  'Copie de DSC04796.jpg',
+  'art2.jpg',
+  'Copie de M7_00487.jpg',
 ]
 
 const MAX_DIMENSION = 1920

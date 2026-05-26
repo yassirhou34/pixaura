@@ -199,6 +199,9 @@ const LOCAL_ONLY_PATHS: ReadonlySet<string> = new Set([
   '/Banque d_images/Copie de M7_01248.jpg',
   '/Banque d_images/Copie de M7_03372.jpg',
   '/Banque d_images/backnoiree.png',
+  '/Banque d_images/Copie de DSC04796.jpg',
+  '/Banque d_images/art2.jpg',
+  '/Banque d_images/Copie de M7_00487.jpg',
 ])
 
 /**
