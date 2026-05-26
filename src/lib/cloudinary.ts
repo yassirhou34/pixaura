@@ -185,10 +185,32 @@ export const ASSET_MAP: Record<string, string> = {
 }
 
 /**
+ * Liste des chemins servis EXCLUSIVEMENT en local (depuis public/Banque d_images/),
+ * sans jamais passer par Cloudinary.
+ * Les fichiers correspondants ont été pré-compressés par scripts/compress-7-images.js
+ * pour rester légers et chargeables instantanément depuis Vercel.
+ * Aucun autre asset n'est affecté.
+ */
+const LOCAL_ONLY_PATHS: ReadonlySet<string> = new Set([
+  '/Banque d_images/humind-white.png',
+  '/Banque d_images/PIXaura-soft white.png',
+  '/Banque d_images/art1.jpg',
+  '/Banque d_images/Copie de M7_09197.jpg',
+  '/Banque d_images/Copie de M7_01248.jpg',
+  '/Banque d_images/Copie de M7_03372.jpg',
+  '/Banque d_images/backnoiree.png',
+])
+
+/**
  * Get Cloudinary URL from local path
  * Automatically converts local paths to Cloudinary URLs if mapped
  */
 export function getAssetUrl(localPath: string, type: 'image' | 'video' = 'image'): string {
+  // Bypass Cloudinary : ces 7 chemins sont servis directement depuis public/
+  if (LOCAL_ONLY_PATHS.has(localPath)) {
+    return localPath
+  }
+
   const publicId = ASSET_MAP[localPath]
 
   // Pas de Cloudinary configuré OU pas d'entrée dans le mapping
