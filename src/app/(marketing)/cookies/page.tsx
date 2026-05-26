@@ -15,7 +15,18 @@ export default function CookiesPage() {
     setMounted(true)
   }, [])
 
-  const sections = [
+  type CookieContentItem = {
+    value: string
+    label?: string
+    type?: "email"
+  }
+
+  const sections: Array<{
+    id: string
+    icon: typeof Cookie
+    title: string
+    content: CookieContentItem[]
+  }> = [
     {
       id: "utilisation",
       icon: Cookie,

@@ -1,8 +1,16 @@
 "use client"
 
-import { ComponentType, HTMLAttributes, ReactNode, useEffect, useRef, useState } from "react"
+import {
+  type ComponentType,
+  type ElementType as ReactElementType,
+  type HTMLAttributes,
+  type ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from "react"
 
-type ElementType = keyof JSX.IntrinsicElements | ComponentType<any>
+type ElementType = ReactElementType | ComponentType<unknown>
 
 interface RevealProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode

@@ -6,7 +6,6 @@ import { useEffect, useState } from "react"
 import { useRouter, usePathname } from "next/navigation"
 import { useTranslation } from "@/contexts/translation-context"
 import { getAssetUrl } from "@/lib/cloudinary"
-import { BACKOFFICE_LOGIN_URL } from "@/lib/backoffice"
 import { Globe, Sparkles, UserCircle } from "lucide-react"
 
 export function Navbar() {
@@ -251,7 +250,7 @@ export function Navbar() {
 
         <div className="hidden xl:flex items-center gap-4">
           <a
-            href={BACKOFFICE_LOGIN_URL}
+            href="/login"
             className={profileLinkClassName}
             aria-label={t("nav.backofficeAriaLabel")}
             title={t("nav.backofficeTitle")}
@@ -412,7 +411,7 @@ export function Navbar() {
 
         <div className="flex items-center gap-2 xl:hidden">
           <a
-            href={BACKOFFICE_LOGIN_URL}
+            href="/login"
             className={profileLinkClassName}
             aria-label={t("nav.backofficeAriaLabel")}
             title={t("nav.backofficeTitle")}
@@ -516,7 +515,7 @@ export function Navbar() {
           })}
 
           <a
-            href={BACKOFFICE_LOGIN_URL}
+            href="/login"
             className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/10 px-6 py-5 text-lg font-semibold text-white transition-colors duration-300 hover:border-primary/60 hover:bg-primary/20"
             aria-label={t("nav.backofficeAriaLabel")}
             title={t("nav.backofficeTitle")}

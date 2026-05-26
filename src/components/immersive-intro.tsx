@@ -47,15 +47,15 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
   const [isFadingOut, setIsFadingOut] = useState(false)
   const [startAnimation, setStartAnimation] = useState(false)
 
-  const holdRafRef = useRef<number>()
-  const resetRafRef = useRef<number>()
+  const holdRafRef = useRef<number | null>(null)
+  const resetRafRef = useRef<number | null>(null)
   const holdStartRef = useRef<number | null>(null)
   const stageRef = useRef<Stage>("loading")
-  const startTimeoutRef = useRef<number>()
+  const startTimeoutRef = useRef<number | null>(null)
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const [audioStarted, setAudioStarted] = useState(false)
-  const holdPulseRef = useRef<number>()
-  const holdTrailRef = useRef<number>()
+  const holdPulseRef = useRef<number | null>(null)
+  const holdTrailRef = useRef<number | null>(null)
   const [holdPulse, setHoldPulse] = useState(0)
   const [trailPositions, setTrailPositions] = useState<{ id: number; progress: number }[]>([])
   const lastTrailProgressRef = useRef(0)
@@ -94,9 +94,9 @@ export function ImmersiveIntro({ onComplete }: ImmersiveIntroProps = {}) {
     if (holdRafRef.current) cancelAnimationFrame(holdRafRef.current)
     if (resetRafRef.current) cancelAnimationFrame(resetRafRef.current)
     if (holdTrailRef.current) cancelAnimationFrame(holdTrailRef.current)
-    holdRafRef.current = undefined
-    resetRafRef.current = undefined
-    holdTrailRef.current = undefined
+    holdRafRef.current = null
+    resetRafRef.current = null
+    holdTrailRef.current = null
   }, [])
 
   const finishIntro = useCallback(() => {

@@ -43,7 +43,7 @@ const getNodeText = (node: ReactNode): string => {
 }
 
 interface VideoCardHolographicProps {
-  videoRef: React.RefObject<HTMLVideoElement>
+  videoRef: React.RefObject<HTMLVideoElement | null>
   videoSrc: string
   isMuted: boolean
   toggleMute: () => void
