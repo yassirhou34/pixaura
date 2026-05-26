@@ -42,17 +42,17 @@ export function getCloudinaryImageUrl(
   // Build transformation string
   const transformations: string[] = []
 
+  const hasDimensions = Boolean(width || height)
+
   if (width) transformations.push(`w_${width}`)
   if (height) transformations.push(`h_${height}`)
-  if (crop) transformations.push(`c_${crop}`)
-  if (gravity && crop === 'fill') transformations.push(`g_${gravity}`)
+  if (crop && hasDimensions) transformations.push(`c_${crop}`)
+  if (gravity && crop === 'fill' && hasDimensions) transformations.push(`g_${gravity}`)
   if (quality) transformations.push(`q_${quality}`)
   if (format) transformations.push(`f_${format}`)
 
-  // Add automatic optimization flags
-  transformations.push('fl_auto_quality') // Auto quality
-  transformations.push('fl_progressive') // Progressive JPEG
-  transformations.push('fl_immutable_cache') // Cache optimization
+  transformations.push('fl_progressive')
+  transformations.push('fl_immutable_cache')
 
   const transformationString = transformations.join(',')
   const folderPath = `${CLOUDINARY_FOLDER}/${publicId}`
@@ -166,37 +166,22 @@ export function extractPublicId(localPath: string): string {
   return filename.replace(/\.[^/.]+$/, '')
 }
 
+import cloudinaryMapping from '../../cloudinary-mapping.json'
+
+// Aliases internes utilisés dans le code mais qui ne correspondent pas
+// à un vrai fichier dans public/Banque d_images/.
+const ASSET_ALIASES: Record<string, string> = {
+  '/Banque d_images/background-web-desktop.mp4': 'background-web-desktop',
+}
+
 /**
- * Map of local paths to Cloudinary public IDs
- * This allows gradual migration - you can keep local paths and they'll be converted
+ * Map of local paths to Cloudinary public IDs.
+ * Source de vérité = cloudinary-mapping.json (généré par scripts/upload-to-cloudinary.js),
+ * complété par quelques alias internes.
  */
 export const ASSET_MAP: Record<string, string> = {
-  // Videos
-  '/Banque d_images/rally1.mp4': 'rally1',
-  '/Banque d_images/Immobilier.mp4': 'immobilier',
-  '/Banque d_images/halowen.mp4': 'halowen',
-  '/Banque d_images/pod1.mp4': 'pod1',
-  '/Banque d_images/rally2.mp4': 'rally2',
-  '/Banque d_images/stageMMa.mp4': 'stage-mma',
-  '/Banque d_images/noir.mp4': 'noir',
-  '/Banque d_images/background-web-desktop.mp4': 'background-web-desktop', // Alias for realisations page
-  '/Banque d_images/Backv2.mp4': 'backv2',
-  '/Banque d_images/Copie de BACKGROUND WEB DESKTOP.mp4': 'background-web-desktop',
-  
-  // Images
-  '/Banque d_images/Copie de M7_03225.jpg': 'm7-03225',
-  '/Banque d_images/StageUfc.jpg': 'stage-ufc',
-  '/Banque d_images/Copie de M7_01248.jpg': 'm7-01248',
-  '/Banque d_images/ippppp1.png': 'background-placeholder',
-  '/Banque d_images/backnoiree.png': 'back-noiree',
-  '/Banque d_images/PIXaura-soft white.png': 'pixaura-logo',
-  '/Banque d_images/humind-white.png': 'humind-logo',
-  '/Banque d_images/Copie de IMG_7149.jpg': 'img-7149',
-  '/Banque d_images/art1.jpg': 'art1',
-  '/Banque d_images/Copie de M7_00487.jpg': 'm7-00487',
-  '/Banque d_images/Copie de M7_02930.jpg': 'm7-02930',
-  '/Banque d_images/Copie de M7_09197.jpg': 'm7-09197',
-  // Add more mappings as needed
+  ...(cloudinaryMapping as Record<string, string>),
+  ...ASSET_ALIASES,
 }
 
 /**
@@ -204,10 +189,11 @@ export const ASSET_MAP: Record<string, string> = {
  * Automatically converts local paths to Cloudinary URLs if mapped
  */
 export function getAssetUrl(localPath: string, type: 'image' | 'video' = 'image'): string {
-  const publicId = ASSET_MAP[localPath] || extractPublicId(localPath)
-  
-  if (!CLOUDINARY_CLOUD_NAME) {
-    // Fallback to local path if Cloudinary not configured
+  const publicId = ASSET_MAP[localPath]
+
+  // Pas de Cloudinary configuré OU pas d'entrée dans le mapping
+  // -> on sert directement le fichier local pour éviter une URL Cloudinary cassée.
+  if (!CLOUDINARY_CLOUD_NAME || !publicId) {
     return localPath
   }
 
