@@ -9,9 +9,9 @@ import {
   Disc,
   Waves,
   Hexagon,
-  Fingerprint,
   LogOut,
   Calendar,
+  CalendarCog,
   Menu,
   X,
   UserCircle2,
@@ -24,7 +24,7 @@ const ADMIN_NAV_LINKS = [
   { href: "/admin/clients", icon: Waves, key: "clients", label: "Clients" },
   { href: "/admin/demandes", icon: Hexagon, key: "demandes", label: "Demandes" },
   { href: "/admin/agenda", icon: Calendar, key: "agenda", label: "Agenda" },
-  { href: "/admin/parametres", icon: Fingerprint, key: "parametres", label: "Calendrier" },
+  { href: "/admin/parametres", icon: CalendarCog, key: "parametres", label: "Calendrier" },
 ] as const;
 
 export function GlobalStyles() {

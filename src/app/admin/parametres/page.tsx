@@ -172,7 +172,8 @@ export default function ParametresPage() {
         <p className="mb-10 max-w-3xl text-base leading-relaxed text-neutral-300 sm:text-lg">
           <strong className="text-white">Ouverture des mois (tous les clients) :</strong>{" "}
           fermez un mois entier pour
-          qu&apos;aucun client ne puisse y réserver (ex. juin fermé tant que vous ne l&apos;activez pas).{" "}
+          qu&apos;aucun client ne puisse y réserver (ex. juin fermé tant que vous ne l&apos;activez pas).
+          <br />
           <strong className="text-white">Journées et créneaux :</strong> blocages précis ci-dessous.
         </p>
 

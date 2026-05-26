@@ -158,7 +158,9 @@ export function ValidatedAgendaCalendar() {
           </h1>
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-neutral-300 sm:text-base">
             Réservations confirmées par Pixaura : entreprise, date complète et créneau horaire. Les créneaux déjà passés
-            apparaissent en rouge ; les rendez-vous à venir en vert.
+            apparaissent en rouge.
+            <br />
+            Les rendez-vous à venir en vert.
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3">

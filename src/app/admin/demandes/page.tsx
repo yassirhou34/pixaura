@@ -2,7 +2,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Filter } from "lucide-react";
+import { ChevronDown, Filter } from "lucide-react";
 import { apiFetch } from "@/lib/api";
 import { getToken, getUser } from "@/lib/auth";
 import { useRouter } from "next/navigation";
@@ -30,9 +30,11 @@ export default function AdminDemandesPage() {
         <header className="mb-8 flex flex-col gap-2">
           <p className="font-mono text-[10px] uppercase tracking-[0.35em] text-violet-300/80">Pipeline P2C</p>
           <h1 className="text-4xl font-black tracking-tight text-white md:text-5xl">Demandes</h1>
-          <p className="max-w-2xl text-sm text-neutral-400">
-            Vue synthétique des demandes clients : statut, créneau et axe de communication en un coup d&apos;œil.
-          </p>
+          <div className="overflow-x-auto pb-0.5">
+            <p className="w-max max-w-none text-sm text-neutral-400 whitespace-nowrap">
+              Vue synthétique des demandes clients : statut, créneau et axe de communication en un coup d&apos;œil.
+            </p>
+          </div>
         </header>
 
         <ChromeCard
@@ -43,30 +45,44 @@ export default function AdminDemandesPage() {
           <div className="grid gap-4 md:grid-cols-2">
             <label className="flex flex-col gap-2 text-xs font-mono uppercase tracking-wider text-neutral-500">
               Statut
-              <select
-                value={filters.status}
-                onChange={(e) => setFilters({ ...filters, status: e.target.value })}
-                className="rounded-xl border border-white/15 bg-black/40 py-2.5 pl-3 pr-8 text-sm text-white"
-              >
-                <option value="">Tous les statuts</option>
-                <option value="en_attente">En attente</option>
-                <option value="validee">Validée</option>
-                <option value="refusee">Refusée</option>
-                <option value="a_completer">À compléter</option>
-              </select>
+              <div className="relative">
+                <select
+                  value={filters.status}
+                  onChange={(e) => setFilters({ ...filters, status: e.target.value })}
+                  className="w-full cursor-pointer rounded-xl border border-white/15 bg-black/40 py-2.5 pl-3 pr-14 text-sm text-white [appearance:none] [-webkit-appearance:none] bg-[length:0] bg-no-repeat"
+                >
+                  <option value="">Tous les statuts</option>
+                  <option value="en_attente">En attente</option>
+                  <option value="validee">Validée</option>
+                  <option value="refusee">Refusée</option>
+                  <option value="a_completer">À compléter</option>
+                </select>
+                <ChevronDown
+                  className="pointer-events-none absolute right-6 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-300"
+                  strokeWidth={2}
+                  aria-hidden
+                />
+              </div>
             </label>
             <label className="flex flex-col gap-2 text-xs font-mono uppercase tracking-wider text-neutral-500">
               Type client
-              <select
-                value={filters.clientType}
-                onChange={(e) => setFilters({ ...filters, clientType: e.target.value })}
-                className="rounded-xl border border-white/15 bg-black/40 py-2.5 pl-3 pr-8 text-sm text-white"
-              >
-                <option value="">Tous les types</option>
-                <option value="paire">Semaine paire</option>
-                <option value="impaire">Semaine impaire</option>
-                <option value="vip">VIP</option>
-              </select>
+              <div className="relative">
+                <select
+                  value={filters.clientType}
+                  onChange={(e) => setFilters({ ...filters, clientType: e.target.value })}
+                  className="w-full cursor-pointer rounded-xl border border-white/15 bg-black/40 py-2.5 pl-3 pr-14 text-sm text-white [appearance:none] [-webkit-appearance:none] bg-[length:0] bg-no-repeat"
+                >
+                  <option value="">Tous les types</option>
+                  <option value="paire">Semaine paire</option>
+                  <option value="impaire">Semaine impaire</option>
+                  <option value="vip">VIP</option>
+                </select>
+                <ChevronDown
+                  className="pointer-events-none absolute right-6 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-300"
+                  strokeWidth={2}
+                  aria-hidden
+                />
+              </div>
             </label>
           </div>
           <div className="mt-4 flex items-center gap-2 text-[11px] font-mono text-neutral-500">

@@ -14,6 +14,7 @@ import {
   Trash2,
   User,
   UserPlus,
+  ChevronDown,
 } from "lucide-react";
 import { apiFetch } from "@/lib/api";
 import { getToken, getUser } from "@/lib/auth";
@@ -165,6 +166,17 @@ const CALENDAR_RULE_LABEL: Record<string, string> = {
   vip: "VIP",
 };
 
+/** Affichage téléphone : paires de chiffres séparées par des points (ex. 06.17.48.88.01). */
+function formatPhoneDots(raw: string): string {
+  const digits = raw.replace(/\D/g, "");
+  if (!digits) return raw.trim();
+  let d = digits;
+  if (d.startsWith("33") && d.length >= 11) {
+    d = `0${d.slice(2)}`;
+  }
+  return d.match(/.{1,2}/g)?.join(".") ?? raw.trim();
+}
+
 function ClientContactRow({
   icon: Icon,
   label,
@@ -195,10 +207,11 @@ function ClientContactRow({
         <p
           className={cn(
             "break-words text-[15px] leading-snug text-neutral-100 sm:text-base",
-            label === "SIRET" && "font-mono tracking-wide text-neutral-200"
+            label === "SIRET" && "font-mono tracking-wide text-neutral-200",
+            label === "Téléphone" && "font-mono tracking-wide text-neutral-200"
           )}
         >
-          {value}
+          {label === "Téléphone" ? formatPhoneDots(value) : value}
         </p>
       </div>
     </div>
@@ -411,7 +424,7 @@ export default function AdminClientsPage() {
         <header className="mb-8 flex flex-col gap-2">
           <p className="font-mono text-[10px] uppercase tracking-[0.35em] text-violet-300/80">Annuaire</p>
           <h1 className="text-4xl font-black tracking-tight text-white md:text-5xl">Clients</h1>
-          <p className="max-w-2xl text-base leading-relaxed text-neutral-300">
+          <p className="max-w-none text-base leading-relaxed text-neutral-300 whitespace-nowrap">
             Création d&apos;accès espace membre, profil semaine (paire / impaire / VIP) et suivi des coordonnées.
           </p>
         </header>
@@ -503,20 +516,31 @@ export default function AdminClientsPage() {
               />
             </Field>
             <Field label="Règle calendrier (P2C) *" error={fieldErrors.clientType}>
-              <select
-                className={cn(inputClass, "cursor-pointer", fieldErrors.clientType && inputErrorClass)}
-                value={form.clientType}
-                onChange={(e) => {
-                  clearFieldError("clientType");
-                  setForm({ ...form, clientType: e.target.value });
-                }}
-                aria-required
-                aria-invalid={Boolean(fieldErrors.clientType)}
-              >
-                <option value="paire">Semaine paire</option>
-                <option value="impaire">Semaine impaire</option>
-                <option value="vip">VIP</option>
-              </select>
+              <div className="relative">
+                <select
+                  className={cn(
+                    inputClass,
+                    "cursor-pointer appearance-none pr-12",
+                    fieldErrors.clientType && inputErrorClass
+                  )}
+                  value={form.clientType}
+                  onChange={(e) => {
+                    clearFieldError("clientType");
+                    setForm({ ...form, clientType: e.target.value });
+                  }}
+                  aria-required
+                  aria-invalid={Boolean(fieldErrors.clientType)}
+                >
+                  <option value="paire">Semaine paire</option>
+                  <option value="impaire">Semaine impaire</option>
+                  <option value="vip">VIP</option>
+                </select>
+                <ChevronDown
+                  className="pointer-events-none absolute right-5 top-1/2 h-5 w-5 -translate-y-1/2 text-neutral-300"
+                  strokeWidth={2}
+                  aria-hidden
+                />
+              </div>
             </Field>
             <Field label={editingId ? "Mot de passe" : "Mot de passe initial *"} error={!editingId ? fieldErrors.password : undefined}>
               <PasswordInput
