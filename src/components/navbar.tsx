@@ -249,15 +249,16 @@ export function Navbar() {
         </div>
 
         <div className="hidden xl:flex items-center gap-4">
-          <a
+          <Link
             href="/login"
+            prefetch
             className={profileLinkClassName}
             aria-label={t("nav.backofficeAriaLabel")}
             title={t("nav.backofficeTitle")}
           >
             <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/30 via-cyan-400/20 to-primary/30 opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-100" />
             <UserCircle className="relative z-10 h-5 w-5 transition-all duration-500 group-hover:text-cyan-300 group-hover:scale-110" />
-          </a>
+          </Link>
 
           {/* Language Switcher - Ultra Premium Design */}
           <div className="relative">
@@ -410,14 +411,15 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center gap-2 xl:hidden">
-          <a
+          <Link
             href="/login"
+            prefetch
             className={profileLinkClassName}
             aria-label={t("nav.backofficeAriaLabel")}
             title={t("nav.backofficeTitle")}
           >
             <UserCircle className="relative z-10 h-5 w-5" />
-          </a>
+          </Link>
 
           <button
             onClick={() => setIsOpen(!isOpen)}
@@ -514,15 +516,17 @@ export function Navbar() {
             )
           })}
 
-          <a
+          <Link
             href="/login"
+            prefetch
+            onClick={() => setIsOpen(false)}
             className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/10 px-6 py-5 text-lg font-semibold text-white transition-colors duration-300 hover:border-primary/60 hover:bg-primary/20"
             aria-label={t("nav.backofficeAriaLabel")}
             title={t("nav.backofficeTitle")}
           >
             <UserCircle className="h-6 w-6 shrink-0" />
             {t("nav.backofficeLogin")}
-          </a>
+          </Link>
 
           {/* Mobile Language Switcher - Ultra Premium Design */}
           <div className="relative flex items-center gap-2.5 rounded-2xl border border-white/20 bg-gradient-to-br from-white/10 via-white/5 to-white/10 p-1.5 backdrop-blur-xl">

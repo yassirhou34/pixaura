@@ -19,7 +19,7 @@ export function middleware(request: NextRequest) {
     "img-src 'self' data: https: blob:",
     "font-src 'self' data:",
     "connect-src 'self' http://localhost:4000 http://127.0.0.1:4000 https:",
-    "media-src 'self' blob: data:",
+    "media-src 'self' https: blob: data:",
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",
@@ -57,12 +57,10 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
+     * Exclude static assets and Next.js internals so the Edge middleware
+     * does not add latency on every image/video/font request on Vercel.
      */
-    '/((?!_next/static|_next/image|favicon.ico).*)',
+    '/((?!_next/static|_next/image|_next/data|favicon.ico|robots.txt|sitemap.xml|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|mp4|webm|ogg|mp3|wav|woff|woff2|ttf|otf|eot|css|js|mjs|map)$).*)',
   ],
 }
 
