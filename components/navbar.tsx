@@ -6,7 +6,8 @@ import { useEffect, useState } from "react"
 import { useRouter, usePathname } from "next/navigation"
 import { useTranslation } from "@/contexts/translation-context"
 import { getAssetUrl } from "@/lib/cloudinary"
-import { Globe, Sparkles } from "lucide-react"
+import { BACKOFFICE_LOGIN_URL } from "@/lib/backoffice"
+import { Globe, Sparkles, UserCircle } from "lucide-react"
 
 export function Navbar() {
   const { t, language, setLanguage } = useTranslation()
@@ -83,6 +84,9 @@ export function Navbar() {
   const isHumindPage = pathname === "/humind"
   const logoSrc = isHumindPage ? getAssetUrl("/Banque d_images/humind-white.png", "image") : getAssetUrl("/Banque d_images/PIXaura-soft white.png", "image")
   const logoAlt = isHumindPage ? "Humind Logo" : "Pixaura International Logo"
+
+  const profileLinkClassName =
+    "group relative flex h-11 w-11 min-h-11 min-w-11 shrink-0 items-center justify-center rounded-full border border-white/25 bg-gradient-to-br from-white/10 via-white/5 to-white/10 text-white transition-all duration-500 hover:border-primary/60 hover:bg-gradient-to-br hover:from-primary/20 hover:via-primary/10 hover:to-primary/20 hover:shadow-[0_0_30px_rgba(0,115,255,0.4)] backdrop-blur-xl"
 
   return (
     <nav
@@ -246,6 +250,16 @@ export function Navbar() {
         </div>
 
         <div className="hidden xl:flex items-center gap-4">
+          <a
+            href={BACKOFFICE_LOGIN_URL}
+            className={profileLinkClassName}
+            aria-label={t("nav.backofficeAriaLabel")}
+            title={t("nav.backofficeTitle")}
+          >
+            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/30 via-cyan-400/20 to-primary/30 opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-100" />
+            <UserCircle className="relative z-10 h-5 w-5 transition-all duration-500 group-hover:text-cyan-300 group-hover:scale-110" />
+          </a>
+
           {/* Language Switcher - Ultra Premium Design */}
           <div className="relative">
             <button
@@ -396,19 +410,30 @@ export function Navbar() {
           </Link>
         </div>
 
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="rounded-xl border border-white/20 bg-black/30 p-4 text-white transition-colors duration-300 hover:border-primary hover:text-primary xl:hidden"
-          aria-label="Toggle menu"
-        >
-          <svg className="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            {isOpen ? (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
-            ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 6h16M4 12h16M4 18h16" />
-            )}
-          </svg>
-        </button>
+        <div className="flex items-center gap-2 xl:hidden">
+          <a
+            href={BACKOFFICE_LOGIN_URL}
+            className={profileLinkClassName}
+            aria-label={t("nav.backofficeAriaLabel")}
+            title={t("nav.backofficeTitle")}
+          >
+            <UserCircle className="relative z-10 h-5 w-5" />
+          </a>
+
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="rounded-xl border border-white/20 bg-black/30 p-4 text-white transition-colors duration-300 hover:border-primary hover:text-primary"
+            aria-label="Toggle menu"
+          >
+            <svg className="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              {isOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
+        </div>
       </div>
 
       <div
@@ -489,6 +514,16 @@ export function Navbar() {
               </Link>
             )
           })}
+
+          <a
+            href={BACKOFFICE_LOGIN_URL}
+            className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/10 px-6 py-5 text-lg font-semibold text-white transition-colors duration-300 hover:border-primary/60 hover:bg-primary/20"
+            aria-label={t("nav.backofficeAriaLabel")}
+            title={t("nav.backofficeTitle")}
+          >
+            <UserCircle className="h-6 w-6 shrink-0" />
+            {t("nav.backofficeLogin")}
+          </a>
 
           {/* Mobile Language Switcher - Ultra Premium Design */}
           <div className="relative flex items-center gap-2.5 rounded-2xl border border-white/20 bg-gradient-to-br from-white/10 via-white/5 to-white/10 p-1.5 backdrop-blur-xl">

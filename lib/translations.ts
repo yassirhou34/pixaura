@@ -20,6 +20,9 @@ export const translations = {
       contact: 'Contact',
       // CTA label: small wording change only
       takeAppointment: 'Prendre rendez-vous',
+      backofficeAriaLabel: 'Connexion espace membre',
+      backofficeTitle: 'Connexion',
+      backofficeLogin: 'Connexion',
     },
     // Home page
     home: {
@@ -831,6 +834,9 @@ export const translations = {
       humind: 'Humind',
       contact: 'Contact',
       takeAppointment: 'Schedule an appointment',
+      backofficeAriaLabel: 'Access member area',
+      backofficeTitle: 'Login',
+      backofficeLogin: 'Login',
     },
     // Home page
     home: {
